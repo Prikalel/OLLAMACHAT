@@ -1,0 +1,7 @@
+bin
+.venv
+.buildozer
+__pycache__
+*.pyc
+*.
+android-ndk-r25c-linux.zip
