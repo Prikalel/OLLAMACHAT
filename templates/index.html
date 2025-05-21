@@ -225,6 +225,24 @@
                 $('#send-button').click();
             }
         });
+
+        // Add this at the bottom of the script section
+        $(document).ready(function() {
+            // Load chat history
+            fetch('/get_history')
+                .then(response => response.json())
+                .then(messages => {
+                    messages.forEach(msg => {
+                        const isImage = msg.content.replace(/^(\<p\>)/,"").startsWith('image_') && msg.role === 'assistant';
+                        //console.log(isImage);
+                        if (isImage) {
+                            appendMessage(msg.role, msg.content.replace(/^(\<p\>)/,"").replace(/(\<\/p\>)$/,""), isImage);
+                        } else {
+                            appendMessage(msg.role, msg.content, isImage);
+                        }
+                    });
+                });
+        });
     </script>
 </body>
 </html>

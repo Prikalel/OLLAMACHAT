@@ -1,4 +1,6 @@
 # app.py
+import atexit
+import time
 from flask import Flask, render_template, request, jsonify, send_from_directory, session
 from flask_session import Session  # Requires pip install Flask-Session
 from chat_implementation import get_next_message, available_models
@@ -32,20 +34,71 @@ global_session = {
     "image_requests": {}
 }
 
-@app.before_request
-def before_first_request_func():
-    if get_chat_session() and len(get_chat_session()["messages"]) == 0 and os.path.exists('global.pkl'):
-        with open('global.pkl', 'rb') as inp:
-            global_session = pickle.load(inp)
+# Load existing session at startup
+def load():
+    if os.path.exists('global.pkl'):
+        try:
+            with open('global.pkl', 'rb') as inp:
+                loaded = pickle.load(inp)
+                global_session.update(loaded)
+                print("Loaded existing chat history " + str(len(global_session["messages"])))
+        except Exception as e:
+            print(f"Error loading session: {str(e)}")
 
-@app.after_request
-def after_request_func(response):
-    with open('global.pkl', 'wb') as outp:
-        pickle.dump(global_session, outp, pickle.HIGHEST_PROTOCOL)
-    return response
+load()
+
+# Save session periodically and on exit
+def save_session():
+    # Only save if we have messages
+    if len(global_session["messages"]) == 0:
+        return
+        
+    # Check if file exists and was modified recently
+    if os.path.exists('global.pkl'):
+        try:
+            mod_time = os.path.getmtime('global.pkl')
+            current_time = time.time()
+            # If modified within last second, skip save
+            if current_time - mod_time < 1:
+                print("Was modified recently. skip")
+                return
+        except Exception as e:
+            print(f"Error checking file mod time: {e}")
+            # Continue with save if we can't check
+    
+    # Proceed with saving
+    try:
+        with open('global.pkl', 'wb') as outp:
+            pickle.dump(global_session, outp, pickle.HIGHEST_PROTOCOL)
+        print(f"Session saved with {len(global_session['messages'])} messages")
+    except Exception as e:
+        print(f"Error saving session: {e}")
+
+atexit.register(save_session)
+
+# Add new route to get chat history
+@app.route("/get_history")
+def get_history():
+    load()
+    chat_session = get_chat_session()
+    return jsonify(list(map(lambda x : {
+        "role": x["role"],
+        "content": format_markdown_text(x["content"])
+    }, chat_session["messages"])))
 
 def format_markdown_text(text):
     return markdown.markdown(text)
+
+def get_filtered_messages(messages):
+    """Filter out image-related messages before sending to LLM"""
+    filtered = []
+    for msg in messages:
+        if isinstance(msg, HumanMessage) and msg.content.startswith("/img"):
+            continue
+        if isinstance(msg, AIMessage) and msg.content.startswith("image_"):
+            continue
+        filtered.append(msg)
+    return filtered
 
 def get_chat_session():
     return global_session
@@ -60,11 +113,14 @@ def send_message():
     user_text = data["message"].strip()
     chat_session = get_chat_session()
     
+    # Always add user message first
+    chat_session["messages"].append({
+        "role": "user",
+        "content": user_text
+    })
+
     if user_text.startswith("/img"):
         return handle_image_command(user_text[4:].strip(), chat_session)
-    
-    # Add user message
-    chat_session["messages"].append({"role": "user", "content": user_text})
     
     # Create request ID
     request_id = str(uuid.uuid4())
@@ -85,7 +141,7 @@ def process_message(request_id, chat_session):
             for msg in chat_session["messages"]
         ]
         
-        content = get_next_message(chat_session["model"], messages)
+        content = get_next_message(chat_session["model"], get_filtered_messages(messages))
         formatted_content = format_markdown_text(content)
         
         # Update session
@@ -130,16 +186,17 @@ def generate_image(request_id, user_prompt, chat_session):
         # Generate prompt if empty
         if not user_prompt.strip():
             messages = [
+                HumanMessage(content=msg["content"]) if msg["role"] == "user" 
+                else AIMessage(content=msg["content"])
+                for msg in chat_session["messages"]
+            ] + [
                 SystemMessage(
                     "Create a high-detailed description in english of your character's appearance and pose based on the conversation. "
                     "Include the background as well. In response give only description in english, without any explanations or questions."
                 )
-            ] + [
-                HumanMessage(content=msg["content"]) if msg["role"] == "user" 
-                else AIMessage(content=msg["content"])
-                for msg in chat_session["messages"]
             ]
-            user_prompt = get_next_message(chat_session["model"], messages)
+            user_prompt = get_next_message(chat_session["model"], get_filtered_messages(messages))
+            print("Will generate image for promt " + str(user_prompt))
         
         # Generate image
         temp_image_path = image_client.predict(
@@ -161,6 +218,11 @@ def generate_image(request_id, user_prompt, chat_session):
 
         # Copy file to static folder
         shutil.copy(temp_image_path, dest_path)
+
+        chat_session["messages"].append({
+            "role": "assistant",
+            "content": filename
+        })
 
         chat_session["image_requests"][request_id] = {
             "type": "image",
