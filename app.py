@@ -79,7 +79,8 @@ atexit.register(save_session)
 # Add new route to get chat history
 @app.route("/get_history")
 def get_history():
-    load()
+    if len(global_session["messages"]) == 0:
+        load()
     chat_session = get_chat_session()
     return jsonify(list(map(lambda x : {
         "role": x["role"],
