@@ -1,0 +1,229 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Application</title>
+    <style>
+        :root {
+            --dark-bg: #353535;
+            --darker-bg: #252525;
+            --text-color: white;
+            --user-color: #4FC3F7;
+            --ai-color: #FF8A80;
+            --thinking-color: #A9A9A9;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .model-selector {
+            margin-bottom: 20px;
+        }
+        
+        #chat-display {
+            height: 500px;
+            border: 1px solid #444;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: var(--darker-bg);
+            margin-bottom: 20px;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+        }
+        
+        .user-message {
+            color: var(--user-color);
+        }
+        
+        .ai-message {
+            color: var(--ai-color);
+        }
+        
+        .thinking {
+            color: var(--thinking-color);
+            font-style: italic;
+        }
+        
+        #input-area {
+            display: flex;
+            gap: 10px;
+        }
+        
+        #message-input {
+            flex-grow: 1;
+            padding: 10px;
+            background-color: var(--darker-bg);
+            color: var(--text-color);
+            border: 1px solid #444;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #353535;
+            color: white;
+            border: 1px solid #444;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #454545;
+        }
+        
+        img.chat-image {
+            max-width: 512px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="model-selector">
+            <label>Model:</label>
+            <select id="model-select">
+                {% for model in models %}
+                <option value="{{ model }}">{{ model }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div id="chat-display"></div>
+        
+        <div id="input-area">
+            <textarea id="message-input" rows="3" placeholder="Type your message here..."></textarea>
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        let activeRequestId = null;
+        let activeImageRequestId = null;
+
+        function appendMessage(role, content, isImage = false) {
+            const chatDisplay = $('#chat-display');
+            const messageClass = role === 'user' ? 'user-message' : 'ai-message';
+            const prefix = role === 'user' ? 'You:' : 'AI:';
+            
+            if (isImage) {
+                const imgHtml = `<div class="message ${messageClass}">
+                    <strong>${prefix}</strong><br>
+                    <img class="chat-image" src="${content}">
+                </div>`;
+                chatDisplay.append(imgHtml);
+            } else {
+                const messageHtml = `<div class="message ${messageClass}">
+                    <strong>${prefix}</strong> ${content}
+                </div>`;
+                chatDisplay.append(messageHtml);
+            }
+            
+            chatDisplay.scrollTop(chatDisplay[0].scrollHeight);
+        }
+
+        function showThinking() {
+            const chatDisplay = $('#chat-display');
+            chatDisplay.append(
+                `<div class="message ai-message thinking">
+                    <strong>AI:</strong> Thinking...
+                </div>`
+            );
+            chatDisplay.scrollTop(chatDisplay[0].scrollHeight);
+        }
+
+        $('#send-button').click(async () => {
+            const message = $('#message-input').val().trim();
+            if (!message) return;
+
+            // Clear input
+            $('#message-input').val('');
+            
+            // Add user message
+            appendMessage('user', message);
+
+            if (message.startsWith('/img')) {
+                showThinking();
+                const response = await fetch("/send_message", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({message: message})
+                });
+                const data = await response.json();
+                activeImageRequestId = data.request_id;
+                pollImageResponse();
+            } else {
+                showThinking();
+                const response = await fetch("/send_message", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({message: message})
+                });
+                const data = await response.json();
+                activeRequestId = data.request_id;
+                pollResponse();
+            }
+        });
+
+        async function pollResponse() {
+            const response = await fetch(`/check_response/${activeRequestId}`);
+            const data = await response.json();
+            
+            if (data.status === 'ready') {
+                if (data.response.type === 'message') {
+                    $('.thinking').last().remove();
+                    appendMessage('assistant', data.response.content);
+                } else if (data.response.type === 'error') {
+                    $('.thinking').last().remove();
+                    appendMessage('assistant', data.response.content);
+                }
+            } else {
+                setTimeout(pollResponse, 500);
+            }
+        }
+
+        async function pollImageResponse() {
+            const response = await fetch(`/check_image/${activeImageRequestId}`);
+            const data = await response.json();
+            
+            if (data.status === 'ready') {
+                $('.thinking').last().remove();
+                if (data.response.type === 'image') {
+                    appendMessage('assistant', data.response.content, true);
+                } else {
+                    appendMessage('assistant', data.response.content);
+                }
+            } else {
+                setTimeout(pollImageResponse, 500);
+            }
+        }
+
+        $('#model-select').change(async function() {
+            await fetch("/change_model", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({model: this.value})
+            });
+            appendMessage('system', `Model changed to ${this.value}`);
+        });
+
+        // Enter key handling
+        $('#message-input').keypress(function(e) {
+            if (e.which === 13 && !e.shiftKey) {
+                e.preventDefault();
+                $('#send-button').click();
+            }
+        });
+    </script>
+</body>
+</html>

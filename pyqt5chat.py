@@ -22,7 +22,7 @@ class ChatWorker(QThread):
         
     def run(self):
         try:
-            content = get_next_message(self.model, self.messages)
+            content: str = get_next_message(self.model, self.messages)
             self.response_ready.emit(content)
         except Exception as e:
             self.response_ready.emit(f"Error: {str(e)}")
@@ -48,7 +48,7 @@ class ChatTab(QWidget):
         # Model selection
         model_layout = QHBoxLayout()
         self.model_combo = QComboBox()
-        self.model_combo.addItems(available_models)
+        self.model_combo.addItems(available_models) # available_models is list of strings
         self.model_combo.setCurrentText(self.model)
         self.model_combo.currentTextChanged.connect(self.change_model)
         model_layout.addWidget(QLabel("Model:"))
