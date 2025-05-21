@@ -7,3 +7,4 @@ __pycache__
 android-ndk-r25c-linux.zip
 flask_session
 static/images
+.plandex*
