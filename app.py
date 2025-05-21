@@ -7,10 +7,10 @@ from gradio_client import Client
 import markdown
 import uuid
 import threading
-import time
 import os
 import shutil
 from pathlib import Path
+import pickle
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "your-secret-key"
@@ -31,6 +31,18 @@ global_session = {
     "active_requests": {},
     "image_requests": {}
 }
+
+@app.before_request
+def before_first_request_func():
+    if get_chat_session() and len(get_chat_session()["messages"]) == 0 and os.path.exists('global.pkl'):
+        with open('global.pkl', 'rb') as inp:
+            global_session = pickle.load(inp)
+
+@app.after_request
+def after_request_func(response):
+    with open('global.pkl', 'wb') as outp:
+        pickle.dump(global_session, outp, pickle.HIGHEST_PROTOCOL)
+    return response
 
 def format_markdown_text(text):
     return markdown.markdown(text)
