@@ -117,14 +117,15 @@
             const prefix = role === 'user' ? 'You:' : 'AI:';
             
             if (isImage) {
+                const imgUrl = `/static/images/${content}`;
                 const imgHtml = `<div class="message ${messageClass}">
                     <strong>${prefix}</strong><br>
-                    <img class="chat-image" src="${content}">
+                    <img class="chat-image" src="${imgUrl}">
                 </div>`;
                 chatDisplay.append(imgHtml);
             } else {
                 const messageHtml = `<div class="message ${messageClass}">
-                    <strong>${prefix}</strong> ${content}
+                    <strong>${prefix}</strong> <a style="color: #FFFFFF;"> ${content} </a>
                 </div>`;
                 chatDisplay.append(messageHtml);
             }

@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify, send_from_directory, session
 from flask_session import Session  # Requires pip install Flask-Session
 from chat_implementation import get_next_message, available_models
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
@@ -8,38 +8,35 @@ import markdown
 import uuid
 import threading
 import time
+import os
+import shutil
+from pathlib import Path
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "your-secret-key"
+app.config["STATIC_FOLDER"] = "static"
+app.config["IMAGE_FOLDER"] = os.path.join(app.config["STATIC_FOLDER"], "images")
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+Path(app.config["IMAGE_FOLDER"]).mkdir(parents=True, exist_ok=True)
 
 # Initialize image client
 image_client = Client("Heartsync/NSFW-Uncensored-photo",
                      hf_token="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")
 
-class ChatSession:
-    def __init__(self):
-        self.messages = []
-        self.model = available_models[0]
-        self.active_requests = {}
-        self.image_requests = {}
+global global_session
+global_session = {
+    "messages": [],
+    "model": available_models[0],
+    "active_requests": {},
+    "image_requests": {}
+}
 
 def format_markdown_text(text):
     return markdown.markdown(text)
 
-@app.before_request
-def initialize_session():
-    if "chat_session" not in session:
-        session["chat_session"] = {
-            "messages": [],
-            "model": available_models[0],
-            "active_requests": {},
-            "image_requests": {}
-        }
-
 def get_chat_session():
-    return session["chat_session"]
+    return global_session
 
 @app.route("/")
 def index():
@@ -85,6 +82,7 @@ def process_message(request_id, chat_session):
             "type": "message",
             "content": formatted_content
         }
+        print("Done " + request_id)
     except Exception as e:
         chat_session["active_requests"][request_id] = {
             "type": "error",
@@ -93,6 +91,7 @@ def process_message(request_id, chat_session):
 
 @app.route("/check_response/<request_id>")
 def check_response(request_id):
+    print("Check " + request_id)
     chat_session = get_chat_session()
     status = chat_session["active_requests"].get(request_id, "not found")
     
@@ -131,7 +130,7 @@ def generate_image(request_id, user_prompt, chat_session):
             user_prompt = get_next_message(chat_session["model"], messages)
         
         # Generate image
-        result = image_client.predict(
+        temp_image_path = image_client.predict(
             prompt=user_prompt,
             negative_prompt="text, watermark, signature, cartoon, anime, illustration, painting, drawing, low quality, blurry",
             seed=0,
@@ -143,9 +142,17 @@ def generate_image(request_id, user_prompt, chat_session):
             api_name="/infer"
         )
         
+        # Generate unique filename
+        unique_id = uuid.uuid4().hex
+        filename = f"image_{unique_id}.webp"
+        dest_path = os.path.join(app.config["IMAGE_FOLDER"], filename)
+
+        # Copy file to static folder
+        shutil.copy(temp_image_path, dest_path)
+
         chat_session["image_requests"][request_id] = {
             "type": "image",
-            "content": result
+            "content": filename  # Store only filename instead of full path
         }
     except Exception as e:
         chat_session["image_requests"][request_id] = {
@@ -172,6 +179,10 @@ def change_model():
     chat_session = get_chat_session()
     chat_session["model"] = model
     return jsonify({"success": True})
+
+@app.route('/static/images/<filename>')
+def serve_image(filename):
+    return send_from_directory(app.config["IMAGE_FOLDER"], filename)
 
 if __name__ == "__main__":
     app.run(debug=True)
