@@ -41,7 +41,7 @@ def load():
             with open('global.pkl', 'rb') as inp:
                 loaded = pickle.load(inp)
                 global_session.update(loaded)
-                print("Loaded existing chat history " + str(len(global_session["messages"])))
+                print("Loaded existing chat history " + str(len(global_session["messages"])) + " current model " + global_session["model"])
         except Exception as e:
             print(f"Error loading session: {str(e)}")
 
@@ -260,4 +260,4 @@ def serve_image(filename):
     return send_from_directory(app.config["IMAGE_FOLDER"], filename)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=8080)
