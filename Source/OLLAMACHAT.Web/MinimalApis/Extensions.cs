@@ -58,7 +58,7 @@ public static class Extensions // TODO: имплементировать endpoin
                         }
                         else if (currentState == FailedState.StateName)
                         {
-                            var chatId = "123";
+                            var chatId = "123"; // todo: fix.
                             var chat = chatRepository.GetChatByIdAsync(chatId).GetAwaiter().GetResult();
                             chat.GenerationFailed();
                             chatRepository.UpdateAsync(chat);
@@ -68,6 +68,7 @@ public static class Extensions // TODO: имплементировать endpoin
                             .First(x => x.StateName == SucceededState.StateName)
                             .Data["Result"];
                         string deserializeString = JsonConvert.DeserializeObject<string>(jobValue)!;
+                        deserializeString = Regex.Replace(deserializeString, @"<think>.*?</think>", string.Empty, RegexOptions.Singleline);
                         string responseHtmlContent = Markdig.Markdown.ToHtml(deserializeString);
                         return TypedResults.Ok(new ResponseStatusDto(
                             "ready",
@@ -102,9 +103,14 @@ public static class Extensions // TODO: имплементировать endpoin
             .WithOpenApi();
 
         app.MapPost("/change_model",
-                (ChangeModelRequestDto requestDto) =>
+                async (
+                    [FromServices] IRepository<UserChat> chatRepository,
+                    ChangeModelRequestDto requestDto) =>
                 {
-                    throw new NotImplementedException();
+                    var u = await chatRepository.GetOrCreateUser("alex");
+                    var chat = u.GetOrCreateActiveChat(null, out bool _);
+                    chat.Model = requestDto.Model;
+                    await chatRepository.UpdateAsync(chat);
                     return TypedResults.Ok(new { success = true });
                 })
             .WithSummary("Change active AI model")
