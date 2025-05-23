@@ -5,4 +5,4 @@
 /// </summary>
 /// <param name="Status">Статус. Если "ready" - можно забирать.</param>
 /// <param name="Response">Результат.</param>
-public record ResponseStatus(string Status, ResponseContent? Response = null);
+public record ResponseStatusDto(string Status, ResponseContentDto? Response = null);

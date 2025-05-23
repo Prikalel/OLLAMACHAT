@@ -5,4 +5,4 @@
 /// </summary>
 /// <param name="Type">Тип ("image"/"message").</param> // TODO: использовать enum
 /// <param name="Content">Содержимое. Если картинка - её название.</param>
-public record ResponseContent(string Type, string Content);
+public record ResponseContentDto(string Type, string Content);

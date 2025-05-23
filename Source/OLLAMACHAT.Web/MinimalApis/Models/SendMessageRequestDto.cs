@@ -4,4 +4,4 @@
 /// Отправка сообщения чат-боту.
 /// </summary>
 /// <param name="Message">Сообщение.</param>
-public record SendMessageRequest(string Message);
+public record SendMessageRequestDto(string Message);

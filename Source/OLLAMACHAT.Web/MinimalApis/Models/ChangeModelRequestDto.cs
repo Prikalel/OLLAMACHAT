@@ -4,4 +4,4 @@
 /// Поменять текущую модель чата.
 /// </summary>
 /// <param name="Model">Новая модель для обработки сообщений пользователя.</param>
-public record ChangeModelRequest(string Model);
+public record ChangeModelRequestDto(string Model);
