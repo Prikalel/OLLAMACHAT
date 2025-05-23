@@ -29,5 +29,5 @@ public class ChatMessage : IEntity
     /// <summary>
     /// Время появления сообщения.
     /// </summary>
-    public DateTimeOffset Time { get; private set; } = DateTimeOffset.Now;
+    public DateTimeOffset Time { get; private set; } = DateTimeOffset.Now.ToUniversalTime();
 }

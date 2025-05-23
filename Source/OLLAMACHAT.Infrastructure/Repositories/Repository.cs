@@ -30,36 +30,16 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, I
     }
 
     /// <inheritdoc />
-    public async Task<IEnumerable<TEntity>> GetAllAsync() => await dbSet.ToListAsync();
-
-    /// <inheritdoc />
-    public async Task<TEntity> GetByIdAsync(string id) =>
-        await (dbSet is DbSet<UserChat> chatSet
-            ? chatSet.Include(x => x.Messages) as DbSet<TEntity>
-            : dbSet).FindAsync(id);
-
-    /// <inheritdoc />
-    public async Task AddAsync(TEntity entity)
-    {
-        await dbSet.AddAsync(entity);
-        await context.SaveChangesAsync();
-    }
+    public async Task<UserChat?> GetChatByIdAsync(string id) =>
+        await context.UserChats
+            .Include(x => x.Messages)
+            .Where(x => x.Id == id)
+            .FirstOrDefaultAsync();
 
     /// <inheritdoc />
     public async Task UpdateAsync(TEntity entity)
     {
         dbSet.Update(entity);
         await context.SaveChangesAsync();
-    }
-
-    /// <inheritdoc />
-    public async Task DeleteAsync(string id)
-    {
-        TEntity entity = await GetByIdAsync(id);
-        if (entity != null)
-        {
-            dbSet.Remove(entity);
-            await context.SaveChangesAsync();
-        }
     }
 }

@@ -30,10 +30,12 @@ public class UserChat : IEntity
                 .Permit(ChatAction.UserRequestedTextResponse, ChatState.WaitingMessageGeneration);
         chatStateMachine
             .Configure(ChatState.WaitingImageGeneration)
-                .Permit(ChatAction.GenerationComplete, ChatState.PendingInput);
+                .Permit(ChatAction.GenerationComplete, ChatState.PendingInput)
+                .Permit(ChatAction.GenerationFailed, ChatState.PendingInput);
         chatStateMachine
             .Configure(ChatState.WaitingMessageGeneration)
-            .Permit(ChatAction.GenerationComplete, ChatState.PendingInput);
+                .Permit(ChatAction.GenerationComplete, ChatState.PendingInput)
+                .Permit(ChatAction.GenerationFailed, ChatState.PendingInput);
     }
 
     /// <summary>
@@ -107,6 +109,17 @@ public class UserChat : IEntity
             Role = ChatMessageRole.Assistant,
             Content = response
         });
+        return chatStateMachine.State;
+    }
+
+    /// <summary>
+    /// Выполнено.
+    /// </summary>
+    /// <returns>.</returns>
+    public ChatState GenerationFailed()
+    {
+        chatStateMachine.Fire(ChatAction.GenerationFailed);
+        this.State = chatStateMachine.State;
         return chatStateMachine.State;
     }
 }

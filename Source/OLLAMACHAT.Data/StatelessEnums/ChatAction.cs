@@ -18,5 +18,10 @@ public enum ChatAction
     /// <summary>
     /// Генерация завершена.
     /// </summary>
-    GenerationComplete
+    GenerationComplete,
+
+    /// <summary>
+    /// Ошибка.
+    /// </summary>
+    GenerationFailed
 }

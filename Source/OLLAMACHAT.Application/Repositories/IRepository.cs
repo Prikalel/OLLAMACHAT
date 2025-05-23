@@ -14,33 +14,15 @@ public interface IRepository<TEntity> where TEntity : IEntity
     Task<User> GetOrCreateUser(string name);
 
     /// <summary>
-    /// Получить все сущности.
+    /// Получить чат по id.
     /// </summary>
-    /// <returns>Коллекция сущностей.</returns>
-    Task<IEnumerable<TEntity>> GetAllAsync();
-
-    /// <summary>
-    /// Получить сущность по id.
-    /// </summary>
-    /// <param name="id">ID сущности.</param>
+    /// <param name="id">ID чата.</param>
     /// <returns>Сущность или null, если не найдено.</returns>
-    Task<TEntity> GetByIdAsync(string id);
-
-    /// <summary>
-    /// Добавить новую сущность.
-    /// </summary>
-    /// <param name="entity">Сущность для добавления.</param>
-    Task AddAsync(TEntity entity);
+    Task<UserChat?> GetChatByIdAsync(string id);
 
     /// <summary>
     /// Обновить существующую сущность.
     /// </summary>
     /// <param name="entity">Обновленная сущность.</param>
     Task UpdateAsync(TEntity entity);
-
-    /// <summary>
-    /// Удалить сущность по id.
-    /// </summary>
-    /// <param name="id">ID сущности для удаления.</param>
-    Task DeleteAsync(string id);
 }
