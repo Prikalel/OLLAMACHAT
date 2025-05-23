@@ -62,7 +62,12 @@ public static class Extensions // TODO: имплементировать endpoin
             .Produces<ResponseStatusDto>(StatusCodes.Status200OK)
             .WithOpenApi();
 
-        app.MapPost("/change_model", (ChangeModelRequestDto requestDto) => { return TypedResults.Ok(new { success = true }); })
+        app.MapPost("/change_model",
+                (ChangeModelRequestDto requestDto) =>
+                {
+                    throw new NotImplementedException();
+                    return TypedResults.Ok(new { success = true });
+                })
             .WithSummary("Change active AI model")
             .WithTags("MinimalApi")
             .WithDescription("Updates the currently selected AI model")
