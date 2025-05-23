@@ -13,5 +13,10 @@ public enum ChatAction
     /// <summary>
     /// Юзер ввёл промпт, требуется ответ картинкой.
     /// </summary>
-    UserRequestedImageResponse
+    UserRequestedImageResponse,
+
+    /// <summary>
+    /// Генерация завершена.
+    /// </summary>
+    GenerationComplete
 }

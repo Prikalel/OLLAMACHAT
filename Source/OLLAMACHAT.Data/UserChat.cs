@@ -24,6 +24,16 @@ public class UserChat : IEntity
         Model = model;
         Active = active;
         chatStateMachine = new(state);
+        chatStateMachine
+            .Configure(ChatState.PendingInput)
+                .Permit(ChatAction.UserRequestedImageResponse, ChatState.WaitingImageGeneration)
+                .Permit(ChatAction.UserRequestedTextResponse, ChatState.WaitingMessageGeneration);
+        chatStateMachine
+            .Configure(ChatState.WaitingImageGeneration)
+                .Permit(ChatAction.GenerationComplete, ChatState.PendingInput);
+        chatStateMachine
+            .Configure(ChatState.WaitingMessageGeneration)
+            .Permit(ChatAction.GenerationComplete, ChatState.PendingInput);
     }
 
     /// <summary>
@@ -62,4 +72,16 @@ public class UserChat : IEntity
     /// Сообщения этого чата.
     /// </summary>
     public ICollection<ChatMessage> Messages { get; set; } = [];
+
+    /// <summary>
+    /// Действие: пользователь ввёл промпт.
+    /// </summary>
+    /// <param name="prompt">Промпт пользователя.</param>
+    /// <returns>Новое состояние.</returns>
+    public ChatState UserEnteredPrompt(string prompt)
+    {
+        chatStateMachine.Fire(ChatAction.UserRequestedTextResponse);
+        this.State = chatStateMachine.State;
+        return chatStateMachine.State;
+    }
 }
