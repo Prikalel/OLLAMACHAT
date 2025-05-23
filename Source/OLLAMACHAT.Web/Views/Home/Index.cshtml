@@ -10,3 +10,20 @@
 <h2>Index</h2>
 
 <p>Hello from our View Template!</p>
+
+<!-- Empty container for the API response -->
+<div id="api-message"></div>
+
+@section Scripts {
+    <script>
+        fetch('/hi')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('api-message').innerText = data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('api-message').innerText = 'Failed to load message';
+            });
+    </script>
+}
