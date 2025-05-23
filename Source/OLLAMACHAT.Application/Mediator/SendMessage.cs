@@ -31,8 +31,9 @@ public sealed class SendMessage
 
             logger.LogInformation("Will generate llm response from model {Model}", activeChat.Model);
             string jobId = backgroundJobClient.Enqueue<ILlmBackgroundService>(llmService => llmService.GenerateTextResponse(
+                request.Message,
                 activeChat.Model,
-                user.Id,
+                activeChat.Id,
                 activeChat.Messages));
 
             logger.LogInformation("Returning job id {Id}, chat {Id} current state {State}",

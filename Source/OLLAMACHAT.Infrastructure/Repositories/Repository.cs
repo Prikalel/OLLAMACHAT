@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
-
-namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Repositories;
+﻿namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Repositories;
 
 /// <inheritdoc />
 public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, IEntity
@@ -35,7 +33,10 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, I
     public async Task<IEnumerable<TEntity>> GetAllAsync() => await dbSet.ToListAsync();
 
     /// <inheritdoc />
-    public async Task<TEntity> GetByIdAsync(string id) => await dbSet.FindAsync(id);
+    public async Task<TEntity> GetByIdAsync(string id) =>
+        await (dbSet is DbSet<UserChat> chatSet
+            ? chatSet.Include(x => x.Messages) as DbSet<TEntity>
+            : dbSet).FindAsync(id);
 
     /// <inheritdoc />
     public async Task AddAsync(TEntity entity)

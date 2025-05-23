@@ -2,6 +2,7 @@
 global using Hangfire;
 global using Hangfire.PostgreSql;
 global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.ChangeTracking;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Hangfire;
 global using Microsoft.Extensions.Configuration;
@@ -14,6 +15,7 @@ global using OllamaSharp.Models.Chat;
 global using VelikiyPrikalel.OLLAMACHAT.Application.Repositories;
 global using VelikiyPrikalel.OLLAMACHAT.Application.Services;
 global using VelikiyPrikalel.OLLAMACHAT.Data;
+global using VelikiyPrikalel.OLLAMACHAT.Data.StatelessEnums;
 global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data;
 global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Repositories;
 global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services;

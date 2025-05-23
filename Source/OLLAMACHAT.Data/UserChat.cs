@@ -84,4 +84,29 @@ public class UserChat : IEntity
         this.State = chatStateMachine.State;
         return chatStateMachine.State;
     }
+
+    /// <summary>
+    /// Выполнено.
+    /// </summary>
+    /// <returns>.</returns>
+    public ChatState LlmReturnedResponse(string prompt, string response)
+    {
+        chatStateMachine.Fire(ChatAction.GenerationComplete);
+        this.State = chatStateMachine.State;
+        this.Messages.Add(new ChatMessage
+        {
+            Id = null,
+            ChatId = this.Id,
+            Role = ChatMessageRole.User,
+            Content = prompt
+        });
+        this.Messages.Add(new ChatMessage
+        {
+            Id = null,
+            ChatId = this.Id,
+            Role = ChatMessageRole.Assistant,
+            Content = response
+        });
+        return chatStateMachine.State;
+    }
 }
