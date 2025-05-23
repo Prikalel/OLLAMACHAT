@@ -3,7 +3,7 @@
 /// <summary>
 /// Сообщение чата.
 /// </summary>
-public class ChatMessage
+public class ChatMessage : IEntity
 {
     /// <summary>
     /// Id сообщения.

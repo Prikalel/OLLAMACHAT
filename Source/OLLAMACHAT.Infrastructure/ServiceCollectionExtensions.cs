@@ -22,8 +22,10 @@ public static class ServiceCollectionExtensions
         services.Scan(scan => scan
             .FromAssemblyOf<LlmService>()
             .AddClasses(classes =>
-                classes.InNamespaces(typeof(LlmService).Namespace))
+                classes.InNamespaces(
+                    typeof(LlmService).Namespace,
+                    typeof(Repository<>).Namespace))
             .AsImplementedInterfaces()
-            .WithSingletonLifetime());
+            .WithScopedLifetime());
     }
 }

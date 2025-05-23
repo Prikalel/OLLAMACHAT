@@ -3,7 +3,7 @@
 /// <summary>
 /// Чат пользователя.
 /// </summary>
-public class UserChat
+public class UserChat : IEntity
 {
     private readonly StateMachine<ChatState, ChatAction> chatStateMachine;
 

@@ -3,7 +3,7 @@
 /// <summary>
 /// Пользователь сервиса.
 /// </summary>
-public class User
+public class User : IEntity
 {
     /// <summary>
     /// Id.
