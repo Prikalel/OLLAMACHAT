@@ -32,7 +32,7 @@ public class User : IEntity
     {
         if (!Chats.Any())
         {
-            Chats.Add(new(string.Empty, this.Id, "Chat1", defaultModel, true, ChatState.PendingInput));
+            Chats.Add(new(null, this.Id, "Chat1", defaultModel, true, ChatState.PendingInput));
             created = true;
         }
         else

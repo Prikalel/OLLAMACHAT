@@ -20,10 +20,13 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, I
     {
         if (await context.Users.AnyAsync())
         {
-            return context.Users.FirstOrDefault(x => x.Name == name);
+            return context.Users
+                .Include(x => x.Chats)
+                .ThenInclude(x => x.Messages)
+                .FirstOrDefault(x => x.Name == name);
         }
 
-        EntityEntry<User> entity = await context.Users.AddAsync(new User { Id = string.Empty, Name = name });
+        EntityEntry<User> entity = await context.Users.AddAsync(new User { Id = null, Name = name });
         await context.SaveChangesAsync();
         return entity.Entity;
     }
