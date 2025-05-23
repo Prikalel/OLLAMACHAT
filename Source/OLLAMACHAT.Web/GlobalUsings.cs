@@ -15,4 +15,5 @@ global using NLog;
 global using NLog.Web;
 global using Swashbuckle.AspNetCore.SwaggerGen;
 global using VelikiyPrikalel.OLLAMACHAT.Web.MinimalApis;
+global using VelikiyPrikalel.OLLAMACHAT.Web.MinimalApis.Models;
 global using LogLevel = Microsoft.Extensions.Logging.LogLevel;
