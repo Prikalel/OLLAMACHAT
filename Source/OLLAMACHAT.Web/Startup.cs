@@ -59,6 +59,7 @@ public class Startup
         {
             endpoints.MapControllers();
             endpoints.MapRazorPages();
+            endpoints.MapSwagger();
         });
 
         if (ServicesRegistrationOptions.RegisterHangfireDashboard)

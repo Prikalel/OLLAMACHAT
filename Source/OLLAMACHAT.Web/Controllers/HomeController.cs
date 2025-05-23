@@ -6,6 +6,7 @@ using Index = VelikiyPrikalel.OLLAMACHAT.Web.Views.Home.Index;
 /// index контроллер.
 /// </summary>
 [Route("/")]
+[ApiExplorerSettings(IgnoreApi = true)] // убираем из swagger
 public class HomeController(ILogger<HomeController> logger) : Controller
 {
     /// <summary>
