@@ -16,4 +16,22 @@ public interface ILlmService
     /// </summary>
     /// <returns>Список моделей (строковых названий).</returns>
     Task<IEnumerable<string>> ListLocalModelsAsync();
+
+    /// <summary>
+    /// .
+    /// </summary>
+    /// <param name="prompt">.</param>
+    /// <param name="model">.</param>
+    /// <param name="previousMessages">.</param>
+    /// <returns></returns>
+    Task<string> FullyGenerateNextTextResponse(string prompt, string model, ICollection<OllamaMessage> previousMessages);
 }
+
+/// <summary>
+/// Сообщение.
+/// </summary>
+/// <param name="Role">Роль.</param>
+/// <param name="Content">Контент.</param>
+public record OllamaMessage(
+    OllamaSharp.Models.Chat.ChatRole Role,
+    string Content);

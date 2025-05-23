@@ -10,6 +10,7 @@ global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Options;
 global using OllamaSharp;
 global using OllamaSharp.Models;
+global using OllamaSharp.Models.Chat;
 global using VelikiyPrikalel.OLLAMACHAT.Application.Repositories;
 global using VelikiyPrikalel.OLLAMACHAT.Application.Services;
 global using VelikiyPrikalel.OLLAMACHAT.Data;

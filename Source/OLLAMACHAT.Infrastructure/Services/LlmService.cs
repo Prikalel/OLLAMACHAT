@@ -27,4 +27,31 @@ public class LlmService : ILlmService
         logger.LogInformation("Found {Count} models on server", models.Count());
         return models.Select(x => x.Name);
     }
+
+    /// <inheritdoc />
+    public async Task<string> FullyGenerateNextTextResponse(string prompt, string model, ICollection<OllamaMessage> previousMessages)
+    {
+        Chat chat = new(client)
+        {
+            Messages = previousMessages
+                .Select(x => new Message
+                {
+                    Role = x.Role,
+                    Content = x.Content,
+                    Images = [],
+                    ToolCalls = []
+                })
+                .ToList(),
+            Model = model
+        };
+
+        string fullResponse = "";
+        await foreach (string streamPiece in chat.SendAsync(prompt))
+        {
+            Console.Write(streamPiece);
+            fullResponse += streamPiece;
+        }
+
+        return fullResponse;
+    }
 }
