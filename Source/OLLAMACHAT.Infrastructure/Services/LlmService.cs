@@ -18,6 +18,9 @@ public class LlmService : ILlmService
     }
 
     /// <inheritdoc />
+    public async Task<bool> IsServerAlive() => await client.IsRunningAsync();
+
+    /// <inheritdoc />
     public async Task<IEnumerable<string>> ListLocalModelsAsync()
     {
         IEnumerable<Model> models = await client.ListLocalModelsAsync();
