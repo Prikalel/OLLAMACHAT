@@ -1,5 +1,9 @@
 ﻿global using Hangfire;
 global using Hangfire.PostgreSql;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Hangfire;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
+global using VelikiyPrikalel.OLLAMACHAT.Data;
+global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data;

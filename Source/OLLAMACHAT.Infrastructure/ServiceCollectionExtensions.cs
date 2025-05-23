@@ -13,5 +13,9 @@ public static class ServiceCollectionExtensions
     public static void RegisterInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.RegisterHangfire(configuration);
+        services.AddDbContext<OllamaChatContext>(opt =>
+        {
+            opt.UseNpgsql(configuration.GetConnectionString("OLLAMACHAT"));
+        });
     }
 }
