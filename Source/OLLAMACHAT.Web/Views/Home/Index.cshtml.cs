@@ -4,8 +4,5 @@ namespace VelikiyPrikalel.OLLAMACHAT.Web.Views.Home;
 
 public class Index : PageModel
 {
-    public void OnGet()
-    {
-        
-    }
+    public List<string> AvailableModels { get; set; }
 }

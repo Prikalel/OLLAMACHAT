@@ -17,6 +17,18 @@ public class HomeController(ILogger<HomeController> logger) : Controller
     public IActionResult Index()
     {
         logger.LogInformation("Index requested");
-        return View(new Index());
+        return View(new Index()
+        {
+            AvailableModels =
+            [
+                "deepseek-v3",
+                "gpt-4.1",
+                "bidara",
+                "deepseek-r1",
+                "mirexa",
+                "sur",
+                "gpt-4.1-mini"
+            ] // TODO. move to other place
+        });
     }
 }
