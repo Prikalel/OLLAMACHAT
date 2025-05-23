@@ -44,6 +44,21 @@ public class Startup
     {
         app.UseDeveloperExceptionPage();
 
+        app.UseRouting();
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+            endpoints.MapRazorPages();
+
+            endpoints.AddMinimalApis();
+        });
+
+        if (ServicesRegistrationOptions.RegisterHangfireDashboard)
+        {
+            app.UseHangfireDashboard();
+        }
+
         if (ServicesRegistrationOptions.RegisterSwagger)
         {
             app.UseSwagger();
@@ -51,20 +66,6 @@ public class Startup
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{ServiceName} API v1");
             });
-        }
-
-        app.UseRouting();
-
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-            endpoints.MapRazorPages();
-            endpoints.MapSwagger();
-        });
-
-        if (ServicesRegistrationOptions.RegisterHangfireDashboard)
-        {
-            app.UseHangfireDashboard();
         }
     }
 
@@ -86,6 +87,7 @@ public class Startup
 
     private static void RegisterSwagger(IServiceCollection services)
     {
+        services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
         {
             IncludeOllamaChatXmlDocs(options, nameof(Web));
@@ -94,6 +96,8 @@ public class Startup
             options.UseAllOfForInheritance();
 
             options.EnableAnnotations();
+
+            //options.
         });
     }
 
