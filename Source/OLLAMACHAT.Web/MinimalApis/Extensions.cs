@@ -27,7 +27,11 @@ public static class Extensions // TODO: имплементировать endpoin
             .Produces<List<ChatMessageDto>>(StatusCodes.Status200OK)
             .WithOpenApi();
 
-        app.MapPost("/send_message", (SendMessageRequestDto request) => { return TypedResults.Ok(new { request_id = Guid.NewGuid().ToString() }); })
+        app.MapPost("/send_message", async ([FromServices] IMediator mediator, SendMessageRequestDto request) =>
+            TypedResults.Ok(new
+            {
+                request_id = await mediator.Send(new SendMessage.Command(request.Message))
+            }))
             .WithSummary("Submit new message")
             .WithTags("MinimalApi")
             .WithDescription("Accepts user message and returns processing request ID")
@@ -35,12 +39,47 @@ public static class Extensions // TODO: имплементировать endpoin
             .WithOpenApi();
 
         app.MapGet("/check_response/{id}",
-                (string id) =>
+                (
+                    [FromServices] IBackgroundJobClientV2 backgroundJobClient,
+                    [FromServices] IRepository<UserChat> chatRepository,
+                    string id
+                ) =>
                 {
-                    return TypedResults.Ok(new ResponseStatusDto(
-                        "ready",
-                        new ResponseContentDto("message", "Mock response content")
-                    ));
+                    try
+                    {
+                        IMonitoringApi monitoringApi = JobStorage.Current.GetMonitoringApi();
+                        JobDetailsDto jobDetails = monitoringApi.JobDetails(id);
+                        string currentState = jobDetails.History[0].StateName;
+                        if (currentState == EnqueuedState.StateName || currentState == ProcessingState.StateName || currentState == AwaitingState.StateName)
+                        {
+                            return TypedResults.Ok(new ResponseStatusDto(
+                                "processing",
+                                null));
+                        }
+                        else if (currentState == FailedState.StateName)
+                        {
+                            var chatId = "123";
+                            var chat = chatRepository.GetChatByIdAsync(chatId).GetAwaiter().GetResult();
+                            chat.GenerationFailed();
+                            chatRepository.UpdateAsync(chat);
+                        }
+
+                        string jobValue = jobDetails.History
+                            .First(x => x.StateName == SucceededState.StateName)
+                            .Data["Result"];
+                        string deserializeString = JsonConvert.DeserializeObject<string>(jobValue)!;
+                        string responseHtmlContent = Markdig.Markdown.ToHtml(deserializeString);
+                        return TypedResults.Ok(new ResponseStatusDto(
+                            "ready",
+                            new ResponseContentDto("message", responseHtmlContent)
+                        ));
+                    }
+                    catch (Exception)
+                    {
+                        return TypedResults.Ok(new ResponseStatusDto(
+                            "processing",
+                            null));
+                    }
                 })
             .WithSummary("Check message processing status")
             .WithTags("MinimalApi")

@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Markdig" Version="0.41.1" />
     <PackageReference Include="Mediator.Abstractions" Version="3.0.0-preview.65" />
     <PackageReference Include="Mediator.SourceGenerator" Version="3.0.0-preview.65">
       <PrivateAssets>all</PrivateAssets>
