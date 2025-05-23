@@ -8,6 +8,7 @@ public class User : IEntity
     /// <summary>
     /// Id.
     /// </summary>
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public required string Id { get; set; }
 
     /// <summary>
@@ -25,12 +26,18 @@ public class User : IEntity
     /// у пользователя не было чатов.
     /// </summary>
     /// <param name="defaultModel">Модель чата при создании.</param>
+    /// <param name="created">TRUE если чат был создан.</param>
     /// <returns><see cref="UserChat"/>.</returns>
-    public UserChat GetOrCreateActiveChat(string defaultModel)
+    public UserChat GetOrCreateActiveChat(string defaultModel, out bool created)
     {
         if (!Chats.Any())
         {
             Chats.Add(new(string.Empty, this.Id, "Chat1", defaultModel, true, ChatState.PendingInput));
+            created = true;
+        }
+        else
+        {
+            created = false;
         }
 
         return Chats.SingleOrDefault(x => x.Active)

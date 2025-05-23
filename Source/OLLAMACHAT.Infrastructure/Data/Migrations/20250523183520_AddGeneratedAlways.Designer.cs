@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data;
@@ -11,9 +12,11 @@ using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data;
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(OllamaChatContext))]
-    partial class OllamaChatContextModelSnapshot : ModelSnapshot
+    [Migration("20250523183520_AddGeneratedAlways")]
+    partial class AddGeneratedAlways
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

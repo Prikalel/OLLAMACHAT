@@ -10,6 +10,7 @@ internal sealed class UserChatConfiguration : IEntityTypeConfiguration<UserChat>
 
         builder.Property(uc => uc.Id)
             .IsRequired()
+            .UseIdentityAlwaysColumn()
             .ValueGeneratedOnAdd();
 
         builder.Property(uc => uc.Name)

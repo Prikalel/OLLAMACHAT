@@ -8,6 +8,7 @@ public class ChatMessage : IEntity
     /// <summary>
     /// Id сообщения.
     /// </summary>
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public required string Id { get; set; }
 
     /// <summary>

@@ -9,6 +9,7 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasKey(u => u.Id);
         builder.Property(u => u.Id)
             .ValueGeneratedOnAdd()
+            .UseIdentityAlwaysColumn()
             .IsRequired();
 
         builder.Property(u => u.Name)

@@ -9,6 +9,7 @@ internal sealed class ChatMessageConfiguration : IEntityTypeConfiguration<ChatMe
         builder.HasKey(x => x.Id);
         builder.Property(uc => uc.Id)
             .IsRequired()
+            .UseIdentityAlwaysColumn()
             .ValueGeneratedOnAdd();
 
         builder.Property(x => x.Role)

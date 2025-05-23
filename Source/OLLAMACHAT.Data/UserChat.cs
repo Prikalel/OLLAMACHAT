@@ -29,6 +29,7 @@ public class UserChat : IEntity
     /// <summary>
     /// Id чата.
     /// </summary>
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public string Id { get; set; }
 
     /// <summary>
