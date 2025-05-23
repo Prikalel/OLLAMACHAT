@@ -54,6 +54,13 @@ public class Program
             logger.Debug("Starting up webhost.");
             IHost build = CreateWebHostBuilder(args)
                 .Build();
+
+            using (IServiceScope scope = build.Services.CreateScope())
+            {
+                OllamaChatContext db = scope.ServiceProvider.GetRequiredService<OllamaChatContext>();
+                await db.Database.MigrateAsync();
+            }
+
             await build
                 .RunAsync();
         }
