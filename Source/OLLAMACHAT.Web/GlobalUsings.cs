@@ -2,6 +2,7 @@
 global using System.IO;
 global using System.Threading.Tasks;
 global using Hangfire;
+global using Mediator;
 global using VelikiyPrikalel.OLLAMACHAT.Infrastructure;
 global using VelikiyPrikalel.OLLAMACHAT.Web.Settings;
 global using Microsoft.AspNetCore.Builder;
@@ -14,6 +15,7 @@ global using Microsoft.Extensions.Logging;
 global using NLog;
 global using NLog.Web;
 global using Swashbuckle.AspNetCore.SwaggerGen;
+global using VelikiyPrikalel.OLLAMACHAT.Application.Mediator;
 global using VelikiyPrikalel.OLLAMACHAT.Web.MinimalApis;
 global using VelikiyPrikalel.OLLAMACHAT.Web.MinimalApis.Models;
 global using LogLevel = Microsoft.Extensions.Logging.LogLevel;

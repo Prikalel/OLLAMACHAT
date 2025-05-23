@@ -83,6 +83,9 @@ public class Startup
         }
         services.AddControllers();
         services.AddRazorPages();
+
+        services.AddMediator((MediatorOptions options) =>
+            options.ServiceLifetime = ServiceLifetime.Singleton);
     }
 
     private static void RegisterSwagger(IServiceCollection services)

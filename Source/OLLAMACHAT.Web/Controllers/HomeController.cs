@@ -7,28 +7,20 @@ using Index = VelikiyPrikalel.OLLAMACHAT.Web.Views.Home.Index;
 /// </summary>
 [Route("/")]
 [ApiExplorerSettings(IgnoreApi = true)] // убираем из swagger
-public class HomeController(ILogger<HomeController> logger) : Controller
+public class HomeController(ILogger<HomeController> logger,
+    IMediator mediator) : Controller
 {
     /// <summary>
     /// Главная страница.
     /// </summary>
     /// <returns><see cref="ViewResult"/>.</returns>
     [Route("/")]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         logger.LogInformation("Index requested");
         return View(new Index()
         {
-            AvailableModels =
-            [
-                "deepseek-v3",
-                "gpt-4.1",
-                "bidara",
-                "deepseek-r1",
-                "mirexa",
-                "sur",
-                "gpt-4.1-mini"
-            ] // TODO. move to other place
+            AvailableModels = (await mediator.Send(new GetAvailableModels.Query())).ToList()
         });
     }
 }

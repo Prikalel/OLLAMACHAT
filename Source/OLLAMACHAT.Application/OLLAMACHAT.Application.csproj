@@ -16,4 +16,8 @@
     <ProjectReference Include="..\OLLAMACHAT.Data\OLLAMACHAT.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Mediator.Abstractions" Version="3.0.0-preview.65" />
+  </ItemGroup>
+
 </Project>
