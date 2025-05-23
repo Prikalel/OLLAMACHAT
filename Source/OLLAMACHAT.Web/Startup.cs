@@ -58,6 +58,7 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
+            endpoints.MapRazorPages();
         });
 
         if (ServicesRegistrationOptions.RegisterHangfireDashboard)
@@ -79,6 +80,7 @@ public class Startup
             RegisterSwagger(services);
         }
         services.AddControllers();
+        services.AddRazorPages();
     }
 
     private static void RegisterSwagger(IServiceCollection services)
