@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <CsProjectName>OLLAMACHAT.Data</CsProjectName>
+    <OutputPath>..\..\Out\$(Configuration)\$(CsProjectName)\</OutputPath>
+    <DocumentationFile>..\..\Out\$(Configuration)\$(CsProjectName)\VelikiyPrikalel.$(CsProjectName).xml</DocumentationFile>
+    <AssemblyName>VelikiyPrikalel.$(CsProjectName)</AssemblyName>
+    <RootNamespace>VelikiyPrikalel.$(CsProjectName)</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+</Project>

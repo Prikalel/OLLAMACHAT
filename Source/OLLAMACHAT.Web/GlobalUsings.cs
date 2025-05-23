@@ -1,0 +1,17 @@
+﻿global using System;
+global using System.IO;
+global using System.Threading.Tasks;
+global using Hangfire;
+global using VelikiyPrikalel.OLLAMACHAT.Infrastructure;
+global using VelikiyPrikalel.OLLAMACHAT.Web.Settings;
+global using Microsoft.AspNetCore.Builder;
+global using Microsoft.AspNetCore.Hosting;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Hosting;
+global using Microsoft.Extensions.Logging;
+global using NLog;
+global using NLog.Web;
+global using Swashbuckle.AspNetCore.SwaggerGen;
+global using LogLevel = Microsoft.Extensions.Logging.LogLevel;
