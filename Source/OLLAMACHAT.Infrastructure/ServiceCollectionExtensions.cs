@@ -17,5 +17,13 @@ public static class ServiceCollectionExtensions
         {
             opt.UseNpgsql(configuration.GetConnectionString("OLLAMACHAT"));
         });
+        services.Configure<LlmSettings>(
+            configuration.GetSection(nameof(LlmSettings)));
+        services.Scan(scan => scan
+            .FromAssemblyOf<LlmService>()
+            .AddClasses(classes =>
+                classes.InNamespaces(typeof(LlmService).Namespace))
+            .AsImplementedInterfaces()
+            .WithSingletonLifetime());
     }
 }
