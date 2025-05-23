@@ -48,7 +48,6 @@ public class LlmService : ILlmService
         string fullResponse = "";
         await foreach (string streamPiece in chat.SendAsync(prompt))
         {
-            Console.Write(streamPiece);
             fullResponse += streamPiece;
         }
 

@@ -30,7 +30,7 @@ public class LlmBackgroundService(
             );
         logger.LogInformation("Fully got response for prompt {Prompt} in chat {Id}", prompt, chatId);
 
-        UserChat chat = await chatRepository.GetByIdAsync(chatId);
+        UserChat chat = await chatRepository.GetChatByIdAsync(chatId);
         ChatState state = chat.LlmReturnedResponse(prompt, response);
         await chatRepository.UpdateAsync(chat);
         logger.LogInformation("Updated state of chat {Id} to {State}", chatId, state);
