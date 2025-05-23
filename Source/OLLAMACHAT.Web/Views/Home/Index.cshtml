@@ -9,7 +9,7 @@
     <div class="model-selector">
         <label>Model:</label>
         <select id="model-select">
-        @foreach (var availableModel in Model.AvailableModels)
+        @foreach (string availableModel in Model.AvailableModels)
         {
             <option value="@availableModel">@availableModel</option>
         }
