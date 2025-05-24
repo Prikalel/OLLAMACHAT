@@ -1,6 +1,6 @@
 ﻿global using System;
 global using Hangfire;
-global using Hangfire.PostgreSql;
+// global using Hangfire.PostgreSql; // Removed as it's no longer used and causes build errors
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.ChangeTracking;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;

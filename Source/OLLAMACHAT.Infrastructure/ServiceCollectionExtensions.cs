@@ -1,4 +1,7 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure;
+﻿using Microsoft.EntityFrameworkCore;
+using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Settings;
+
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure;
 
 /// <summary>
 /// Extension методы <see cref="IServiceCollection"/>.
@@ -15,10 +18,10 @@ public static class ServiceCollectionExtensions
         services.RegisterHangfire(configuration);
         services.AddDbContext<OllamaChatContext>(opt =>
         {
-            opt.UseNpgsql(configuration.GetConnectionString("OLLAMACHAT"));
+            opt.UseSqlite(configuration.GetConnectionString("OLLAMACHAT"));
         });
-        services.Configure<LlmSettings>(
-            configuration.GetSection(nameof(LlmSettings)));
+        services.Configure<OpenAISettings>(
+            configuration.GetSection("OpenAISettings"));
         services.Scan(scan => scan
             .FromAssemblyOf<LlmService>()
             .AddClasses(classes =>

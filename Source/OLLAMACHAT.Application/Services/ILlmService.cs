@@ -33,5 +33,5 @@ public interface ILlmService
 /// <param name="Role">Роль.</param>
 /// <param name="Content">Контент.</param>
 public record OllamaMessage(
-    OllamaSharp.Models.Chat.ChatRole Role,
+    string Role, // Changed from OllamaSharp.Models.Chat.ChatRole
     string Content);

@@ -24,7 +24,7 @@ public class LlmBackgroundService(
             model,
             previousMessages
                 .Select(x => new OllamaMessage(
-                    x.Role == ChatMessageRole.Assistant ? ChatRole.Assistant : ChatRole.User,
+                    x.Role == ChatMessageRole.Assistant ? "assistant" : "user", // Changed to string literals
                     x.Content))
                 .ToList()
             );

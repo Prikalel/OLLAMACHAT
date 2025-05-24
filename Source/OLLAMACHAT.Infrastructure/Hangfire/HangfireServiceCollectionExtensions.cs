@@ -1,4 +1,9 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Hangfire;
+﻿using Hangfire;
+using Hangfire.SQLite;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Hangfire;
 
 /// <summary>
 ///  Extension методы <see cref="IServiceCollection"/>.
@@ -14,14 +19,8 @@ internal static class HangfireServiceCollectionExtensions
     {
         services.AddHangfire(c =>
         {
-            string connectionString = configuration.GetConnectionString("OLLAMACHAT");
-            c.UsePostgreSqlStorage(x =>
-            {
-                x.UseNpgsqlConnection(connectionString);
-            }, new PostgreSqlStorageOptions()
-            {
-                SchemaName = "hangfire"
-            });
+            // string connectionString = configuration.GetConnectionString("OLLAMACHAT"); // This line can be removed or commented out if not used
+            c.UseSQLiteStorage("hangfire.db"); // Ensure this is the new line
         });
 
         services.AddHangfireServer();
