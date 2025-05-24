@@ -14,8 +14,14 @@ internal static class HangfireServiceCollectionExtensions
     {
         services.AddHangfire(c =>
         {
-            string connectionString = configuration.GetConnectionString("OLLAMACHAT_HANGFIRE");
-            c.UsePostgreSqlStorage(connectionString);
+            string connectionString = configuration.GetConnectionString("OLLAMACHAT");
+            c.UsePostgreSqlStorage(x =>
+            {
+                x.UseNpgsqlConnection(connectionString);
+            }, new PostgreSqlStorageOptions()
+            {
+                SchemaName = "hangfire"
+            });
         });
 
         services.AddHangfireServer();
