@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <CsProjectName>OLLAMACHAT.Application</CsProjectName>
+    <OutputPath>..\..\Out\$(Configuration)\$(CsProjectName)\</OutputPath>
+    <DocumentationFile>..\..\Out\$(Configuration)\$(CsProjectName)\VelikiyPrikalel.$(CsProjectName).xml</DocumentationFile>
+    <AssemblyName>VelikiyPrikalel.$(CsProjectName)</AssemblyName>
+    <RootNamespace>VelikiyPrikalel.$(CsProjectName)</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OLLAMACHAT.Data\OLLAMACHAT.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hangfire.Core" Version="1.8.15" />
+    <PackageReference Include="Mediator.Abstractions" Version="3.0.0-preview.65" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.1" />
+    <PackageReference Include="OllamaSharp" Version="5.1.19" />
+  </ItemGroup>
+
+</Project>

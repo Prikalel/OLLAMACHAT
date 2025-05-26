@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <CsProjectName>OLLAMACHAT.Infrastructure</CsProjectName>
+    <OutputPath>..\..\Out\$(Configuration)\$(CsProjectName)\</OutputPath>
+    <DocumentationFile>..\..\Out\$(Configuration)\$(CsProjectName)\VelikiyPrikalel.$(CsProjectName).xml</DocumentationFile>
+    <AssemblyName>VelikiyPrikalel.$(CsProjectName)</AssemblyName>
+    <RootNamespace>VelikiyPrikalel.$(CsProjectName)</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+      <Nullable>disable</Nullable> <!-- TODO -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hangfire.InMemory" Version="1.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.16" />
+    <PackageReference Include="OpenAI" Version="2.0.0-beta.6" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" />
+    <PackageReference Include="Hangfire.Core" Version="1.8.15" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.16" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.16">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="OllamaSharp" Version="5.1.19" />
+    <PackageReference Include="Scrutor" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OLLAMACHAT.Application\OLLAMACHAT.Application.csproj" />
+    <ProjectReference Include="..\OLLAMACHAT.Data\OLLAMACHAT.Data.csproj" />
+  </ItemGroup>
+
+</Project>
