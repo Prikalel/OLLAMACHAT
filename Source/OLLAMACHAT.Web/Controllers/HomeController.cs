@@ -24,4 +24,11 @@ public class HomeController(
             AvailableModels = (await mediator.Send(new GetAvailableModels.Query())).ToList()
         });
     }
+
+    [Route("/example")]
+    public async Task<IActionResult> Example()
+    {
+        logger.LogInformation("Example requested");
+        return View();
+    }
 }
