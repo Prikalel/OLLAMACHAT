@@ -56,12 +56,17 @@ public static class Extensions // TODO: имплементировать endpoin
                                 "processing",
                                 null));
                         }
-                        else if (currentState == FailedState.StateName)
+                        else if (jobDetails.History.Any(x => x.StateName == FailedState.StateName)
+                                 && jobDetails.History.All(x => x.StateName != SucceededState.StateName))
                         {
-                            var chatId = "123"; // todo: fix.
+                            var chatId = jobDetails.Job.Args[2].ToString();
                             var chat = chatRepository.GetChatByIdAsync(chatId).GetAwaiter().GetResult();
                             chat.GenerationFailed();
                             chatRepository.UpdateAsync(chat);
+                            return TypedResults.Ok(new ResponseStatusDto(
+                                "ready",
+                                new ResponseContentDto("message", "Failed to complete")
+                            ));
                         }
 
                         string jobValue = jobDetails.History
