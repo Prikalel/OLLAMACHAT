@@ -28,3 +28,5 @@ global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data;
 global using VelikiyPrikalel.OLLAMACHAT.Web.MinimalApis;
 global using VelikiyPrikalel.OLLAMACHAT.Web.MinimalApis.Models;
 global using LogLevel = Microsoft.Extensions.Logging.LogLevel;
+global using Microsoft.AspNetCore.SignalR;
+global using VelikiyPrikalel.OLLAMACHAT.Web.Webhooks;

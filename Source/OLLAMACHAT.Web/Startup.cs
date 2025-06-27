@@ -67,6 +67,11 @@ public class Startup
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{ServiceName} API v1");
             });
         }
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapHub<ExampleHub>("/hub");
+        });
     }
 
     /// <summary>
@@ -86,6 +91,8 @@ public class Startup
 
         services.AddMediator((MediatorOptions options) =>
             options.ServiceLifetime = ServiceLifetime.Scoped);
+
+        services.AddSignalR();
     }
 
     private static void RegisterSwagger(IServiceCollection services)

@@ -31,4 +31,11 @@ public class HomeController(
         logger.LogInformation("Example requested");
         return View();
     }
+
+    [Route("/signalPage")]
+    public async Task<IActionResult> SignalPage()
+    {
+        logger.LogInformation("Example SignalPage requested");
+        return View();
+    }
 }
