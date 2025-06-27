@@ -38,6 +38,17 @@ public static class Extensions // TODO: имплементировать endpoin
             .Produces<ResponseStatusDto>(StatusCodes.Status200OK)
             .WithOpenApi();
 
+        app.MapPost("/send_signalr_message", async ([FromServices] IHubContext<ExampleHub> hubContext, SendMessageRequestDto request) =>
+            {
+                await hubContext.Clients.All.SendAsync("MessageFromServer", request.Message);
+                return TypedResults.Ok("OK");
+            })
+            .WithSummary("Submit new message to signalr hub")
+            .WithTags("MinimalApi")
+            .WithDescription("Отправляет сообщение в хаб signalr")
+            .Produces<string>(StatusCodes.Status200OK)
+            .WithOpenApi();
+
         app.MapGet("/check_response/{id}",
                 (
                     [FromServices] IBackgroundJobClientV2 backgroundJobClient,
