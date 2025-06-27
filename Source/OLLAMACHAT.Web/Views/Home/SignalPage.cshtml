@@ -5,14 +5,30 @@
     ViewData["Title"] = "SignalR";
 }
 
-<div style="margin: auto">
 
-    HELLO WORLD!
-
+<div class="chat-container">
+    <div id="chat-display"></div>
 </div>
 
 @section Scripts {
     <script type="module">
+        import { HubConnectionBuilder } from '@@microsoft/signalr';
+
+        const hubConnection = new HubConnectionBuilder()
+            .withUrl("/hub") // адрес хаба
+            .build();
+
+        hubConnection.on("MessageFromServer", function (data) {
+            const chatDisplay = $('#chat-display');
+            const messageHtml = `<div class="message user-message">
+                    <strong>Hub:</strong> <span style="color: #e0e0e0;">${data}</span>
+                </div>`;
+            chatDisplay.append(messageHtml);
+            console.log("added message!");
+        });
+
         console.log("hi!");
+
+        hubConnection.start();
     </script>
 }
