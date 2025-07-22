@@ -302,3 +302,4 @@ docker-compose/logs
 /Source/OLLAMACHAT.Web/*.db
 /Source/OLLAMACHAT.Web/*.db-shm
 /Source/OLLAMACHAT.Web/*.db-wal
+.aider*
