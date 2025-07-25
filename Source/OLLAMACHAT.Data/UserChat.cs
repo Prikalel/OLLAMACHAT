@@ -62,8 +62,16 @@ public class UserChat : IEntity
     /// <summary>
     /// Флаг активности на случай если у пользователя несколько чатов.
     /// В один момент времени может быть только 1 открытый чат.
+    /// todo: переделать потому что это глупо, у пользователя должно быть больше 1 чата в которых
+    /// он должен мочь параллельно ждать ответ модели.
     /// </summary>
     public bool Active { get; private set; }
+
+    /// <summary>
+    /// Идентификатор задачи HF которая должна выполнить обработку запроса.
+    /// Если null значит состояние <see cref="State"/> = <see cref="ChatState.PendingInput"/>.
+    /// </summary>
+    public string? EnqueuedCompletionJobId { get; private set; }
 
     /// <summary>
     /// Состояние.
@@ -79,11 +87,13 @@ public class UserChat : IEntity
     /// Действие: пользователь ввёл промпт.
     /// </summary>
     /// <param name="prompt">Промпт пользователя.</param>
+    /// <param name="jobId">Идентификатор задачи HF на генерацию ответа.</param>
     /// <returns>Новое состояние.</returns>
-    public ChatState UserEnteredPrompt(string prompt)
+    public ChatState UserEnteredPrompt(string prompt, string jobId)
     {
         chatStateMachine.Fire(ChatAction.UserRequestedTextResponse);
         this.State = chatStateMachine.State;
+        this.EnqueuedCompletionJobId = jobId;
         return chatStateMachine.State;
     }
 
@@ -95,6 +105,7 @@ public class UserChat : IEntity
     {
         chatStateMachine.Fire(ChatAction.GenerationComplete);
         this.State = chatStateMachine.State;
+        this.EnqueuedCompletionJobId = null;
         this.Messages.Add(new ChatMessage
         {
             Id = null,
@@ -120,6 +131,7 @@ public class UserChat : IEntity
     {
         chatStateMachine.Fire(ChatAction.GenerationFailed);
         this.State = chatStateMachine.State;
+        this.EnqueuedCompletionJobId = null;
         return chatStateMachine.State;
     }
 }
