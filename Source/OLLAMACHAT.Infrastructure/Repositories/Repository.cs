@@ -37,6 +37,13 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, I
             .FirstOrDefaultAsync();
 
     /// <inheritdoc />
+    public async Task<UserChat?> GetChatWithJobId(string JobId) =>
+        await context.UserChats
+            .Include(x => x.Messages)
+            .Where(x => x.EnqueuedCompletionJobId == JobId)
+            .FirstOrDefaultAsync();
+
+    /// <inheritdoc />
     public async Task UpdateAsync(TEntity entity)
     {
         dbSet.Update(entity);

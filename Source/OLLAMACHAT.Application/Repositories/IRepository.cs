@@ -21,6 +21,13 @@ public interface IRepository<TEntity> where TEntity : IEntity
     Task<UserChat?> GetChatByIdAsync(string id);
 
     /// <summary>
+    /// .
+    /// </summary>
+    /// <param name="JobId">.</param>
+    /// <returns>.</returns>
+    Task<UserChat?> GetChatWithJobId(string JobId);
+
+    /// <summary>
     /// Обновить существующую сущность.
     /// </summary>
     /// <param name="entity">Обновленная сущность.</param>
