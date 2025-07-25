@@ -7,9 +7,9 @@ namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services;
 /// <inheritdoc />
 public class LlmService : ILlmService
 {
-    private const string uri = "https://openrouter.ai/api/v1";
     private readonly ILogger<LlmService> logger;
     private readonly OpenAISettings openAISettings;
+    private readonly string uri;
 
     /// <summary>
     /// ctor.
@@ -20,7 +20,12 @@ public class LlmService : ILlmService
     {
         this.logger = logger;
         this.openAISettings = openAISettings.Value;
+        this.uri = openAISettings.Value.ApiBase;
 
+        if (string.IsNullOrWhiteSpace(this.uri))
+        {
+            throw new ArgumentNullException(nameof(LlmService.openAISettings.ApiBase), "OpenAI API net address is not configured.");
+        }
         if (string.IsNullOrWhiteSpace(this.openAISettings.ApiKey))
         {
             throw new ArgumentNullException(nameof(LlmService.openAISettings.ApiKey), "OpenAI API key is not configured.");
@@ -54,7 +59,12 @@ public class LlmService : ILlmService
             prompt);
 
         // Создаем список сообщений, включая историю и текущий запрос
-        List<ChatMessage> chatMessages = new();
+        List<ChatMessage> chatMessages = string.IsNullOrWhiteSpace(openAISettings.SystemChatMessage)
+        ? []
+        :
+        [
+            new SystemChatMessage(openAISettings.SystemChatMessage)
+        ];
 
         // Map previous messages
         foreach (OllamaMessage prevMessage in previousMessages)
@@ -71,7 +81,6 @@ public class LlmService : ILlmService
 
         chatMessages.Add(new UserChatMessage(prompt));
 
-        List<ChatTool> tools = GetTools();
         ChatClient chatClient = new(model,
             openAISettings.ApiKey,
             new()
@@ -81,11 +90,17 @@ public class LlmService : ILlmService
 
         ChatCompletionOptions chatCompletionOptions = new()
         {
-            ToolChoice = ChatToolChoice.Auto
+            ToolChoice = openAISettings.EnableTools
+                ? ChatToolChoice.Auto
+                : ChatToolChoice.None
         };
-        foreach (ChatTool tool in tools)
+        if (openAISettings.EnableTools)
         {
-            chatCompletionOptions.Tools.Add(tool);
+            List<ChatTool> tools = GetTools();
+            foreach (ChatTool tool in tools)
+            {
+                chatCompletionOptions.Tools.Add(tool);
+            }
         }
 
         // Цикл для обработки потенциальных вызовов инструментов
