@@ -1,8 +1,4 @@
-﻿using Hangfire;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Hangfire;
+﻿namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Hangfire;
 
 /// <summary>
 ///  Extension методы <see cref="IServiceCollection"/>.
