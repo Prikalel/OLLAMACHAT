@@ -35,10 +35,6 @@ public class UserChatBackgroundService : BackgroundService
                 {
                     var jobId = userChat.EnqueuedCompletionJobId!;
                     var llmResponse = ChatResponseObtainer.ObtainChatResponseByJobId(jobId);
-                    if (llmResponse.Completed)
-                    {
-                        throw new InvalidOperationException($"Состояние {userChat.Id} completed но при этом он ждёт чего-то");
-                    }
 
                     if (llmResponse.Failed)
                     {

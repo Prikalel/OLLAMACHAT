@@ -6,8 +6,15 @@ public static class ChatResponseObtainer
     {
         IMonitoringApi monitoringApi = JobStorage.Current.GetMonitoringApi();
         JobDetailsDto jobDetails = monitoringApi.JobDetails(jobId);
-        string currentState = jobDetails.History[0].StateName;
-        if (currentState == EnqueuedState.StateName || currentState == ProcessingState.StateName || currentState == AwaitingState.StateName)
+        string? currentState = jobDetails?.History.FirstOrDefault()?.StateName;
+
+        if (currentState == null)
+        {
+            return new(true, true, "Error in task state");
+        }
+
+        if (currentState == EnqueuedState.StateName
+            || currentState == ProcessingState.StateName || currentState == AwaitingState.StateName)
         {
             return new(false, false, null);
         }
