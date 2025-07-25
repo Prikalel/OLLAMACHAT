@@ -1,4 +1,6 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Application.Mediator;
+﻿using Hangfire.States;
+
+namespace VelikiyPrikalel.OLLAMACHAT.Application.Mediator;
 
 /// <summary>
 /// Отправка промта llm.
@@ -23,25 +25,44 @@ public sealed class SendMessage
         /// <inheritdoc />
         public async ValueTask<string> Handle(Command request, CancellationToken cancellationToken)
         {
-            User user = await userRepository.GetOrCreateUser("alex");
-            UserChat activeChat = user.GetOrCreateActiveChat(null, out bool _);
+            string? jobId = null;
+            try
+            {
+                User user = await userRepository.GetOrCreateUser("alex");
+                UserChat activeChat = user.GetOrCreateActiveChat(null, out bool _);
 
-            ChatState state = activeChat.UserEnteredPrompt(request.Message);
-            await userRepository.UpdateAsync(user); // сохранили состояние чата
+                logger.LogInformation("Will generate llm response from model {Model}", activeChat.Model);
+                // создали таску на генерацию ответа. запуск через сколько угодно главное дать нам время обновить состояние чата перед постановкой в очередь.
+                jobId = backgroundJobClient.Create<ILlmBackgroundService>(llmService => llmService.GenerateTextResponse(
+                        request.Message,
+                        activeChat.Model,
+                        activeChat.Id,
+                        activeChat.Messages),
+                    new ScheduledState(TimeSpan.FromHours(3)));
 
-            logger.LogInformation("Will generate llm response from model {Model}", activeChat.Model);
-            string jobId = backgroundJobClient.Enqueue<ILlmBackgroundService>(llmService => llmService.GenerateTextResponse(
-                request.Message,
-                activeChat.Model,
-                activeChat.Id,
-                activeChat.Messages));
+                ChatState state = activeChat.UserEnteredPrompt(request.Message, jobId);
+                await userRepository.UpdateAsync(user); // сохранили состояние чата с идентификатором задачи
 
-            logger.LogInformation("Returning job id {Id}, chat {Id} current state {State}",
-                jobId,
-                activeChat.Id,
-                state);
+                // поставили задачу в очередь
+                backgroundJobClient.ChangeState(jobId, new EnqueuedState(), ScheduledState.StateName);
 
-            return jobId;
+                logger.LogInformation("Returning job id {Id}, chat {Id} current state {State}",
+                    jobId,
+                    activeChat.Id,
+                    state);
+            }
+            catch (Exception ex)
+            {
+                // Если что-то пошло не так - удалили задачу на генерацию ответа
+                if (jobId != null)
+                {
+                    backgroundJobClient.ChangeState(jobId, new DeletedState());
+                }
+
+                throw;
+            }
+
+            return jobId!;
         }
     }
 }
