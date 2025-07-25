@@ -10,10 +10,12 @@ using Microsoft.Extensions.Hosting;
 public class UserChatBackgroundService : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
+    private readonly ILogger<UserChatBackgroundService> logger;
 
-    public UserChatBackgroundService(IServiceProvider serviceProvider)
+    public UserChatBackgroundService(IServiceProvider serviceProvider, ILogger<UserChatBackgroundService> logger)
     {
         _serviceProvider = serviceProvider;
+        this.logger = logger;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -25,13 +27,25 @@ public class UserChatBackgroundService : BackgroundService
                 var dbContext = scope.ServiceProvider.GetRequiredService<OllamaChatContext>();
 
                 var userChats = dbContext.UserChats
-                    .Where(uc => uc.State == ChatState.WaitingImageGeneration || uc.State == ChatState.WaitingMessageGeneration)
+                    .Where(uc => (uc.State == ChatState.WaitingImageGeneration || uc.State == ChatState.WaitingMessageGeneration)
+                        && uc.EnqueuedCompletionJobId != null)
                     .ToList();
 
                 foreach (var userChat in userChats)
                 {
-                    userChat.GenerationFailed();
-                    dbContext.UserChats.Update(userChat);
+                    var jobId = userChat.EnqueuedCompletionJobId!;
+                    var llmResponse = ChatResponseObtainer.ObtainChatResponseByJobId(jobId);
+                    if (llmResponse.Completed)
+                    {
+                        throw new InvalidOperationException($"Состояние {userChat.Id} completed но при этом он ждёт чего-то");
+                    }
+
+                    if (llmResponse.Failed)
+                    {
+                        userChat.GenerationFailed();
+                        dbContext.UserChats.Update(userChat);
+                        logger.LogWarning("Считаем что чат {chat} не смог завершить операцию", userChat.Id);
+                    }
                 }
 
                 await dbContext.SaveChangesAsync(stoppingToken);
