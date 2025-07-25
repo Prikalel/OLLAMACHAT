@@ -2,7 +2,9 @@
 
 Переход на Event Sourcing фундаментально меняет подход к хранению данных. Вместо того чтобы сохранять в базе данных только последнее состояние ваших сущностей (`User`, `UserChat`), вы будете хранить полную последовательность событий, которые привели к этому состоянию. Состояние объекта (агрегата) будет восстанавливаться "на лету" путем проигрывания всех его событий.
 
-### Шаг 1: Установка необходимых пакетов
+В текущей реализации используется SQLite с Mediator и простым интерфейсом репозитория для CRUD операций. Приложение использует Minimal API вместо традиционных контроллеров. Также стоит отметить, что `ChatMessage` может быть превращён не в агрегат, а в ValueObject (в терминах C# - record).
+
+## Шаг 1: Установка необходимых пакетов
 
 Для начала добавьте в ваш проект следующие NuGet-пакеты:
 
@@ -13,9 +15,9 @@
 <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 ```
 
-Будьте умными и не добавляйте непаравильные лишние зависимости в Application-слой а меняйте зависимости только Infrastructure или Web-слоя.
+Будьте умными и не добавляйте неправильные лишние зависимости в Application-слой, а меняйте зависимости только Infrastructure или Web-слоя.
 
-### Шаг 2: Создание доменных событий
+## Шаг 2: Создание доменных событий
 
 События — это неизменяемые факты о том, что произошло в системе. Создайте классы для каждого значимого изменения в ваших агрегатах. Все события должны реализовывать интерфейс `CQRSlite.Events.IEvent`.
 
@@ -84,12 +86,23 @@ public class ChatStateChangedEvent : IMyEvent
     public ChatState NewState { get; set; }
     public string JobId { get; set; }
 }
+
+public class ChatModelChangedEvent : IMyEvent
+{
+    public Guid Id { get; set; }
+    public int Version { get; set; }
+    public DateTimeOffset TimeStamp { get; set; }
+    
+    public string ChatId { get; set; }
+    public string NewModel { get; set; }
+}
 ```
 
-
-### Шаг 3: Преобразование сущностей в аггрегаты
+## Шаг 3: Преобразование сущностей в агрегаты
 
 Ваши доменные модели (`User`, `UserChat`) теперь станут агрегатами. Агрегат — это граница транзакционной согласованности. Они должны наследоваться от `CQRSlite.Domain.AggregateRoot`. Вместо прямого изменения полей, методы агрегата создают и применяют события с помощью `ApplyChange`.
+
+`ChatMessage` может быть преобразован в ValueObject (record), так как он представляет собой неизменяемую структуру данных без собственного поведения.
 
 ```csharp
 public class UserAggregate : AggregateRoot
@@ -101,7 +114,6 @@ public class UserAggregate : AggregateRoot
 
     public UserAggregate(Guid id, string name)
     {
-        Id = id;
         ApplyChange(new UserCreatedEvent
         {
             Id = Guid.NewGuid(),
@@ -142,6 +154,7 @@ public class UserChatAggregate : AggregateRoot
 {
     public string UserId { get; private set; }
     public string Name { get; private set; }
+    public string Model { get; private set; }
     public ChatState State { get; private set; }
     public string EnqueuedCompletionJobId { get; private set; }
     public List<ChatMessage> Messages { get; private set; } = new();
@@ -150,7 +163,6 @@ public class UserChatAggregate : AggregateRoot
 
     public UserChatAggregate(Guid id, string userId, string name, string model)
     {
-        Id = id;
         ApplyChange(new ChatCreatedEvent
         {
             Id = Guid.NewGuid(),
@@ -176,13 +188,35 @@ public class UserChatAggregate : AggregateRoot
         });
     }
     
-    // Другие методы для изменения состояния...
+    public void ChangeModel(string newModel)
+    {
+        ApplyChange(new ChatModelChangedEvent
+        {
+            Id = Guid.NewGuid(),
+            ChatId = this.Id.ToString(),
+            NewModel = newModel,
+            TimeStamp = DateTimeOffset.UtcNow
+        });
+    }
+    
+    public void UpdateState(ChatState newState, string jobId)
+    {
+        ApplyChange(new ChatStateChangedEvent
+        {
+            Id = Guid.NewGuid(),
+            ChatId = this.Id.ToString(),
+            NewState = newState,
+            JobId = jobId,
+            TimeStamp = DateTimeOffset.UtcNow
+        });
+    }
 
     // Методы Apply для восстановления состояния
     private void Apply(ChatCreatedEvent e)
     {
         UserId = e.UserId;
         Name = e.Name;
+        Model = e.Model;
         State = ChatState.PendingInput; // Начальное состояние
     }
 
@@ -203,11 +237,15 @@ public class UserChatAggregate : AggregateRoot
         State = e.NewState;
         EnqueuedCompletionJobId = e.JobId;
     }
+    
+    private void Apply(ChatModelChangedEvent e)
+    {
+        Model = e.NewModel;
+    }
 }
 ```
 
-
-### Шаг 4: Реализация хранилища событий с `SQLStreamStore`
+## Шаг 4: Реализация хранилища событий с `SQLStreamStore`
 
 Создадим реализацию `IEventStore`, которая будет работать с `SQLStreamStore`.
 
@@ -246,7 +284,7 @@ public class SqlStreamStoreEventStore : IEventStore
             JsonConvert.SerializeObject(e)
         )).ToArray();
         
-        var expectedRevision = expectedVersion ?? aggregate.Version - events.Length;
+        var expectedRevision = expectedVersion ?? aggregate.Version;
 
         await _streamStore.AppendToStream(streamId, expectedRevision, newStreamMessages);
 
@@ -267,7 +305,7 @@ public class SqlStreamStoreEventStore : IEventStore
 
         if (page.Status == PageReadStatus.StreamNotFound)
         {
-            throw new Exception($"Aggregate '{aggregateId}' not found."); // Или верните null
+            throw new AggregateNotFoundException($"Aggregate '{aggregateId}' not found.");
         }
         
         var history = new List<IEvent>();
@@ -285,8 +323,7 @@ public class SqlStreamStoreEventStore : IEventStore
 }
 ```
 
-
-### Шаг 5: Новая реализация репозитория
+## Шаг 5: Новая реализация репозитория
 
 Старый репозиторий, работавший с EF Core, заменяется новым, который оперирует агрегатами и хранилищем событий.
 
@@ -318,10 +355,9 @@ public class AggregateRepository<T> : IAggregateRepository<T> where T : Aggregat
 }
 ```
 
+## Шаг 6: Настройка Dependency Injection
 
-### Шаг 6: Настройка Dependency Injection
-
-В файле `Program.cs` или `Startup.cs` настройте контейнер зависимостей.
+В файле `Startup.cs` настройте контейнер зависимостей.
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)
@@ -333,7 +369,7 @@ public void ConfigureServices(IServiceCollection services)
     var streamStore = new SqliteStreamStore(settings);
     
     // Важно: Инициализация схемы БД
-    streamStore.CreateSchemaIfNotExists().Wait(); 
+    streamStore.CreateSchemaIfNotExists().GetAwaiter().GetResult(); 
 
     services.AddSingleton<IStreamStore>(streamStore);
     
@@ -359,8 +395,7 @@ public class MediatREventPublisher : IEventPublisher
 }
 ```
 
-
-### Шаг 7: Триггеры на события для дополнительной логики
+## Шаг 7: Триггеры на события для дополнительной логики
 
 Это ответ на ваш вопрос о том, как реагировать на события. Вы создаете обработчики, которые подписываются на конкретные типы событий. MediatR отлично справляется с этой задачей.
 
@@ -398,9 +433,9 @@ public class UserEventLoggingHandler :
 
 MediatR автоматически обнаружит этот класс и будет вызывать его методы `Handle` каждый раз, когда `IEventPublisher` публикует `UserCreatedEvent` или `UserNameChangedEvent`.
 
-### Шаг 8: Команды и их обработчики (Write Side)
+## Команды и их обработчики (Write Side)
 
-Взаимодействие с системой теперь происходит через отправку команд.
+Взаимодействие с системой теперь происходит через отправку команд. Вместо традиционных контроллеров приложение использует Minimal API.
 
 ```csharp
 // Команда на создание пользователя
@@ -429,47 +464,132 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Guid>
         return userId;
     }
 }
-```
 
-
-### Использование
-
-Теперь в вашем API контроллере или сервисе вы будете использовать MediatR для отправки команд и `IAggregateRepository` для получения данных.
-
-```csharp
-[ApiController]
-[Route("[controller]")]
-public class UsersController : ControllerBase
+// Команда на отправку сообщения
+public class SendMessageCommand : IRequest<string>
 {
-    private readonly IMediator _mediator;
+    public string Message { get; set; }
+}
+
+// Обработчик команды отправки сообщения
+public class SendMessageCommandHandler : IRequestHandler<SendMessageCommand, string>
+{
     private readonly IAggregateRepository<UserAggregate> _userRepository;
+    private readonly IBackgroundJobClientV2 backgroundJobClient;
+    private readonly ILogger<SendMessageCommandHandler> logger;
 
-    public UsersController(IMediator mediator, IAggregateRepository<UserAggregate> userRepository)
+    public SendMessageCommandHandler(
+        IAggregateRepository<UserAggregate> userRepository,
+        IBackgroundJobClientV2 backgroundJobClient,
+        ILogger<SendMessageCommandHandler> logger)
     {
-        _mediator = mediator;
         _userRepository = userRepository;
+        this.backgroundJobClient = backgroundJobClient;
+        this.logger = logger;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand command)
+    public async Task<string> Handle(SendMessageCommand request, CancellationToken cancellationToken)
     {
-        var userId = await _mediator.Send(command);
-        return CreatedAtAction(nameof(GetUser), new { id = userId }, null);
-    }
-    
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetUser(Guid id)
-    {
-        try 
+        string? jobId = null;
+        try
         {
-            // Чтение данных путем восстановления агрегата из событий
-            var user = await _userRepository.GetByIdAsync(id);
-            return Ok(new { user.Id, user.Name, user.Version });
+            // Получаем пользователя (в реальной реализации нужно определить, как получать текущего пользователя)
+            var user = await _userRepository.GetByIdAsync(Guid.Parse("user-id")); // Замените на реальную логику получения пользователя
+            var activeChat = user.GetOrCreateActiveChat(null, out bool _);
+
+            logger.LogInformation("Will generate llm response from model {Model}", activeChat.Model);
+            // создали таску на генерацию ответа. запуск через сколько угодно главное дать нам время обновить состояние чата перед постановкой в очередь.
+            jobId = backgroundJobClient.Create<ILlmBackgroundService>(llmService => llmService.GenerateTextResponse(
+                    request.Message,
+                    activeChat.Model,
+                    activeChat.Id,
+                    activeChat.Messages),
+                new ScheduledState(TimeSpan.FromHours(3)));
+
+            activeChat.UpdateState(ChatState.WaitingMessageGeneration, jobId);
+            await _userRepository.SaveAsync(user); // сохранили состояние чата с идентификатором задачи
+
+            // поставили задачу в очередь
+            backgroundJobClient.ChangeState(jobId, new EnqueuedState(), ScheduledState.StateName);
+
+            logger.LogInformation("Returning job id {Id}, chat {Id} current state {State}",
+                jobId,
+                activeChat.Id,
+                activeChat.State);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return NotFound();
+            // Если что-то пошло не так - удалили задачу на генерацию ответа
+            if (jobId != null)
+            {
+                backgroundJobClient.ChangeState(jobId, new DeletedState());
+            }
+
+            throw;
         }
+
+        return jobId!;
     }
 }
 ```
+
+## Использование
+
+Теперь в вашем Minimal API вы будете использовать MediatR для отправки команд и `IAggregateRepository` для получения данных.
+
+```csharp
+public static class Extensions
+{
+    public static void AddMinimalApis(this IEndpointRouteBuilder app)
+    {
+        app.MapGet("/get_history", async (IMediator mediator) => TypedResults.Ok(
+                (await mediator.Send(new GetUserChatHistory.Query()))
+                .Select(x => new ChatMessageDto(
+                    x.Role.ToString().ToLower(),
+                    x.Content))
+            ))
+            .WithSummary("Get chat history")
+            .WithTags("MinimalApi")
+            .WithDescription("Returns list of previous chat messages")
+            .Produces<List<ChatMessageDto>>(StatusCodes.Status200OK)
+            .WithOpenApi();
+
+        app.MapPost("/send_message", async ([FromServices] IMediator mediator, SendMessageRequestDto request) =>
+            TypedResults.Ok(new
+            {
+                request_id = await mediator.Send(new SendMessage.Command(request.Message))
+            }))
+            .WithSummary("Submit new message")
+            .WithTags("MinimalApi")
+            .WithDescription("Accepts user message and returns processing request ID")
+            .Produces<ResponseStatusDto>(StatusCodes.Status200OK)
+            .WithOpenApi();
+
+        // ... другие endpoints
+    }
+}
+```
+
+## Особенности внедрения Event Sourcing
+
+Особенность внедрения Event Sourcing в нашем случае заключается в том, что мы не будем использовать readonly-проекции, а для операций чтения будем строить агрегаты из событий. Это упрощает архитектуру, но может повлиять на производительность при большом количестве событий.
+
+## Слои, в которых происходят изменения
+
+1. **Application Layer**: 
+   - Замена команд и обработчиков для работы с агрегатами вместо сущностей EF
+   - Обновление интерфейсов репозиториев
+
+2. **Data Layer**:
+   - Создание доменных событий
+   - Преобразование сущностей в агрегаты
+   - Создание ValueObjects (ChatMessage как record)
+
+3. **Infrastructure Layer**:
+   - Реализация хранилища событий с использованием SQLStreamStore
+   - Новая реализация репозиториев для работы с агрегатами
+   - Настройка Dependency Injection для новых компонентов
+
+4. **Web Layer**:
+   - Адаптация Minimal API для работы с новыми командами и обработчиками
+   - Обновление конфигурации Startup.cs для регистрации новых сервисов
