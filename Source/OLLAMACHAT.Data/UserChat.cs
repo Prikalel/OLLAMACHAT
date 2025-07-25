@@ -57,7 +57,7 @@ public class UserChat : IEntity
     /// <summary>
     /// Модель, использующаяся для генерации ответов в чате.
     /// </summary>
-    public string Model { get; set; } // todo: private set
+    public string Model { get; private set; }
 
     /// <summary>
     /// Флаг активности на случай если у пользователя несколько чатов.
@@ -82,6 +82,11 @@ public class UserChat : IEntity
     /// Сообщения этого чата.
     /// </summary>
     public ICollection<ChatMessage> Messages { get; private set; } = [];
+
+    public void UpdateModel(string newModel)
+    {
+        this.Model = newModel;
+    }
 
     /// <summary>
     /// Действие: пользователь ввёл промпт.

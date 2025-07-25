@@ -94,7 +94,7 @@ public static class Extensions // TODO: имплементировать endpoin
                 {
                     var u = await chatRepository.GetOrCreateUser("alex");
                     var chat = u.GetOrCreateActiveChat(null, out bool _);
-                    chat.Model = requestDto.Model;
+                    chat.UpdateModel(requestDto.Model);
                     await chatRepository.UpdateAsync(chat);
                     return TypedResults.Ok(new { success = true });
                 })
