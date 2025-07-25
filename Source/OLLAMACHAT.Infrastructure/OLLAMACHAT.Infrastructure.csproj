@@ -8,10 +8,6 @@
     <RootNamespace>VelikiyPrikalel.$(CsProjectName)</RootNamespace>
   </PropertyGroup>
 
-  <PropertyGroup>
-      <Nullable>disable</Nullable> <!-- TODO -->
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Hangfire.InMemory" Version="1.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.16" />
