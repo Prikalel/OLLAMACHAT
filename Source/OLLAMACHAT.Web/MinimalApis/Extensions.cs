@@ -47,38 +47,18 @@ public static class Extensions // TODO: имплементировать endpoin
                 {
                     try
                     {
-                        IMonitoringApi monitoringApi = JobStorage.Current.GetMonitoringApi();
-                        JobDetailsDto jobDetails = monitoringApi.JobDetails(id);
-                        string currentState = jobDetails.History[0].StateName;
-                        if (currentState == EnqueuedState.StateName || currentState == ProcessingState.StateName || currentState == AwaitingState.StateName)
+                        ChatResponseObtainer.ChatResponse result = ChatResponseObtainer.ObtainChatResponseByJobId(id);
+                        return (result.Completed, result.Failed) switch
                         {
-                            return TypedResults.Ok(new ResponseStatusDto(
+                            (false, _) => TypedResults.Ok(new ResponseStatusDto(
                                 "processing",
-                                null));
-                        }
-                        else if (jobDetails.History.Any(x => x.StateName == FailedState.StateName)
-                                 && jobDetails.History.All(x => x.StateName != SucceededState.StateName))
-                        {
-                            var chatId = jobDetails.Job.Args[2].ToString();
-                            var chat = chatRepository.GetChatByIdAsync(chatId).GetAwaiter().GetResult();
-                            chat.GenerationFailed();
-                            chatRepository.UpdateAsync(chat);
-                            return TypedResults.Ok(new ResponseStatusDto(
+                                null)),
+                            (true, true) => SetChatAsFailedAndReturn(chatRepository, result, id),
+                            (true, false) => TypedResults.Ok(new ResponseStatusDto(
                                 "ready",
-                                new ResponseContentDto("message", "Failed to complete")
-                            ));
-                        }
-
-                        string jobValue = jobDetails.History
-                            .First(x => x.StateName == SucceededState.StateName)
-                            .Data["Result"];
-                        string deserializeString = JsonConvert.DeserializeObject<string>(jobValue)!;
-                        deserializeString = Regex.Replace(deserializeString, @"<think>.*?</think>", string.Empty, RegexOptions.Singleline);
-                        string responseHtmlContent = Markdig.Markdown.ToHtml(deserializeString);
-                        return TypedResults.Ok(new ResponseStatusDto(
-                            "ready",
-                            new ResponseContentDto("message", responseHtmlContent)
-                        ));
+                                new ResponseContentDto("message", Markdig.Markdown.ToHtml(result.Response!))
+                            ))
+                        };
                     }
                     catch (Exception)
                     {
@@ -123,5 +103,16 @@ public static class Extensions // TODO: имплементировать endpoin
             .WithDescription("Updates the currently selected AI model")
             .Produces(StatusCodes.Status200OK)
             .WithOpenApi();
+    }
+
+    private static Ok<ResponseStatusDto> SetChatAsFailedAndReturn(IRepository<UserChat> chatRepository, ChatResponseObtainer.ChatResponse response, string jobId)
+    {
+        var chat = chatRepository.GetChatWithJobId(jobId).GetAwaiter().GetResult();
+        chat.GenerationFailed();
+        chatRepository.UpdateAsync(chat);
+        return TypedResults.Ok(new ResponseStatusDto(
+            "ready",
+            new ResponseContentDto("message", "Failed to complete")
+        ));
     }
 }
