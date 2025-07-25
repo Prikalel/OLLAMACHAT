@@ -19,7 +19,7 @@ public class User : IEntity
     /// <summary>
     /// Чаты пользователя.
     /// </summary>
-    public ICollection<UserChat> Chats { get; set; } = [];
+    public ICollection<UserChat> Chats { get; } = [];
 
     /// <summary>
     /// Получить активный чат пользователя или создать его, если
