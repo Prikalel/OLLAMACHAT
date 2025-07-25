@@ -8,5 +8,5 @@ public interface IEntity
     /// <summary>
     /// Id.
     /// </summary>
-    public string Id { get; set; }
+    public string Id { get; }
 }

@@ -42,28 +42,28 @@ public class UserChat : IEntity
     /// Id чата.
     /// </summary>
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public string Id { get; set; }
+    public string Id { get; private set; }
 
     /// <summary>
     /// Id пользователя, которому принадлежит чат.
     /// </summary>
-    public string UserId { get; set; }
+    public string UserId { get; private set; }
 
     /// <summary>
     /// Имя чата.
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; private set; }
 
     /// <summary>
     /// Модель, использующаяся для генерации ответов в чате.
     /// </summary>
-    public string Model { get; set; }
+    public string Model { get; set; } // todo: private set
 
     /// <summary>
     /// Флаг активности на случай если у пользователя несколько чатов.
     /// В один момент времени может быть только 1 открытый чат.
     /// </summary>
-    public bool Active { get; set; }
+    public bool Active { get; private set; }
 
     /// <summary>
     /// Состояние.
@@ -73,7 +73,7 @@ public class UserChat : IEntity
     /// <summary>
     /// Сообщения этого чата.
     /// </summary>
-    public ICollection<ChatMessage> Messages { get; set; } = [];
+    public ICollection<ChatMessage> Messages { get; private set; } = [];
 
     /// <summary>
     /// Действие: пользователь ввёл промпт.
