@@ -1,6 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"] - Chat Application</title>
     <style>
         :root {
@@ -208,18 +209,63 @@
 
         /* Responsive adjustments */
         @@media (max-width: 768px) {
+            body {
+                padding: 10px;
+                animation: none;
+                background: var(--dark-bg);
+            }
+
             .chat-container {
-                padding: 15px;
-                border-radius: 12px;
+                padding: 12px;
+                border-radius: 10px;
+                max-width: 100%;
             }
 
             #chat-display {
-                height: 400px;
+                height: 60vh;
+                padding: 12px;
+                font-size: 14px;
             }
 
             .user-message, .ai-message {
                 margin-left: 0;
                 margin-right: 0;
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            #input-area {
+                flex-direction: column;
+                gap: 8px;
+                padding: 0 8px;
+                box-sizing: border-box;
+            }
+
+            #message-input {
+                min-height: 80px;
+                width: 100%;
+                box-sizing: border-box;
+                margin: 0;
+            }
+
+            button {
+                width: 100%;
+                height: 50px;
+                padding: 12px;
+            }
+
+            img.chat-image {
+                max-width: 100%;
+            }
+        }
+
+        @@media (max-width: 480px) {
+            #chat-display {
+                height: 55vh;
+            }
+
+            .message {
+                margin-bottom: 12px;
             }
         }
 
