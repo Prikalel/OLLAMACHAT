@@ -96,11 +96,13 @@ public class UserChat : IEntity
     /// Удалить последнее сообщение в чатике внезависимости от того кто его отправил.
     /// </summary>
     /// <returns>Было ли выполнено удаление. False если элементов в списке сообщений нет.</returns>
-    public bool UndoLastMessage()
+    public bool DeleteLastMessage()
     {
         if (this.Messages.Count > 0)
         {
-            Messages.Remove(this.Messages.Last());
+            Messages.Remove(this.Messages
+                .OrderBy(x => x.Time)
+                .Last());
             return true;
         }
         return false;

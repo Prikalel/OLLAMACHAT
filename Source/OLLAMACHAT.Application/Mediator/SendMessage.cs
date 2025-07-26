@@ -34,7 +34,7 @@ public sealed class SendMessage
                 if (request.Message.Trim().ToLower().Equals("/undo"))
                 {
                     logger.LogInformation("Will delete last message");
-                    activeChat.UndoLastMessage();
+                    activeChat.DeleteLastMessage();
                     await userRepository.UpdateAsync(user);
                     jobId = backgroundJobClient.Create(() => ReturnLastMessageDeletedText(),
                         new ScheduledState(TimeSpan.FromHours(3)));
