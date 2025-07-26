@@ -83,9 +83,27 @@ public class UserChat : IEntity
     /// </summary>
     public ICollection<ChatMessage> Messages { get; private set; } = [];
 
+    /// <summary>
+    /// Обновить модель выбранную для общения в чатике.
+    /// </summary>
+    /// <param name="newModel">Идентификатор новой модели.</param>
     public void UpdateModel(string newModel)
     {
         this.Model = newModel;
+    }
+
+    /// <summary>
+    /// Удалить последнее сообщение в чатике внезависимости от того кто его отправил.
+    /// </summary>
+    /// <returns>Было ли выполнено удаление. False если элементов в списке сообщений нет.</returns>
+    public bool UndoLastMessage()
+    {
+        if (this.Messages.Count > 0)
+        {
+            Messages.Remove(this.Messages.Last());
+            return true;
+        }
+        return false;
     }
 
     /// <summary>

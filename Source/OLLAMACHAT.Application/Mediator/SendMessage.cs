@@ -31,25 +31,36 @@ public sealed class SendMessage
                 User user = await userRepository.GetOrCreateUser("alex");
                 UserChat activeChat = user.GetOrCreateActiveChat(null, out bool _);
 
-                logger.LogInformation("Will generate llm response from model {Model}", activeChat.Model);
-                // создали таску на генерацию ответа. запуск через сколько угодно главное дать нам время обновить состояние чата перед постановкой в очередь.
-                jobId = backgroundJobClient.Create<ILlmBackgroundService>(llmService => llmService.GenerateTextResponse(
-                        request.Message,
-                        activeChat.Model,
-                        activeChat.Id,
-                        activeChat.Messages),
-                    new ScheduledState(TimeSpan.FromHours(3)));
+                if (request.Message.Trim().ToLower().Equals("/undo"))
+                {
+                    logger.LogInformation("Will delete last message");
+                    activeChat.UndoLastMessage();
+                    await userRepository.UpdateAsync(user);
+                    jobId = backgroundJobClient.Create(() => ReturnLastMessageDeletedText(),
+                        new ScheduledState(TimeSpan.FromHours(3)));
+                }
+                else
+                {
+                    logger.LogInformation("Will generate llm response from model {Model}", activeChat.Model);
+                    // создали таску на генерацию ответа. запуск через сколько угодно главное дать нам время обновить состояние чата перед постановкой в очередь.
+                    jobId = backgroundJobClient.Create<ILlmBackgroundService>(llmService => llmService.GenerateTextResponse(
+                            request.Message,
+                            activeChat.Model,
+                            activeChat.Id,
+                            activeChat.Messages),
+                        new ScheduledState(TimeSpan.FromHours(3)));
 
-                ChatState state = activeChat.UserEnteredPrompt(request.Message, jobId);
-                await userRepository.UpdateAsync(user); // сохранили состояние чата с идентификатором задачи
+                    ChatState state = activeChat.UserEnteredPrompt(request.Message, jobId);
+                    await userRepository.UpdateAsync(user); // сохранили состояние чата с идентификатором задачи
+                }
+
 
                 // поставили задачу в очередь
                 backgroundJobClient.ChangeState(jobId, new EnqueuedState(), ScheduledState.StateName);
 
-                logger.LogInformation("Returning job id {Id}, chat {Id} current state {State}",
+                logger.LogInformation("Returning job id {Id}, chat {Id}",
                     jobId,
-                    activeChat.Id,
-                    state);
+                    activeChat.Id);
             }
             catch (Exception ex)
             {
@@ -63,6 +74,10 @@ public sealed class SendMessage
             }
 
             return jobId!;
+        }
+
+        public async Task<string> ReturnLastMessageDeletedText() {
+            return await Task.FromResult("Last message deleted from chat");
         }
     }
 }
