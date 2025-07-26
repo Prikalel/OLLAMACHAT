@@ -19,7 +19,13 @@
     <div id="chat-display"></div>
 
     <div id="input-area">
-        <textarea id="message-input" rows="3" placeholder="Type your message here..."></textarea>
+        <div class="input-wrapper">
+            <textarea id="message-input" rows="3" placeholder="Type your message here..."></textarea>
+            <div class="help-tooltip">
+                <div class="help-icon">?</div>
+                <span class="tooltip-text">/undo - to delete last message</span>
+            </div>
+        </div>
         <button id="send-button">Send</button>
     </div>
 </div>

@@ -131,12 +131,62 @@
 
         #input-area {
             display: flex;
-            gap: 12px;
+            gap: 8px; /* Increased gap slightly for better visual separation */
             align-items: flex-end;
         }
 
-        #message-input {
+        .input-wrapper {
+            position: relative;
             flex-grow: 1;
+        }
+
+        .help-tooltip {
+            position: absolute;
+            right: 8px; /* Adjusted to be closer to the input field's right edge */
+            top: 10px; /* Adjusted to be slightly lower, aligning better with text input */
+            z-index: 1;
+        }
+
+        .help-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background-color: #555;
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 150px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -75px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .help-tooltip:hover .tooltip-text,
+        .help-tooltip:active .tooltip-text,
+        .help-tooltip:focus .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        #message-input {
+            width: 100%; /* Ensure textarea takes full width of its parent */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
             padding: 14px;
             background-color: rgba(20, 20, 20, 0.8);
             color: var(--text-color);
@@ -241,9 +291,13 @@
                 box-sizing: border-box;
             }
 
+            .input-wrapper {
+                width: 100%; /* Ensure input-wrapper takes full width in mobile */
+            }
+
             #message-input {
                 min-height: 80px;
-                width: 100%;
+                width: 100%; /* Ensure textarea takes full width of its parent in mobile */
                 box-sizing: border-box;
                 margin: 0;
             }
