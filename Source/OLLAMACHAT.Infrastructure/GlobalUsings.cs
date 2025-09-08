@@ -1,14 +1,13 @@
 ﻿global using System;
-global using Hangfire;
-// global using Hangfire.PostgreSql; // Removed as it's no longer used and causes build errors
+global using Microsoft.AspNetCore.SignalR;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.ChangeTracking;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
-global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Hangfire;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Options;
+global using VelikiyPrikalel.OLLAMACHAT.Application.Hubs;
 global using VelikiyPrikalel.OLLAMACHAT.Application.Repositories;
 global using VelikiyPrikalel.OLLAMACHAT.Application.Services;
 global using VelikiyPrikalel.OLLAMACHAT.Data;

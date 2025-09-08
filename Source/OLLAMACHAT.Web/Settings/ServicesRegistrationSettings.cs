@@ -9,9 +9,4 @@ public class ServicesRegistrationSettings
     /// Использовать SwaggerUi.
     /// </summary>
     public bool RegisterSwagger { get; set; } = false;
-    
-    /// <summary>
-    /// Использовать hangfire dashboard.
-    /// </summary>
-    public bool RegisterHangfireDashboard { get; set; } = false;
 }

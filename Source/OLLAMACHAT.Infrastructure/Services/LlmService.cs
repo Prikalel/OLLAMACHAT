@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using OpenAI;
 using OpenAI.Chat;
 using ChatMessage = OpenAI.Chat.ChatMessage;
 
@@ -42,9 +43,6 @@ public class LlmService : ILlmService
     /// <inheritdoc />
     public Task<IEnumerable<string>> ListLocalModelsAsync()
     {
-        // OpenAI doesn't have "local" models in the same way Ollama does.
-        // This method will return the currently configured model.
-        logger.LogInformation("Returning configured OpenAI model: {Model}", openAISettings.Models);
         return Task.FromResult<IEnumerable<string>>( openAISettings.Models );
     }
 
@@ -244,6 +242,62 @@ public class LlmService : ILlmService
         catch (Exception ex)
         {
             return $"Исключение при поиске в Wikipedia: {ex.Message}";
+        }
+    }
+
+    /// <inheritdoc />
+    public async IAsyncEnumerable<string> StreamTextResponse(
+        string prompt,
+        string model,
+        ICollection<OllamaMessage> previousMessages)
+    {
+        if (openAISettings.EnableTools)
+        {
+            logger.LogError("Streaming does not support tool calls.");
+            throw new NotSupportedException("Streaming does not support tool calls.");
+        }
+
+        // Create chat messages
+        List<ChatMessage> chatMessages = string.IsNullOrWhiteSpace(openAISettings.SystemChatMessage)
+            ? new List<ChatMessage>()
+            : new List<ChatMessage>
+            {
+                new SystemChatMessage(openAISettings.SystemChatMessage)
+            };
+
+        foreach (OllamaMessage prevMessage in previousMessages)
+        {
+            if (prevMessage.Role.Equals("user", StringComparison.OrdinalIgnoreCase))
+            {
+                chatMessages.Add(new UserChatMessage(prevMessage.Content));
+            }
+            else if (prevMessage.Role.Equals("assistant", StringComparison.OrdinalIgnoreCase))
+            {
+                chatMessages.Add(new AssistantChatMessage(prevMessage.Content));
+            }
+        }
+
+        chatMessages.Add(new UserChatMessage(prompt));
+
+        ChatClient chatClient = new ChatClient(
+            model,
+            openAISettings.ApiKey,
+            new OpenAIClientOptions()
+            {
+                Endpoint = new Uri(uri)
+            });
+
+        ChatCompletionOptions chatCompletionOptions = new ChatCompletionOptions();
+
+        IAsyncEnumerable<StreamingChatCompletionUpdate> stream = chatClient.CompleteChatStreamingAsync(chatMessages, chatCompletionOptions);
+
+        await foreach (var chunk in stream)
+        {
+            string token = string.Join("", chunk.ContentUpdate.Select(c => c.Text));
+            if (!string.IsNullOrEmpty(token))
+            {
+                yield return token;
+            }
         }
     }
 }

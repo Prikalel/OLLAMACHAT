@@ -31,8 +31,7 @@ public class Startup
     private ServicesRegistrationSettings ServicesRegistrationOptions =>
         new ()
         {
-            RegisterSwagger = true,
-            RegisterHangfireDashboard = true
+            RegisterSwagger = true
         };
 
     /// <summary>
@@ -50,14 +49,10 @@ public class Startup
         {
             endpoints.MapControllers();
             endpoints.MapRazorPages();
+            endpoints.MapHub<ChatHub>("/chatHub");
 
             endpoints.AddMinimalApis();
         });
-
-        if (ServicesRegistrationOptions.RegisterHangfireDashboard)
-        {
-            app.UseHangfireDashboard();
-        }
 
         if (ServicesRegistrationOptions.RegisterSwagger)
         {
@@ -75,7 +70,7 @@ public class Startup
     /// <param name="services">Коллекция сервисов.</param>
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddHostedService<UserChatBackgroundService>();
+        //services.AddHostedService<UserChatBackgroundService>();
         services.RegisterInfrastructure(Configuration);
 
         if (ServicesRegistrationOptions.RegisterSwagger)
@@ -84,6 +79,7 @@ public class Startup
         }
         services.AddControllers();
         services.AddRazorPages();
+        services.AddSignalR();
 
         services.AddMediator((MediatorOptions options) =>
             options.ServiceLifetime = ServiceLifetime.Scoped);

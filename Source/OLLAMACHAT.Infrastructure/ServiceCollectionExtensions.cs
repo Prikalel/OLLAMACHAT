@@ -15,13 +15,19 @@ public static class ServiceCollectionExtensions
     /// <param name="configuration">><see cref="IConfiguration"/>.</param>
     public static void RegisterInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.RegisterHangfire(configuration);
         services.AddDbContext<OllamaChatContext>(opt =>
         {
             opt.UseSqlite(configuration.GetConnectionString("OLLAMACHAT"));
         });
-        services.Configure<OpenAISettings>(
-            configuration.GetSection("OpenAISettings"));
+        services.Configure<OpenAISettings>(opt =>
+        {
+            var r = configuration.GetRequiredSection("OpenAISettings");
+            opt.ApiKey = r["ApiKey"];
+            opt.ApiBase = r["ApiBase"];
+            opt.EnableTools = false;
+            opt.SystemChatMessage = r["SystemChatMessage"];
+            opt.Models = r.GetSection("Models").GetChildren().Select(x => x.Value).OfType<string>().ToArray();
+        });
         services.Scan(scan => scan
             .FromAssemblyOf<LlmService>()
             .AddClasses(classes =>
