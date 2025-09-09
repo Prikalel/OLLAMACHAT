@@ -6,8 +6,8 @@ namespace VelikiyPrikalel.OLLAMACHAT.Application.Hubs
     {
         public async Task ChangeModel(string model)
         {
-            var u = await chatRepository.GetOrCreateUser("alex");
-            var chat = u.GetOrCreateActiveChat(null, out bool _);
+            User u = await chatRepository.GetOrCreateUser("alex");
+            UserChat chat = u.GetOrCreateActiveChat(null, out bool _);
             chat.UpdateModel(model);
             await chatRepository.UpdateAsync(chat);
             _logger.LogInformation("Model changed to {M}", model);

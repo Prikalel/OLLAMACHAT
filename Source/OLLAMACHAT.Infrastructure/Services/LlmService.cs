@@ -291,7 +291,7 @@ public class LlmService : ILlmService
 
         IAsyncEnumerable<StreamingChatCompletionUpdate> stream = chatClient.CompleteChatStreamingAsync(chatMessages, chatCompletionOptions);
 
-        await foreach (var chunk in stream)
+        await foreach (StreamingChatCompletionUpdate chunk in stream)
         {
             string token = string.Join("", chunk.ContentUpdate.Select(c => c.Text));
             if (!string.IsNullOrEmpty(token))
