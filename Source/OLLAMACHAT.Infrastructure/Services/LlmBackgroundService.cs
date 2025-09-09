@@ -21,19 +21,15 @@ public class LlmBackgroundService(
         }
 
         // Accumulate tokens while streaming response via SignalR
-        string fullResponse = "";
-        await foreach (string token in llmService.StreamTextResponse(
+        string fullResponse = await llmService.FullyGenerateNextTextResponse(
             prompt,
             model,
             previousMessages
                 .Select(x => new OllamaMessage(
                     x.Role == ChatMessageRole.Assistant ? "assistant" : "user",
                     x.Content))
-                .ToList()))
-        {
-            fullResponse += token;
-            await hubContext.Clients.Client(connectionId).SendAsync("ReceiveMessageChunk", token);
-        }
+                .ToList());
+        await hubContext.Clients.Client(connectionId).SendAsync("ReceiveMessageChunk", fullResponse);
 
         logger.LogInformation("Streamed response for prompt {Prompt} in chat {Id}", prompt, chatId);
 

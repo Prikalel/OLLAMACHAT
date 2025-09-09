@@ -25,18 +25,6 @@ public interface ILlmService
     /// <param name="previousMessages">.</param>
     /// <returns></returns>
     Task<string> FullyGenerateNextTextResponse(string prompt, string model, ICollection<OllamaMessage> previousMessages);
-
-    /// <summary>
-    /// .
-    /// </summary>
-    /// <param name="prompt"></param>
-    /// <param name="model"></param>
-    /// <param name="previousMessages"></param>
-    /// <returns></returns>
-    IAsyncEnumerable<string> StreamTextResponse(
-        string prompt,
-        string model,
-        ICollection<OllamaMessage> previousMessages);
 }
 
 /// <summary>
