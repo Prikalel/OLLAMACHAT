@@ -1,4 +1,6 @@
 ﻿global using System;
+global using System.Text;
+global using System.Text.Json;
 global using Microsoft.AspNetCore.SignalR;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.ChangeTracking;

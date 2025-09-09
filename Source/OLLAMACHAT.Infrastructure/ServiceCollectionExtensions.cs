@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Settings;
-
-namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure;
+﻿namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure;
 
 /// <summary>
 /// Extension методы <see cref="IServiceCollection"/>.
@@ -21,13 +18,16 @@ public static class ServiceCollectionExtensions
         });
         services.Configure<OpenAISettings>(opt =>
         {
-            var r = configuration.GetRequiredSection("OpenAISettings");
+            IConfigurationSection r = configuration.GetRequiredSection("OpenAISettings");
             opt.ApiKey = r["ApiKey"];
             opt.ApiBase = r["ApiBase"];
             opt.EnableTools = false;
             opt.SystemChatMessage = r["SystemChatMessage"];
             opt.Models = r.GetSection("Models").GetChildren().Select(x => x.Value).OfType<string>().ToArray();
         });
+
+        services.Configure<List<McpServerConfiguration>>(options =>
+            configuration.GetSection("McpServers").Bind(options));
         services.Scan(scan => scan
             .FromAssemblyOf<LlmService>()
             .AddClasses(classes =>
