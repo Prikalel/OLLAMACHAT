@@ -19,7 +19,7 @@ public static class Extensions // TODO: имплементировать endpoin
                 (await mediator.Send(new GetUserChatHistory.Query()))
                 .Select(x => new ChatMessageDto(
                     x.Role.ToString().ToLower(),
-                    x.Content))
+                    Markdig.Markdown.ToHtml(x.Content)))
             ))
             .WithSummary("Get chat history")
             .WithTags("MinimalApi")

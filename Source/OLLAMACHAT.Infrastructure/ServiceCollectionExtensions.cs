@@ -16,15 +16,8 @@ public static class ServiceCollectionExtensions
         {
             opt.UseSqlite(configuration.GetConnectionString("OLLAMACHAT"));
         });
-        services.Configure<OpenAISettings>(opt =>
-        {
-            IConfigurationSection r = configuration.GetRequiredSection("OpenAISettings");
-            opt.ApiKey = r["ApiKey"];
-            opt.ApiBase = r["ApiBase"];
-            opt.EnableTools = false;
-            opt.SystemChatMessage = r["SystemChatMessage"];
-            opt.Models = r.GetSection("Models").GetChildren().Select(x => x.Value).OfType<string>().ToArray();
-        });
+        services.Configure<OpenAISettings>(options =>
+            configuration.GetSection("OpenAISettings").Bind(options));
 
         services.Configure<List<McpServerConfiguration>>(options =>
             configuration.GetSection("McpServers").Bind(options));

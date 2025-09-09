@@ -14,12 +14,6 @@ public interface IMcpConfigurationService
     /// <param name="name">Имя сервера.</param>
     /// <returns>Информация о MCP сервере, или null, если не найдено.</returns>
     McpServerInfo? GetServerByName(string name);
-
-    /// <summary>
-    /// Получает конфигурацию MCP сервера с наивысшим приоритетом.
-    /// </summary>
-    /// <returns>Информация о MCP сервере с наивысшим приоритетом.</returns>
-    McpServerInfo GetHighestPriorityServer();
 }
 
 public record McpServerInfo(string Name, string Url, string Type, string? AuthToken);
