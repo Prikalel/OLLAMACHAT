@@ -22,4 +22,4 @@ public interface IMcpConfigurationService
     McpServerInfo GetHighestPriorityServer();
 }
 
-public record McpServerInfo(string Name, string Url, string Type, int Priority, string? AuthToken);
+public record McpServerInfo(string Name, string Url, string Type, string? AuthToken);
