@@ -7,10 +7,11 @@ OLLAMACHAT is a web application that allows users to chat with various Large Lan
 ## Features
 
 *   **Chat Interface:** A simple and intuitive web interface for chatting with LLMs.
-*   **Multi-Model Support:** Supports multiple LLMs, including models from OpenAI.
+*   **Multi-Model Support:** Supports multiple LLMs, including models any OpenAI capable provider.
 *   **Chat History:** Stores chat history in a local SQLite database.
-*   **Background Job Processing:** Uses Hangfire for background job processing.
+*   **Background Job Processing:** Uses SignalR to communicate between frontend and backend.
 *   **API Documentation:** Includes Swagger for API documentation.
+*   **SSE MCP support**: mcp config can be defined in appsettings including passing custom Authorization header.
 
 ## Technologies
 
@@ -18,11 +19,12 @@ OLLAMACHAT is a web application that allows users to chat with various Large Lan
 *   **ASP.NET Core**
 *   **Entity Framework Core**
 *   **SQLite**
-*   **Hangfire**
+*   **SignalR**
 *   **Swagger**
 *   **Razor Pages**
-*   **Minimal APIs**
+*   **Minimal APIs** (gonna be replaced)
 *   **Mediator**
+*   **ModelContextProtocol.Core**
 
 ## Configuration
 
@@ -32,6 +34,7 @@ The application's configuration is stored in `appsettings.json`. The following s
 *   **`ConnectionStrings:OLLAMACHAT`:** The connection string for the SQLite database.
 *   **`OpenAISettings:ApiKey`:** Your OpenAI API key.
 *   **`OpenAISettings:Models`:** A list of LLMs to make available in the application.
+*   **`McpServers`:** A list of sse mcp servers to connect to, chat will use them if necessary.
 
 ## How to Run
 
