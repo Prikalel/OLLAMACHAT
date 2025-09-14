@@ -57,3 +57,7 @@ The application's configuration is stored in `appsettings.json`. The following s
     dotnet run
     ```
 6.  **Open your browser and navigate to the URL specified in `appsettings.json` (default is `http://localhost:5001`).**
+
+## SAST Tools 
+ 
+[PVS-Studio](https://pvs-studio.com/pvs-studio/?utm_source=website&utm_medium=github&utm_campaign=open_source) - static analyzer for C, C++, C#, and Java code.
