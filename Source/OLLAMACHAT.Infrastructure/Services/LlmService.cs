@@ -132,15 +132,14 @@ public class LlmService : ILlmService
                     case ChatFinishReason.ToolCalls:
                     {
                         chatMessages.Add(new AssistantChatMessage(completion));
+                        logger.LogInformation(
+                            "Model requires tool call(s). Processing {Count} call(s).",
+                            completion.ToolCalls.Count);
 
                         foreach (ChatToolCall toolCall in completion.ToolCalls)
                         {
                             if (toolCall.FunctionName == "search_wikipedia")
                             {
-                                logger.LogInformation(
-                                    "Model requires tool call(s). Processing {Count} call(s).",
-                                    completion.ToolCalls.Count);
-
                                 string toolResult = await SearchWikipedia(
                                     JObject.Parse(toolCall.FunctionArguments)["term"]
                                         .ToString());
@@ -172,8 +171,9 @@ public class LlmService : ILlmService
                                     toolCall.Id,
                                     responseContent));
                                 logger.LogInformation(
-                                    "Successfully called tool: {Tool}",
-                                    toolName);
+                                    "Successfully called tool: {Tool}. Response content: {Content}",
+                                    toolName,
+                                    responseContent);
                             }
                             else
                             {
@@ -284,7 +284,6 @@ public class LlmService : ILlmService
     {
         try
         {
-
             // Используем API Wikipedia для получения краткого содержания страницы
             using HttpClient httpClient = new HttpClient();
             string requestUri = $"https://en.wikipedia.org/api/rest_v1/page/summary/{Uri.EscapeDataString(term)}";
