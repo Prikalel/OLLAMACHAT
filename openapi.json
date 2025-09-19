@@ -24,6 +24,228 @@
     }
   ],
   "paths": {
+    "/api/v1/parser/cs/parse": {
+      "post": {
+        "tags": ["C# Parser - Code-Graph"],
+        "summary": "Parse C# file for code-graph integration",
+        "description": "Returns normalized ParseResult structure with detailed entities, relationships, and metadata. Maps directly to code-graph's ParsedEntity/ParseResult interfaces from src/types/parser.ts. Supports configuration via options for selective analysis.",
+        "operationId": "parseCSharpForCodeGraph",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtendedParserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful parsing result aligned with code-graph interface",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CodeGraphParseResult"
+                },
+                "example": {
+                  "filePath": "src/Services/UserService.cs",
+                  "language": "csharp",
+                  "entities": [
+                    {
+                      "name": "UserService",
+                      "type": "class",
+                      "location": {
+                        "start": {
+                          "line": 5,
+                          "column": 11,
+                          "index": 45
+                        },
+                        "end": {
+                          "line": 85,
+                          "column": 1,
+                          "index": 2456
+                        }
+                      },
+                      "modifiers": ["public", "partial"],
+                      "inheritance": {
+                        "baseClasses": [],
+                        "interfaces": ["IUserService"],
+                        "isAbstract": false
+                      },
+                      "children": [
+                        {
+                          "name": "GetUserAsync",
+                          "type": "method",
+                          "location": {
+                            "start": {
+                              "line": 12,
+                              "column": 19,
+                              "index": 156
+                            },
+                            "end": {
+                              "line": 25,
+                              "column": 4,
+                              "index": 456
+                            }
+                          },
+                          "modifiers": ["public", "async"],
+                          "methodType": "instance",
+                          "returnType": "Task<User>",
+                          "parameters": [
+                            {
+                              "name": "userId",
+                              "type": "int",
+                              "optional": false
+                            },
+                            {
+                              "name": "includeRoles",
+                              "type": "bool?",
+                              "optional": true,
+                              "defaultValue": "null"
+                            }
+                          ],
+                          "asyncInfo": {
+                            "isAsync": true,
+                            "isAwaitable": true
+                          },
+                          "attributeDecorators": [
+                            {
+                              "name": "Obsolete",
+                              "arguments": ["\"Use GetUserByIdAsync instead\""],
+                              "isBuiltin": true
+                            }
+                          ],
+                          "relationships": [
+                            {
+                              "type": "calls",
+                              "to": "UserRepository.FindByIdAsync",
+                              "targetFile": "src/Repositories/UserRepository.cs",
+                              "metadata": {
+                                "line": 18,
+                                "confidence": 1.0
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "patterns": {
+                        "designPatterns": [
+                          "dependency_injection"
+                        ],
+                        "csharpIdioms": [
+                          "async_await"
+                        ]
+                      }
+                    },
+                    {
+                      "name": "using MyApp.Services",
+                      "type": "import",
+                      "location": {
+                        "start": {
+                          "line": 1,
+                          "column": 1,
+                          "index": 0
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 22,
+                          "index": 21
+                        }
+                      },
+                      "importData": {
+                        "source": "MyApp.Services",
+                        "specifiers": [],
+                        "isDefault": false,
+                        "isNamespace": true,
+                        "isRelative": false,
+                        "fromModule": "MyApp.Services"
+                      }
+                    }
+                  ],
+                  "relationships": [
+                    {
+                      "from": "UserService",
+                      "to": "IUserRepository",
+                      "type": "implements",
+                      "targetFile": null,
+                      "metadata": {
+                        "line": 6,
+                        "confidence": 1.0
+                      }
+                    },
+                    {
+                      "from": "GetUserAsync",
+                      "to": "UserRepository.FindByIdAsync",
+                      "type": "calls",
+                      "targetFile": "src/Repositories/UserRepository.cs",
+                      "metadata": {
+                        "line": 18,
+                        "confidence": 0.95
+                      }
+                    }
+                  ],
+                  "patterns": {
+                    "designPatterns": [
+                      {
+                        "pattern": "dependency_injection",
+                        "entities": ["UserService", "IUserRepository"],
+                        "confidence": 0.98,
+                        "description": "Constructor injection of IUserRepository detected"
+                      }
+                    ],
+                    "csharpIdioms": [
+                      {
+                        "idiom": "async_await",
+                        "locations": [
+                          {
+                            "line": 18,
+                            "column": 12
+                          }
+                        ],
+                        "usage": "await userRepository.FindByIdAsync(userId)"
+                      }
+                    ],
+                    "circularDependencies": []
+                  },
+                  "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "parseTimeMs": 156,
+                  "errors": [],
+                  "metadata": {
+                    "loc": 245,
+                    "complexity_score": 8,
+                    "maintainability_index": 78.5,
+                    "file_purpose": "User service implementation with async operations",
+                    "key_abstractions": ["User", "Repository", "Service"],
+                    "design_patterns": ["dependency_injection", "async_pipeline"]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request (malformed C# or invalid paths)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error during Roslyn parsing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/parser/cs/dependencies": {
       "post": {
         "tags": ["C# Parser"],
@@ -209,6 +431,1330 @@
   },
   "components": {
     "schemas": {
+      "ExtendedParserRequest": {
+        "type": "object",
+        "description": "Request for C# parsing with code-graph options support",
+        "required": ["file_path", "repo_path"],
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "format": "path",
+            "description": "Path to the C# source file to parse",
+            "example": "src/Services/UserService.cs"
+          },
+          "repo_path": {
+            "type": "string",
+            "format": "path",
+            "description": "Repository root path for relative path resolution",
+            "example": "/path/to/repo"
+          },
+          "content": {
+            "type": "string",
+            "description": "Optional raw C# source code (for testing when file_path is inaccessible)",
+            "example": "using System;\npublic class Test { public void Method() {} }"
+          },
+          "options": {
+            "$ref": "#/components/schemas/ParserOptions"
+          }
+        }
+      },
+      "ParserOptions": {
+        "type": "object",
+        "description": "Configuration options for selective parsing (maps to code-graph ParserOptions)",
+        "properties": {
+          "extractReferences": {
+            "type": "boolean",
+            "default": true,
+            "description": "Extract cross-entity references and relationships"
+          },
+          "extractInheritance": {
+            "type": "boolean",
+            "default": true,
+            "description": "Extract class inheritance and interface implementation hierarchies"
+          },
+          "extractOverrides": {
+            "type": "boolean",
+            "default": true,
+            "description": "Detect method overrides and virtual method implementations"
+          },
+          "detectPatterns": {
+            "type": "boolean",
+            "default": true,
+            "description": "Detect C# design patterns and idioms (dependency injection, async patterns, LINQ)"
+          },
+          "analyzeAsync": {
+            "type": "boolean",
+            "default": true,
+            "description": "Analyze async/await patterns and Task/ValueTask return types"
+          },
+          "includeSourceSnippets": {
+            "type": "boolean",
+            "default": false,
+            "description": "Include source code snippets in entity definitions"
+          },
+          "maxDepth": {
+            "type": "integer",
+            "default": 5,
+            "minimum": 1,
+            "maximum": 10,
+            "description": "Maximum nesting depth for extracting child entities"
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "default": 5000,
+            "description": "Maximum parsing time per file in milliseconds"
+          }
+        },
+        "example": {
+          "extractInheritance": true,
+          "detectPatterns": true,
+          "analyzeAsync": true,
+          "maxDepth": 5
+        }
+      },
+      "CodeGraphParsedEntity": {
+        "type": "object",
+        "description": "Single parsed entity matching code-graph's ParsedEntity interface. Extracted from Roslyn SyntaxTree/SemanticModel.",
+        "required": ["name", "type", "location"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Entity name as declared in source code",
+            "example": "GetUserAsync"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["function", "class", "method", "interface", "type", "import", "export", "variable", "constant", "property", "enum", "struct", "namespace", "delegate", "event", "record", "using_directive"],
+            "description": "Entity type aligned with code-graph supported types, extended for C#",
+            "example": "method"
+          },
+          "location": {
+            "type": "object",
+            "required": ["start", "end"],
+            "properties": {
+              "start": {
+                "type": "object",
+                "properties": {
+                  "line": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "1-based starting line number",
+                    "example": 12
+                  },
+                  "column": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "0-based starting column position",
+                    "example": 19
+                  },
+                  "index": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Character index from file start",
+                    "example": 156
+                  }
+                },
+                "description": "Source location start position (Roslyn TextSpan start)"
+              },
+              "end": {
+                "$ref": "#/components/schemas/CodeGraphParsedEntity/properties/location/properties/start",
+                "description": "Source location end position (Roslyn TextSpan end)"
+              }
+            },
+            "example": {
+              "start": {
+                "line": 12,
+                "column": 19,
+                "index": 156
+              },
+              "end": {
+                "line": 25,
+                "column": 4,
+                "index": 456
+              }
+            }
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CodeGraphParsedEntity"
+            },
+            "description": "Nested child entities (e.g., methods within a class, properties within a record)",
+            "example": [
+              {
+                "name": "GetUserByEmail",
+                "type": "method",
+                "location": {
+                  "start": {
+                    "line": 30,
+                    "column": 19,
+                    "index": 678
+                  },
+                  "end": {
+                    "line": 42,
+                    "column": 4,
+                    "index": 890
+                  }
+                }
+              }
+            ]
+          },
+          "references": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "References to other entities within the same file",
+            "example": [
+              "UserRepository.FindByIdAsync",
+              "ILogger.LogInformation"
+            ]
+          },
+          "modifiers": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["public", "private", "protected", "internal", "static", "virtual", "abstract", "override", "async", "partial", "readonly", "const", "volatile", "new", "sealed", "extern"]
+            },
+            "description": "C# access and behavioral modifiers (from Roslyn SyntaxToken modifiers)",
+            "example": ["public", "async", "virtual"]
+          },
+          "methodType": {
+            "type": "string",
+            "enum": ["instance", "static", "virtual", "abstract", "override", "partial"],
+            "description": "Method classification based on Roslyn MethodDeclarationSyntax modifiers",
+            "example": "instance"
+          },
+          "attributeDecorators": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Attribute class name (without Attribute suffix)",
+                  "example": "Obsolete"
+                },
+                "fullName": {
+                  "type": "string",
+                  "description": "Full attribute type name with namespace",
+                  "example": "System.ObsoleteAttribute"
+                },
+                "arguments": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Attribute constructor and named arguments",
+                  "example": ["\"Use GetUserByIdAsync instead\"", "error: true"]
+                },
+                "isBuiltin": {
+                  "type": "boolean",
+                  "description": "True for .NET framework attributes",
+                  "example": true
+                },
+                "location": {
+                  "$ref": "#/components/schemas/CodeGraphParsedEntity/properties/location"
+                }
+              },
+              "required": ["name", "isBuiltin"]
+            },
+            "description": "C# attributes applied to the entity (maps to code-graph decorators)",
+            "example": [
+              {
+                "name": "Obsolete",
+                "fullName": "System.ObsoleteAttribute",
+                "arguments": ["\"Use GetUserByIdAsync instead\"", "error: true"],
+                "isBuiltin": true,
+                "location": {
+                  "start": {
+                    "line": 11,
+                    "column": 13,
+                    "index": 123
+                  },
+                  "end": {
+                    "line": 11,
+                    "column": 65,
+                    "index": 175
+                  }
+                }
+              },
+              {
+                "name": "AsyncTimeout",
+                "fullName": "MyApp.Attributes.AsyncTimeoutAttribute",
+                "arguments": ["30000"],
+                "isBuiltin": false
+              }
+            ]
+          },
+          "inheritance": {
+            "type": "object",
+            "properties": {
+              "baseClasses": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "ServiceBase"
+                    },
+                    "fullName": {
+                      "type": "string",
+                      "example": "MyApp.Core.ServiceBase"
+                    },
+                    "isInterface": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "description": "Direct base classes (from Roslyn BaseListSyntax)",
+                "example": [
+                  {
+                    "name": "ServiceBase",
+                    "fullName": "MyApp.Core.ServiceBase",
+                    "isInterface": false
+                  }
+                ]
+              },
+              "interfaces": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Implemented interfaces (from Roslyn BaseListSyntax)",
+                "example": ["IUserService", "IDisposable"]
+              },
+              "isAbstract": {
+                "type": "boolean",
+                "description": "True if class is abstract",
+                "example": false
+              },
+              "isSealed": {
+                "type": "boolean",
+                "description": "True if class is sealed",
+                "example": false
+              }
+            },
+            "description": "Inheritance hierarchy information for classes, structs, records",
+            "example": {
+              "baseClasses": [
+                {
+                  "name": "ServiceBase",
+                  "fullName": "MyApp.Core.ServiceBase",
+                  "isInterface": false
+                }
+              ],
+              "interfaces": ["IUserService"],
+              "isAbstract": false,
+              "isSealed": false
+            }
+          },
+          "asyncInfo": {
+            "type": "object",
+            "properties": {
+              "isAsync": {
+                "type": "boolean",
+                "description": "True if method is marked async (Roslyn AsyncModifier)",
+                "example": true
+              },
+              "isAwaitable": {
+                "type": "boolean",
+                "description": "True if returns awaitable type (Task, ValueTask, custom awaitable)",
+                "example": true
+              },
+              "awaitPoints": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "line": {
+                      "type": "integer",
+                      "example": 18
+                    },
+                    "column": {
+                      "type": "integer",
+                      "example": 12
+                    },
+                    "awaitedType": {
+                      "type": "string",
+                      "example": "Task<User>"
+                    }
+                  }
+                },
+                "description": "Locations of await expressions within the method"
+              }
+            },
+            "description": "Async/await pattern analysis from Roslyn syntax and semantic model",
+            "example": {
+              "isAsync": true,
+              "isAwaitable": true,
+              "awaitPoints": [
+                {
+                  "line": 18,
+                  "column": 12,
+                  "awaitedType": "Task<User>"
+                },
+                {
+                  "line": 20,
+                  "column": 15,
+                  "awaitedType": "Task<bool>"
+                }
+              ]
+            }
+          },
+          "returnType": {
+            "type": "string",
+            "description": "Return type as declared (from Roslyn TypeSyntax, resolved via SemanticModel)",
+            "example": "Task<User>"
+          },
+          "parameters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Parameter name from Roslyn ParameterSyntax",
+                  "example": "userId"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Parameter type (resolved via SemanticModel)",
+                  "example": "int"
+                },
+                "optional": {
+                  "type": "boolean",
+                  "description": "True if parameter has default value or is optional",
+                  "default": false,
+                  "example": false
+                },
+                "defaultValue": {
+                  "type": "string",
+                  "nullable": true,
+                  "description": "Default value expression (from Roslyn EqualsValueClauseSyntax)",
+                  "example": "null"
+                },
+                "hasRef": {
+                  "type": "boolean",
+                  "description": "True if ref parameter",
+                  "default": false,
+                  "example": false
+                },
+                "hasOut": {
+                  "type": "boolean",
+                  "description": "True if out parameter",
+                  "default": false,
+                  "example": false
+                },
+                "hasThis": {
+                  "type": "boolean",
+                  "description": "True if this parameter (extension method)",
+                  "default": false,
+                  "example": false
+                },
+                "position": {
+                  "type": "integer",
+                  "description": "Parameter position in parameter list (0-based)",
+                  "example": 0
+                }
+              },
+              "required": ["name", "type"]
+            },
+            "description": "Method/function parameters with full type information and modifiers",
+            "example": [
+              {
+                "name": "userId",
+                "type": "int",
+                "optional": false,
+                "position": 0
+              },
+              {
+                "name": "includeRoles",
+                "type": "bool?",
+                "optional": true,
+                "defaultValue": "null",
+                "position": 1
+              },
+              {
+                "name": "cancellationToken",
+                "type": "CancellationToken",
+                "optional": true,
+                "defaultValue": "default",
+                "position": 2,
+                "hasThis": false
+              }
+            ]
+          },
+          "importData": {
+            "type": "object",
+            "properties": {
+              "source": {
+                "type": "string",
+                "description": "Namespace or module being imported",
+                "example": "System.Collections.Generic"
+              },
+              "specifiers": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "local": {
+                      "type": "string",
+                      "description": "Local name used in current file",
+                      "example": "List"
+                    },
+                    "imported": {
+                      "type": "string",
+                      "description": "Original imported name",
+                      "example": "List"
+                    },
+                    "alias": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Alias if using alias directive",
+                      "example": "MyList"
+                    }
+                  }
+                },
+                "description": "Specific type/member imports (for using static or alias directives)"
+              },
+              "isDefault": {
+                "type": "boolean",
+                "description": "True for default imports (rare in C#)",
+                "default": false,
+                "example": false
+              },
+              "isStatic": {
+                "type": "boolean",
+                "description": "True for 'using static' directives",
+                "default": false,
+                "example": false
+              },
+              "isNamespace": {
+                "type": "boolean",
+                "description": "True for namespace-level imports (most common)",
+                "default": true,
+                "example": true
+              },
+              "isRelative": {
+                "type": "boolean",
+                "description": "True for relative namespace imports (e.g., using Project.Models;)",
+                "default": false,
+                "example": true
+              },
+              "fromModule": {
+                "type": "string",
+                "nullable": true,
+                "description": "Source module/assembly for external references",
+                "example": "System.Collections"
+              },
+              "location": {
+                "$ref": "#/components/schemas/CodeGraphParsedEntity/properties/location"
+              }
+            },
+            "description": "Import/using directive details parsed from Roslyn UsingDirectiveSyntax",
+            "example": {
+              "source": "System.Collections.Generic",
+              "specifiers": [],
+              "isDefault": false,
+              "isStatic": false,
+              "isNamespace": true,
+              "isRelative": false,
+              "fromModule": "System.Collections",
+              "location": {
+                "start": {
+                  "line": 2,
+                  "column": 1,
+                  "index": 22
+                },
+                "end": {
+                  "line": 2,
+                  "column": 29,
+                  "index": 50
+                }
+              }
+            }
+          },
+          "patterns": {
+            "type": "object",
+            "properties": {
+              "designPatterns": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "pattern": {
+                      "type": "string",
+                      "enum": ["dependency_injection", "factory", "singleton", "repository", "unit_of_work", "async_pipeline", "linq_query", "fluent_interface", "builder", "decorator", "observer", "strategy"],
+                      "description": "Detected C# design pattern",
+                      "example": "dependency_injection"
+                    },
+                    "entities": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Entities involved in the pattern",
+                      "example": ["UserService", "IUserRepository"]
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1,
+                      "description": "Detection confidence score",
+                      "example": 0.98
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Pattern detection rationale",
+                      "example": "Constructor injection of IUserRepository detected via Roslyn semantic analysis"
+                    },
+                    "locations": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CodeGraphParsedEntity/properties/location"
+                      },
+                      "description": "Source locations where pattern is detected"
+                    }
+                  },
+                  "required": ["pattern", "entities", "confidence", "description"]
+                },
+                "description": "Design patterns detected through Roslyn semantic analysis and pattern matching"
+              },
+              "csharpIdioms": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "idiom": {
+                      "type": "string",
+                      "enum": ["async_await", "linq_query", "pattern_matching", "null_conditional", "switch_expression", "record_equality", "deconstruct", "tuple_deconstruct", "out_var", "using_declaration", "nullable_reference"],
+                      "description": "C# language idiom or feature usage",
+                      "example": "async_await"
+                    },
+                    "locations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "line": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 18
+                          },
+                          "column": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "example": 12
+                          }
+                        }
+                      },
+                      "description": "Source locations of idiom usage"
+                    },
+                    "usage": {
+                      "type": "string",
+                      "description": "Code snippet demonstrating the idiom",
+                      "example": "await userRepository.FindByIdAsync(userId)"
+                    },
+                    "version": {
+                      "type": "string",
+                      "description": "C# version required for this idiom",
+                      "example": "C# 5.0"
+                    }
+                  },
+                  "required": ["idiom", "locations", "usage"]
+                },
+                "description": "C# language idioms and modern feature usage detected in source"
+              },
+              "circularDependencies": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "cycle": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Files/modules in the circular dependency cycle",
+                      "example": ["src/Services/A.cs", "src/Services/B.cs", "src/Services/A.cs"]
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["namespace", "type", "method"],
+                      "description": "Level of circular dependency",
+                      "example": "namespace"
+                    },
+                    "severity": {
+                      "type": "string",
+                      "enum": ["warning", "error"],
+                      "description": "Impact level of the circular dependency",
+                      "example": "warning"
+                    },
+                    "locations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "file": {
+                            "type": "string",
+                            "example": "src/Services/A.cs"
+                          },
+                          "line": {
+                            "type": "integer",
+                            "example": 5
+                          }
+                        }
+                      },
+                      "description": "Specific locations of problematic references"
+                    }
+                  },
+                  "required": ["cycle", "type", "severity"]
+                },
+                "description": "Circular dependencies detected during semantic analysis"
+              }
+            },
+            "description": "Pattern analysis results (Layer 4 equivalent for C#) from Roslyn semantic analysis",
+            "example": {
+              "designPatterns": [
+                {
+                  "pattern": "dependency_injection",
+                  "entities": ["UserService", "IUserRepository"],
+                  "confidence": 0.98,
+                  "description": "Constructor injection pattern detected in UserService",
+                  "locations": [
+                    {
+                      "start": {
+                        "line": 7,
+                        "column": 20,
+                        "index": 89
+                      },
+                      "end": {
+                        "line": 7,
+                        "column": 45,
+                        "index": 114
+                      }
+                    }
+                  ]
+                }
+              ],
+              "csharpIdioms": [
+                {
+                  "idiom": "async_await",
+                  "locations": [
+                    {
+                      "line": 18,
+                      "column": 12
+                    },
+                    {
+                      "line": 20,
+                      "column": 15
+                    }
+                  ],
+                  "usage": "await userRepository.FindByIdAsync(userId)",
+                  "version": "C# 5.0"
+                }
+              ],
+              "circularDependencies": []
+            }
+          },
+          "relationships": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntityRelationship"
+            },
+            "description": "Intra-file relationships between this entity and others in the same file"
+          },
+          "sourceSnippet": {
+            "type": "string",
+            "nullable": true,
+            "description": "Source code snippet of the entity definition (when includeSourceSnippets=true)",
+            "example": "public async Task<User> GetUserAsync(int userId) => await _repository.FindByIdAsync(userId);"
+          },
+          "csharpSpecific": {
+            "type": "object",
+            "properties": {
+              "accessLevel": {
+                "type": "string",
+                "enum": ["public", "private", "protected", "internal", "protected_internal", "private_protected"],
+                "description": "Resolved access level from modifier combination",
+                "example": "public"
+              },
+              "isExtensionMethod": {
+                "type": "boolean",
+                "description": "True if this is an extension method",
+                "default": false,
+                "example": false
+              },
+              "isGeneric": {
+                "type": "boolean",
+                "description": "True if method/class has type parameters",
+                "default": false,
+                "example": false
+              },
+              "typeParameters": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "T"
+                    },
+                    "constraints": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": ["where T : class"]
+                    }
+                  }
+                },
+                "description": "Generic type parameters and constraints"
+              },
+              "implementsMembers": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "interface": {
+                      "type": "string",
+                      "example": "IUserService"
+                    },
+                    "member": {
+                      "type": "string",
+                      "example": "GetUserAsync"
+                    }
+                  }
+                },
+                "description": "Interface members implemented by this entity"
+              },
+              "xmlDocumentation": {
+                "type": "string",
+                "nullable": true,
+                "description": "Full XML documentation comment",
+                "example": "/// <summary>Gets user by ID asynchronously</summary>\n/// <param name=\"userId\">User identifier</param>\n/// <returns>User entity wrapped in Task</returns>"
+              }
+            },
+            "description": "C#-specific metadata from Roslyn compilation analysis"
+          }
+        },
+        "example": {
+          "name": "GetUserAsync",
+          "type": "method",
+          "location": {
+            "start": {
+              "line": 12,
+              "column": 19,
+              "index": 156
+            },
+            "end": {
+              "line": 25,
+              "column": 4,
+              "index": 456
+            }
+          },
+          "modifiers": ["public", "async", "virtual"],
+          "methodType": "instance",
+          "returnType": "Task<User>",
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "int",
+              "optional": false,
+              "position": 0
+            }
+          ],
+          "asyncInfo": {
+            "isAsync": true,
+            "isAwaitable": true
+          },
+          "attributeDecorators": [
+            {
+              "name": "Obsolete",
+              "arguments": ["\"Use GetUserByIdAsync instead\""],
+              "isBuiltin": true
+            }
+          ],
+          "relationships": [
+            {
+              "from": "GetUserAsync",
+              "to": "UserRepository.FindByIdAsync",
+              "type": "calls"
+            }
+          ],
+          "csharpSpecific": {
+            "accessLevel": "public",
+            "isExtensionMethod": false,
+            "implementsMembers": [
+              {
+                "interface": "IUserService",
+                "member": "GetUserAsync"
+              }
+            ]
+          }
+        }
+      },
+      "EntityRelationship": {
+        "type": "object",
+        "description": "Relationship between parsed entities, aligned with code-graph's EntityRelationship interface",
+        "required": ["from", "to", "type"],
+        "properties": {
+          "from": {
+            "type": "string",
+            "description": "Source entity name (fully qualified if needed)",
+            "example": "UserService.GetUserAsync"
+          },
+          "to": {
+            "type": "string",
+            "description": "Target entity name (fully qualified if cross-file)",
+            "example": "UserRepository.FindByIdAsync"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["inherits", "implements", "overrides", "calls", "imports", "contains", "references", "instantiates", "uses_field", "implements_member", "overrides_property"],
+            "description": "Relationship type (extended for C# semantics)",
+            "example": "calls"
+          },
+          "targetFile": {
+            "type": "string",
+            "nullable": true,
+            "format": "path",
+            "description": "Target file path for cross-file relationships (relative to repo_path)",
+            "example": "src/Repositories/UserRepository.cs"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "line": {
+                "type": "integer",
+                "description": "Source line where relationship occurs",
+                "example": 18
+              },
+              "column": {
+                "type": "integer",
+                "description": "Source column where relationship occurs",
+                "example": 12
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "Confidence score for relationship detection",
+                "example": 0.95
+              },
+              "distance": {
+                "type": "integer",
+                "description": "Call stack depth or inheritance distance",
+                "example": 1
+              },
+              "isDirect": {
+                "type": "boolean",
+                "description": "True for direct relationships (no intermediaries)",
+                "default": true,
+                "example": true
+              },
+              "csharpSpecific": {
+                "type": "object",
+                "properties": {
+                  "methodSignature": {
+                    "type": "string",
+                    "description": "Signature of called method for call relationships",
+                    "example": "Task<User> FindByIdAsync(int id)"
+                  },
+                  "interfaceMember": {
+                    "type": "boolean",
+                    "description": "True if relationship implements interface member",
+                    "example": false
+                  },
+                  "overrideTarget": {
+                    "type": "string",
+                    "description": "Base method being overridden",
+                    "example": "ServiceBase.GetUserAsync"
+                  }
+                }
+              }
+            },
+            "description": "Relationship metadata including source location and confidence"
+          },
+          "direction": {
+            "type": "string",
+            "enum": ["forward", "backward", "bidirectional"],
+            "description": "Relationship directionality",
+            "default": "forward",
+            "example": "forward"
+          }
+        },
+        "example": {
+          "from": "UserService.GetUserAsync",
+          "to": "UserRepository.FindByIdAsync",
+          "type": "calls",
+          "targetFile": "src/Repositories/UserRepository.cs",
+          "metadata": {
+            "line": 18,
+            "column": 12,
+            "confidence": 1.0,
+            "distance": 1,
+            "isDirect": true,
+            "csharpSpecific": {
+              "methodSignature": "Task<User> FindByIdAsync(int id)",
+              "interfaceMember": false
+            }
+          },
+          "direction": "forward"
+        }
+      },
+      "CodeGraphParseResult": {
+        "type": "object",
+        "description": "Complete parsing result matching code-graph's ParseResult interface from src/types/parser.ts",
+        "required": ["filePath", "language", "entities", "contentHash", "parseTimeMs"],
+        "properties": {
+          "filePath": {
+            "type": "string",
+            "format": "path",
+            "description": "Absolute or relative path to the parsed file",
+            "example": "src/Services/UserService.cs"
+          },
+          "language": {
+            "type": "string",
+            "enum": ["csharp"],
+            "description": "Detected programming language",
+            "example": "csharp"
+          },
+          "entities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CodeGraphParsedEntity"
+            },
+            "minItems": 0,
+            "description": "All extracted entities from the C# file (classes, methods, properties, imports, etc.)",
+            "example": [
+              {
+                "name": "UserService",
+                "type": "class",
+                "location": {
+                  "start": {
+                    "line": 5,
+                    "column": 11,
+                    "index": 45
+                  },
+                  "end": {
+                    "line": 85,
+                    "column": 1,
+                    "index": 2456
+                  }
+                }
+              }
+            ]
+          },
+          "relationships": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntityRelationship"
+            },
+            "description": "All intra-file relationships between extracted entities (Layer 3 analysis)",
+            "example": [
+              {
+                "from": "UserService",
+                "to": "IUserService",
+                "type": "implements"
+              }
+            ]
+          },
+          "patterns": {
+            "$ref": "#/components/schemas/CodeGraphParsedEntity/properties/patterns",
+            "description": "Pattern analysis results (Layer 4) - design patterns and C# idioms detected"
+          },
+          "contentHash": {
+            "type": "string",
+            "description": "SHA-256 hash of the parsed content for caching and change detection",
+            "example": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "parseTimeMs": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Time taken for Roslyn parsing and analysis in milliseconds",
+            "example": 156
+          },
+          "fromCache": {
+            "type": "boolean",
+            "description": "True if result was served from compilation cache",
+            "default": false,
+            "example": false
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error message from Roslyn diagnostics",
+                  "example": "CS0103: The name 'userRepo' does not exist in the current context"
+                },
+                "severity": {
+                  "type": "string",
+                  "enum": ["error", "warning", "info"],
+                  "description": "Diagnostic severity level",
+                  "example": "error"
+                },
+                "location": {
+                  "$ref": "#/components/schemas/CodeGraphParsedEntity/properties/location"
+                },
+                "roslynId": {
+                  "type": "string",
+                  "description": "Roslyn diagnostic ID (CSXXXX)",
+                  "example": "CS0103"
+                },
+                "fullText": {
+                  "type": "string",
+                  "description": "Complete diagnostic message",
+                  "example": "CS0103: The name 'userRepo' does not exist in the current context"
+                }
+              },
+              "required": ["message", "severity"]
+            },
+            "description": "Compilation errors and warnings from Roslyn diagnostics",
+            "example": [
+              {
+                "message": "CS8618: Non-nullable property 'Name' must contain a non-null value when exiting constructor.",
+                "severity": "warning",
+                "location": {
+                  "start": {
+                    "line": 45,
+                    "column": 18,
+                    "index": 1234
+                  },
+                  "end": {
+                    "line": 45,
+                    "column": 22,
+                    "index": 1238
+                  }
+                },
+                "roslynId": "CS8618",
+                "fullText": "CS8618: Non-nullable property 'Name' must contain a non-null value when exiting constructor. Consider declaring the property as nullable."
+              }
+            ]
+          },
+          "metadata": {
+            "type": "object",
+            "description": "File-level metadata from Roslyn analysis",
+            "properties": {
+              "loc": {
+                "type": "integer",
+                "description": "Lines of code (excluding whitespace and comments)",
+                "example": 245
+              },
+              "sloc": {
+                "type": "integer",
+                "description": "Source lines of code (significant lines)",
+                "example": 156
+              },
+              "complexity_score": {
+                "type": "integer",
+                "description": "Cyclomatic complexity across all methods",
+                "example": 8
+              },
+              "maintainability_index": {
+                "type": "number",
+                "description": "Maintainability index (0-100, higher is better)",
+                "example": 78.5
+              },
+              "file_purpose": {
+                "type": "string",
+                "nullable": true,
+                "description": "Inferred purpose based on primary class/interface",
+                "example": "User service implementation with async repository operations"
+              },
+              "key_abstractions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Main domain concepts represented in the file",
+                "example": ["User", "Service", "Repository", "Async"]
+              },
+              "roslynDiagnostics": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "CS8618"
+                    },
+                    "severity": {
+                      "type": "string",
+                      "example": "warning"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Non-nullable property must contain a non-null value"
+                    },
+                    "count": {
+                      "type": "integer",
+                      "example": 2
+                    }
+                  }
+                },
+                "description": "Summary of Roslyn diagnostic categories"
+              },
+              "namespace": {
+                "type": "string",
+                "description": "Primary namespace of the file",
+                "example": "MyApp.Services"
+              },
+              "assemblyReferences": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "External assemblies referenced",
+                "example": ["System", "System.Threading.Tasks", "Microsoft.Extensions.Logging"]
+              }
+            },
+            "required": ["loc", "sloc", "complexity_score"],
+            "example": {
+              "loc": 245,
+              "sloc": 156,
+              "complexity_score": 8,
+              "maintainability_index": 78.5,
+              "file_purpose": "User service implementation",
+              "key_abstractions": ["User", "Service", "Repository"],
+              "roslynDiagnostics": [
+                {
+                  "id": "CS8618",
+                  "severity": "warning",
+                  "message": "Non-nullable property warning",
+                  "count": 2
+                }
+              ],
+              "namespace": "MyApp.Services",
+              "assemblyReferences": ["System", "System.Threading.Tasks"]
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Non-critical warnings (e.g., unused imports, complexity thresholds)",
+            "example": [
+              "Method GetUserAsync exceeds complexity threshold (8 > 7)",
+              "File has 3 unused using directives"
+            ]
+          }
+        },
+        "example": {
+          "filePath": "src/Services/UserService.cs",
+          "language": "csharp",
+          "entities": [
+            {
+              "name": "UserService",
+              "type": "class",
+              "location": {
+                "start": {
+                  "line": 5,
+                  "column": 11,
+                  "index": 45
+                },
+                "end": {
+                  "line": 85,
+                  "column": 1,
+                  "index": 2456
+                }
+              },
+              "modifiers": ["public", "partial"],
+              "inheritance": {
+                "baseClasses": [],
+                "interfaces": ["IUserService"],
+                "isAbstract": false
+              },
+              "children": [
+                {
+                  "name": "GetUserAsync",
+                  "type": "method",
+                  "location": {
+                    "start": {
+                      "line": 12,
+                      "column": 19,
+                      "index": 156
+                    },
+                    "end": {
+                      "line": 25,
+                      "column": 4,
+                      "index": 456
+                    }
+                  },
+                  "modifiers": ["public", "async"],
+                  "returnType": "Task<User>",
+                  "parameters": [
+                    {
+                      "name": "userId",
+                      "type": "int",
+                      "optional": false
+                    }
+                  ],
+                  "asyncInfo": {
+                    "isAsync": true,
+                    "isAwaitable": true
+                  }
+                }
+              ]
+            }
+          ],
+          "relationships": [
+            {
+              "from": "UserService",
+              "to": "IUserService",
+              "type": "implements",
+              "metadata": {
+                "line": 6,
+                "confidence": 1.0
+              }
+            }
+          ],
+          "patterns": {
+            "designPatterns": [
+              {
+                "pattern": "dependency_injection",
+                "entities": ["UserService", "IUserRepository"],
+                "confidence": 0.98,
+                "description": "Constructor injection detected"
+              }
+            ],
+            "csharpIdioms": [
+              {
+                "idiom": "async_await",
+                "locations": [
+                  {
+                    "line": 18,
+                    "column": 12
+                  }
+                ],
+                "usage": "await userRepository.FindByIdAsync(userId)"
+              }
+            ]
+          },
+          "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "parseTimeMs": 156,
+          "fromCache": false,
+          "errors": [],
+          "metadata": {
+            "loc": 245,
+            "sloc": 156,
+            "complexity_score": 8,
+            "maintainability_index": 78.5,
+            "namespace": "MyApp.Services"
+          },
+          "warnings": [
+            "Method GetUserAsync complexity: 8 (threshold: 7)"
+          ]
+        }
+      },
       "ParserRequest": {
         "type": "object",
         "required": ["file_path", "repo_path"],
