@@ -1,0 +1,549 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "C# Language Parser Microservice API",
+    "description": "REST API for C# code analysis, providing endpoints to extract dependencies and code structure. This service enables Python-based IntentGraph to support C# by delegating parsing to a dedicated microservice. Endpoints mirror the abstract methods in LanguageParser base class from src/intentgraph/adapters/parsers/base.py. Schemas are exactly aligned with domain models from src/intentgraph/domain/models.py.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "IntentGraph Team",
+      "email": "support@intentgraph.example.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Local development server"
+    },
+    {
+      "url": "https://csharp-parser.example.com",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/api/v1/parser/cs/dependencies": {
+      "post": {
+        "tags": ["C# Parser"],
+        "summary": "Extract dependencies from a C# source file",
+        "description": "Analyzes the given C# file and returns a list of relative paths to its dependencies within the repository. Mirrors `extract_dependencies` method. Dependencies include resolved using statements and project references.",
+        "operationId": "extractDependencies",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response with list of dependency paths",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of relative file paths (e.g., ['src/AnotherClass.cs'])",
+                  "example": ["src/Models/User.cs", "src/Services/IDataService.cs"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input (e.g., invalid paths or file not found)",
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "500": {
+            "description": "Internal server error during parsing",
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/parser/cs/structure": {
+      "post": {
+        "tags": ["C# Parser"],
+        "summary": "Extract detailed code structure from a C# source file",
+        "description": "Parses the C# file to extract code symbols, API exports, function dependencies, imports, and metadata. Mirrors `extract_code_structure` method, returning tuple (symbols, exports, function_deps, imports, metadata).",
+        "operationId": "extractCodeStructure",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response with code structure data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CodeStructureResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input (e.g., invalid paths or file not found)",
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "500": {
+            "description": "Internal server error during parsing",
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/parser/cs/extensions": {
+      "get": {
+        "tags": ["C# Parser"],
+        "summary": "Get supported C# file extensions",
+        "description": "Returns the list of file extensions recognized by the C# parser (e.g., for resolving imports). Mirrors `_get_file_extensions` method.",
+        "operationId": "getFileExtensions",
+        "responses": {
+          "200": {
+            "description": "List of file extensions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Supported extensions",
+                  "example": [".cs", ".csx", ".cshtml"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/parser/cs/init-files": {
+      "get": {
+        "tags": ["C# Parser"],
+        "summary": "Get C# initialization file names",
+        "description": "Returns names of initialization files for C# modules/packages (e.g., for directory resolution). Mirrors `_get_init_files` method. For C#, this may include AssemblyInfo.cs.",
+        "operationId": "getInitFiles",
+        "responses": {
+          "200": {
+            "description": "List of init file names",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Init file names",
+                  "example": ["AssemblyInfo.cs", "GlobalUsings.cs"]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/parser/cs/resolve-import": {
+      "post": {
+        "tags": ["C# Parser"],
+        "summary": "Resolve an import path to actual file paths",
+        "description": "Resolves a C# import/using statement to relative file paths within the repo, with security validation. Mirrors `_resolve_import_path` method.",
+        "operationId": "resolveImportPath",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResolveImportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "List of resolved file paths",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Resolved relative paths or empty list if invalid/unresolved",
+                  "example": ["src/System/Collections/Generic/List.cs"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid import path or security violation",
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "500": {
+            "description": "Internal server error",
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ParserRequest": {
+        "type": "object",
+        "required": ["file_path", "repo_path"],
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "format": "path",
+            "description": "Absolute or relative path to the C# source file",
+            "example": "/home/user/repo/src/MyClass.cs"
+          },
+          "repo_path": {
+            "type": "string",
+            "format": "path",
+            "description": "Absolute path to the repository root",
+            "example": "/home/user/repo"
+          }
+        }
+      },
+      "ResolveImportRequest": {
+        "type": "object",
+        "required": ["import_path", "file_path", "repo_path"],
+        "properties": {
+          "import_path": {
+            "type": "string",
+            "description": "The import/using path to resolve (e.g., 'System.Collections' or '.Models.User')",
+            "example": "System.Collections.Generic"
+          },
+          "file_path": {
+            "$ref": "#/components/schemas/ParserRequest/properties/file_path"
+          },
+          "repo_path": {
+            "$ref": "#/components/schemas/ParserRequest/properties/repo_path"
+          }
+        }
+      },
+      "UUID": {
+        "type": "string",
+        "format": "uuid",
+        "description": "Universally Unique Identifier (UUID) as string",
+        "example": "123e4567-e89b-12d3-a456-426614174000"
+      },
+      "CodeSymbol": {
+        "type": "object",
+        "description": "Represents a function, class, or other code symbol. Aligned with domain.models.CodeSymbol dataclass.",
+        "required": ["name", "symbol_type", "line_start", "line_end"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The symbol name as it appears in code",
+            "example": "GetUserAsync"
+          },
+          "symbol_type": {
+            "type": "string",
+            "description": "Type of symbol ('function', 'class', 'variable', 'import', 'method' for C#)",
+            "example": "method"
+          },
+          "line_start": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Starting line number in source file",
+            "example": 42
+          },
+          "line_end": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Ending line number in source file",
+            "example": 58
+          },
+          "signature": {
+            "type": "string",
+            "nullable": true,
+            "description": "Full signature for functions/classes (e.g., 'public Task<User> GetUserAsync(int id)')",
+            "example": "public async Task<User> GetUserAsync(int id)"
+          },
+          "docstring": {
+            "type": "string",
+            "nullable": true,
+            "description": "Documentation string if present (XML doc comment)",
+            "example": "<summary>Gets a user by ID asynchronously</summary>"
+          },
+          "is_exported": {
+            "type": "boolean",
+            "default": false,
+            "description": "True if part of public API",
+            "example": true
+          },
+          "is_private": {
+            "type": "boolean",
+            "default": false,
+            "description": "True if private (e.g., starts with underscore or internal)",
+            "example": false
+          },
+          "decorators": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": [],
+            "description": "List of decorator/attribute names applied to symbol (e.g., '[Obsolete]')",
+            "example": ["[Obsolete(\"Use new method\")]", "[AsyncTimeout(30)]"]
+          },
+          "parent": {
+            "type": "string",
+            "nullable": true,
+            "description": "Parent symbol name for nested definitions (e.g., class name for method)",
+            "example": "UserService"
+          },
+          "id": {
+            "$ref": "#/components/schemas/UUID",
+            "description": "Unique identifier for the symbol"
+          }
+        }
+      },
+      "APIExport": {
+        "type": "object",
+        "description": "Represents something exported by a module. Aligned with domain.models.APIExport dataclass.",
+        "required": ["name", "export_type"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Exported item name",
+            "example": "GetUserAsync"
+          },
+          "export_type": {
+            "type": "string",
+            "description": "Type of export ('function', 'class', 'variable', 'constant', 'method' for C#)",
+            "example": "method"
+          },
+          "symbol_id": {
+            "$ref": "#/components/schemas/UUID",
+            "nullable": true,
+            "description": "Link to CodeSymbol.id if defined here"
+          },
+          "is_reexport": {
+            "type": "boolean",
+            "default": false,
+            "description": "True if re-exported from another module",
+            "example": false
+          },
+          "original_module": {
+            "type": "string",
+            "nullable": true,
+            "description": "Original module if re-exported",
+            "example": "System.Collections"
+          },
+          "docstring": {
+            "type": "string",
+            "nullable": true,
+            "description": "Documentation for the export",
+            "example": "<summary>Public API method</summary>"
+          }
+        }
+      },
+      "FunctionDependency": {
+        "type": "object",
+        "description": "Represents a specific function-level dependency. Aligned with domain.models.FunctionDependency dataclass.",
+        "required": ["from_symbol", "to_symbol", "to_file", "dependency_type", "line_number"],
+        "properties": {
+          "from_symbol": {
+            "$ref": "#/components/schemas/UUID",
+            "description": "Symbol that has the dependency (source)"
+          },
+          "to_symbol": {
+            "$ref": "#/components/schemas/UUID",
+            "description": "Symbol being depended on (target)"
+          },
+          "to_file": {
+            "$ref": "#/components/schemas/UUID",
+            "description": "File containing the target symbol"
+          },
+          "dependency_type": {
+            "type": "string",
+            "description": "'calls', 'inherits', 'imports', 'instantiates' (e.g., 'calls' for method invocation)",
+            "example": "calls"
+          },
+          "line_number": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Where this dependency occurs",
+            "example": 50
+          },
+          "context": {
+            "type": "string",
+            "nullable": true,
+            "description": "Code context around dependency (snippet)",
+            "example": "userService.GetUserAsync(id);"
+          }
+        }
+      },
+      "CodeStructureResponse": {
+        "type": "object",
+        "description": "Response mirroring the tuple from extract_code_structure: (symbols, exports, function_deps, imports, metadata). Aligned with domain.models.",
+        "required": ["symbols", "exports", "function_dependencies", "imports", "metadata"],
+        "properties": {
+          "symbols": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CodeSymbol"
+            },
+            "description": "List of CodeSymbol instances"
+          },
+          "exports": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/APIExport"
+            },
+            "description": "List of APIExport instances"
+          },
+          "function_dependencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FunctionDependency"
+            },
+            "description": "List of FunctionDependency instances"
+          },
+          "imports": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of import statements (e.g., 'using System;')",
+            "example": ["using System.Collections.Generic;", "using MyApp.Models;"]
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Dictionary of metadata (e.g., complexity, LOC). Inspired by FileInfo fields.",
+            "properties": {
+              "loc": {
+                "type": "integer",
+                "description": "Lines of code",
+                "example": 120
+              },
+              "complexity_score": {
+                "type": "integer",
+                "description": "Cyclomatic complexity",
+                "example": 5
+              },
+              "maintainability_index": {
+                "type": "number",
+                "description": "Maintainability score",
+                "example": 85.5
+              },
+              "file_purpose": {
+                "type": "string",
+                "nullable": true,
+                "description": "Inferred file purpose",
+                "example": "User service implementation"
+              },
+              "key_abstractions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Main concepts",
+                "example": ["User", "Repository"]
+              },
+              "design_patterns": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Detected patterns",
+                "example": ["Dependency Injection"]
+              }
+            },
+            "example": {
+              "loc": 120,
+              "complexity_score": 5,
+              "maintainability_index": 85.5
+            }
+          }
+        }
+      },
+      "Language": {
+        "type": "string",
+        "enum": ["python", "javascript", "typescript", "go", "unknown", "csharp"],
+        "description": "Supported programming languages, extended with C#"
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": ["code", "message"],
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "INVALID_PATH"
+          },
+          "message": {
+            "type": "string",
+            "example": "File path is outside repository boundaries"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad Request (400)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "InternalError": {
+        "description": "Internal Server Error (500)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "C# Parser",
+      "description": "Endpoints for C# code analysis and parsing, compatible with IntentGraph domain models"
+    }
+  ],
+  "externalDocs": {
+    "description": "IntentGraph Documentation - Domain Models",
+    "url": "https://intentgraph.example.com/docs/domain/models"
+  }
+}
