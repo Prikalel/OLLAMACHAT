@@ -171,9 +171,8 @@ public class LlmService : ILlmService
                                     toolCall.Id,
                                     responseContent));
                                 logger.LogInformation(
-                                    "Successfully called tool: {Tool}. Response content: {Content}",
-                                    toolName,
-                                    responseContent);
+                                    "Successfully called tool: {Tool}",
+                                    toolName);
                             }
                             else
                             {
