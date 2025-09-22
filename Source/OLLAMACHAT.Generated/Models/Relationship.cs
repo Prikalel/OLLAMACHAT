@@ -19,7 +19,7 @@ using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
-namespace IO.Swagger.Models
+namespace OLLAMACHAT.Generated.Models
 {
     /// <summary>
     /// Represents a relationship between two entities.
@@ -49,7 +49,7 @@ namespace IO.Swagger.Models
         /// Gets or Sets Type
         /// </summary>
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-        [XmlType("IO.Swagger.Models.Relationship.TypeEnum")]
+        [XmlType("OLLAMACHAT.Generated.Models.Relationship.TypeEnum")]
         public enum TypeEnum
         {
             /// <summary>

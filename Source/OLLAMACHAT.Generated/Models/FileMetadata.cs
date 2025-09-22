@@ -18,7 +18,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
-namespace IO.Swagger.Models
+namespace OLLAMACHAT.Generated.Models
 {
     /// <summary>
     /// High-level metadata about the parsed file.

@@ -1,5 +1,5 @@
-﻿using IO.Swagger.Controllers;
-using IO.Swagger.Filters;
+﻿using OLLAMACHAT.Generated.Controllers;
+using OLLAMACHAT.Generated.Filters;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -114,7 +114,7 @@ public class Startup
             c.EnableAnnotations();
 
             c.CustomSchemaIds(type => type.FullName.Replace('+', '.'));
-            c.IncludeXmlComments($"{AppContext.BaseDirectory}{Path.DirectorySeparatorChar}IO.Swagger.xml");
+            c.IncludeXmlComments($"{AppContext.BaseDirectory}{Path.DirectorySeparatorChar}OLLAMACHAT.Generated.xml");
 
             // Include DataAnnotation attributes on Controller Action parameters as Swagger validation rules (e.g required, pattern, ..)
             // Use [ValidateModelState] on Actions to actually validate it in C# as well!

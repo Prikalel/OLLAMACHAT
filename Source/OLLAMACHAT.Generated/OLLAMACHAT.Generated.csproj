@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Description>IO.Swagger</Description>
-    <Copyright>IO.Swagger</Copyright>
+    <Description>OLLAMACHAT.Generated</Description>
+    <Copyright>OLLAMACHAT.Generated</Copyright>
     <TargetFramework>net7.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PreserveCompilationContext>true</PreserveCompilationContext>
-    <AssemblyName>IO.Swagger</AssemblyName>
-    <PackageId>IO.Swagger</PackageId>
-    <CsProjectName>IO.Swagger</CsProjectName>
+    <AssemblyName>OLLAMACHAT.Generated</AssemblyName>
+    <PackageId>OLLAMACHAT.Generated</PackageId>
+    <CsProjectName>OLLAMACHAT.Generated</CsProjectName>
     <OutputPath>..\..\Out\$(Configuration)\$(CsProjectName)\</OutputPath>
     <DocumentationFile>..\..\Out\$(Configuration)\$(CsProjectName)\$(CsProjectName).xml</DocumentationFile>
     <RootNamespace>$(CsProjectName)</RootNamespace>

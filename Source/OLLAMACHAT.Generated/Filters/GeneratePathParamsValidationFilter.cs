@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace IO.Swagger.Filters
+namespace OLLAMACHAT.Generated.Filters
 {
     /// <summary>
     /// Path Parameter Validation Rules Filter
