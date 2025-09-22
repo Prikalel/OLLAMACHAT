@@ -1,4 +1,10 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Web;
+﻿using IO.Swagger.Controllers;
+using IO.Swagger.Filters;
+using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
+
+namespace VelikiyPrikalel.OLLAMACHAT.Web;
 
 /// <summary>
 /// Класс конфигурации веб-приложения.
@@ -77,8 +83,18 @@ public class Startup
         {
             RegisterSwagger(services);
         }
-        services.AddControllers();
-        services.AddRazorPages();
+        services.AddControllers()
+            .AddApplicationPart(typeof(CParserApiController).Assembly);
+        services.AddRazorPages().AddMvcOptions(options =>
+        {
+            options.InputFormatters.RemoveType<Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter>();
+            options.OutputFormatters.RemoveType<Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonOutputFormatter>();
+        }).AddNewtonsoftJson(opts =>
+        {
+            opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            opts.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
+        })
+        .AddXmlSerializerFormatters();
         services.AddSignalR();
 
         services.AddMediator((MediatorOptions options) =>
@@ -88,16 +104,21 @@ public class Startup
     private static void RegisterSwagger(IServiceCollection services)
     {
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen(options =>
+        services.AddSwaggerGen(c =>
         {
-            IncludeOllamaChatXmlDocs(options, nameof(Web));
+            IncludeOllamaChatXmlDocs(c, nameof(Web));
 
-            options.SupportNonNullableReferenceTypes();
-            options.UseAllOfForInheritance();
+            c.SupportNonNullableReferenceTypes();
+            c.UseAllOfForInheritance();
 
-            options.EnableAnnotations();
+            c.EnableAnnotations();
 
-            //options.
+            c.CustomSchemaIds(type => type.FullName.Replace('+', '.'));
+            c.IncludeXmlComments($"{AppContext.BaseDirectory}{Path.DirectorySeparatorChar}IO.Swagger.xml");
+
+            // Include DataAnnotation attributes on Controller Action parameters as Swagger validation rules (e.g required, pattern, ..)
+            // Use [ValidateModelState] on Actions to actually validate it in C# as well!
+            c.OperationFilter<GeneratePathParamsValidationFilter>();
         });
     }
 

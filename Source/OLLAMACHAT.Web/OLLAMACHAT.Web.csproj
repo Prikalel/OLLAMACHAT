@@ -38,6 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OLLAMACHAT.Generated\IO.Swagger.csproj" />
     <ProjectReference Include="..\OLLAMACHAT.Infrastructure\OLLAMACHAT.Infrastructure.csproj" />
   </ItemGroup>
 

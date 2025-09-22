@@ -3,12 +3,8 @@
 /// <summary>
 /// Роуты minimal api.
 /// </summary>
-public static class Extensions // TODO: имплементировать endpoint-ы
+public static class Extensions // TODO: переместить в выход Home контроллера, а этот файл удалить
 {
-    // TODO: static files.
-    // The Flask app references images at /static/images/, but in ASP.NET Core, static files are typically in wwwroot.
-    // We need to ensure that the static files are properly set up
-
     /// <summary>
     /// Добавить api.
     /// </summary>
