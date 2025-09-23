@@ -16,85 +16,58 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
-using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 namespace OLLAMACHAT.Generated.Models
 {
     /// <summary>
-    /// Represents a relationship between two entities.
+    ///
     /// </summary>
     [DataContract]
-    public partial class Relationship : IEquatable<Relationship>
+    public partial class ParseErrorDto : IEquatable<ParseErrorDto>
     {
         /// <summary>
-        /// Name of the source entity.
+        /// Gets or Sets Message
         /// </summary>
-        /// <value>Name of the source entity.</value>
-        [Required]
 
-        [DataMember(Name="from")]
-        public string From { get; set; }
+        [DataMember(Name="message")]
+        public string Message { get; set; }
 
         /// <summary>
-        /// Name of the target entity.
-        /// </summary>
-        /// <value>Name of the target entity.</value>
-        [Required]
-
-        [DataMember(Name="to")]
-        public string To { get; set; }
-
-        /// <summary>
-        /// Gets or Sets Type
+        /// Gets or Sets Severity
         /// </summary>
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-        [XmlType("OLLAMACHAT.Generated.Models.Relationship.TypeEnum")]
-        public enum TypeEnum
+        public enum SeverityEnumDto
         {
             /// <summary>
-            /// Enum InheritsEnum for inherits
+            /// Enum ErrorEnum for error
             /// </summary>
-            [EnumMember(Value = "inherits")]
-            InheritsEnum = 0,
+            [EnumMember(Value = "error")]
+            ErrorEnum = 0,
             /// <summary>
-            /// Enum ImplementsEnum for implements
+            /// Enum WarningEnum for warning
             /// </summary>
-            [EnumMember(Value = "implements")]
-            ImplementsEnum = 1,
+            [EnumMember(Value = "warning")]
+            WarningEnum = 1,
             /// <summary>
-            /// Enum CallsEnum for calls
+            /// Enum InfoEnum for info
             /// </summary>
-            [EnumMember(Value = "calls")]
-            CallsEnum = 2,
-            /// <summary>
-            /// Enum ReferencesEnum for references
-            /// </summary>
-            [EnumMember(Value = "references")]
-            ReferencesEnum = 3        }
+            [EnumMember(Value = "info")]
+            InfoEnum = 2        }
 
         /// <summary>
-        /// Gets or Sets Type
+        /// Gets or Sets Severity
         /// </summary>
-        [Required]
 
-        [DataMember(Name="type")]
-        public TypeEnum? Type { get; set; }
-
-        /// <summary>
-        /// Relative path to the target file if the relationship is cross-file.
-        /// </summary>
-        /// <value>Relative path to the target file if the relationship is cross-file.</value>
-
-        [DataMember(Name="targetFile")]
-        public string TargetFile { get; set; }
+        [DataMember(Name="severity")]
+        public SeverityEnumDto? Severity { get; set; }
 
         /// <summary>
         /// Gets or Sets Location
         /// </summary>
 
         [DataMember(Name="location")]
-        public Location Location { get; set; }
+        public LocationDto Location { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -103,11 +76,9 @@ namespace OLLAMACHAT.Generated.Models
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class Relationship {\n");
-            sb.Append("  From: ").Append(From).Append("\n");
-            sb.Append("  To: ").Append(To).Append("\n");
-            sb.Append("  Type: ").Append(Type).Append("\n");
-            sb.Append("  TargetFile: ").Append(TargetFile).Append("\n");
+            sb.Append("class ParseError {\n");
+            sb.Append("  Message: ").Append(Message).Append("\n");
+            sb.Append("  Severity: ").Append(Severity).Append("\n");
             sb.Append("  Location: ").Append(Location).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -131,39 +102,29 @@ namespace OLLAMACHAT.Generated.Models
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((Relationship)obj);
+            return obj.GetType() == GetType() && Equals((ParseErrorDto)obj);
         }
 
         /// <summary>
-        /// Returns true if Relationship instances are equal
+        /// Returns true if ParseError instances are equal
         /// </summary>
-        /// <param name="other">Instance of Relationship to be compared</param>
+        /// <param name="other">Instance of ParseError to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(Relationship other)
+        public bool Equals(ParseErrorDto other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return
                 (
-                    From == other.From ||
-                    From != null &&
-                    From.Equals(other.From)
+                    Message == other.Message ||
+                    Message != null &&
+                    Message.Equals(other.Message)
                 ) &&
                 (
-                    To == other.To ||
-                    To != null &&
-                    To.Equals(other.To)
-                ) &&
-                (
-                    Type == other.Type ||
-                    Type != null &&
-                    Type.Equals(other.Type)
-                ) &&
-                (
-                    TargetFile == other.TargetFile ||
-                    TargetFile != null &&
-                    TargetFile.Equals(other.TargetFile)
+                    Severity == other.Severity ||
+                    Severity != null &&
+                    Severity.Equals(other.Severity)
                 ) &&
                 (
                     Location == other.Location ||
@@ -182,14 +143,10 @@ namespace OLLAMACHAT.Generated.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
-                    if (From != null)
-                    hashCode = hashCode * 59 + From.GetHashCode();
-                    if (To != null)
-                    hashCode = hashCode * 59 + To.GetHashCode();
-                    if (Type != null)
-                    hashCode = hashCode * 59 + Type.GetHashCode();
-                    if (TargetFile != null)
-                    hashCode = hashCode * 59 + TargetFile.GetHashCode();
+                    if (Message != null)
+                    hashCode = hashCode * 59 + Message.GetHashCode();
+                    if (Severity != null)
+                    hashCode = hashCode * 59 + Severity.GetHashCode();
                     if (Location != null)
                     hashCode = hashCode * 59 + Location.GetHashCode();
                 return hashCode;
@@ -199,12 +156,12 @@ namespace OLLAMACHAT.Generated.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(Relationship left, Relationship right)
+        public static bool operator ==(ParseErrorDto left, ParseErrorDto right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(Relationship left, Relationship right)
+        public static bool operator !=(ParseErrorDto left, ParseErrorDto right)
         {
             return !Equals(left, right);
         }

@@ -21,34 +21,17 @@ using Newtonsoft.Json;
 namespace OLLAMACHAT.Generated.Models
 {
     /// <summary>
-    /// High-level metadata about the parsed file.
+    /// 
     /// </summary>
     [DataContract]
-    public partial class FileMetadata : IEquatable<FileMetadata>
+    public partial class ParsedEntityImportDataDto : IEquatable<ParsedEntityImportDataDto>
     { 
         /// <summary>
-        /// Lines of Code.
+        /// Gets or Sets Source
         /// </summary>
-        /// <value>Lines of Code.</value>
 
-        [DataMember(Name="loc")]
-        public int? Loc { get; set; }
-
-        /// <summary>
-        /// Aggregated cyclomatic complexity.
-        /// </summary>
-        /// <value>Aggregated cyclomatic complexity.</value>
-
-        [DataMember(Name="complexityScore")]
-        public int? ComplexityScore { get; set; }
-
-        /// <summary>
-        /// The primary namespace of the file.
-        /// </summary>
-        /// <value>The primary namespace of the file.</value>
-
-        [DataMember(Name="namespace")]
-        public string _Namespace { get; set; }
+        [DataMember(Name="source")]
+        public string Source { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -57,10 +40,8 @@ namespace OLLAMACHAT.Generated.Models
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class FileMetadata {\n");
-            sb.Append("  Loc: ").Append(Loc).Append("\n");
-            sb.Append("  ComplexityScore: ").Append(ComplexityScore).Append("\n");
-            sb.Append("  _Namespace: ").Append(_Namespace).Append("\n");
+            sb.Append("class ParsedEntityImportData {\n");
+            sb.Append("  Source: ").Append(Source).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -83,34 +64,24 @@ namespace OLLAMACHAT.Generated.Models
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((FileMetadata)obj);
+            return obj.GetType() == GetType() && Equals((ParsedEntityImportDataDto)obj);
         }
 
         /// <summary>
-        /// Returns true if FileMetadata instances are equal
+        /// Returns true if ParsedEntityImportData instances are equal
         /// </summary>
-        /// <param name="other">Instance of FileMetadata to be compared</param>
+        /// <param name="other">Instance of ParsedEntityImportData to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(FileMetadata other)
+        public bool Equals(ParsedEntityImportDataDto other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return 
                 (
-                    Loc == other.Loc ||
-                    Loc != null &&
-                    Loc.Equals(other.Loc)
-                ) && 
-                (
-                    ComplexityScore == other.ComplexityScore ||
-                    ComplexityScore != null &&
-                    ComplexityScore.Equals(other.ComplexityScore)
-                ) && 
-                (
-                    _Namespace == other._Namespace ||
-                    _Namespace != null &&
-                    _Namespace.Equals(other._Namespace)
+                    Source == other.Source ||
+                    Source != null &&
+                    Source.Equals(other.Source)
                 );
         }
 
@@ -124,12 +95,8 @@ namespace OLLAMACHAT.Generated.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
-                    if (Loc != null)
-                    hashCode = hashCode * 59 + Loc.GetHashCode();
-                    if (ComplexityScore != null)
-                    hashCode = hashCode * 59 + ComplexityScore.GetHashCode();
-                    if (_Namespace != null)
-                    hashCode = hashCode * 59 + _Namespace.GetHashCode();
+                    if (Source != null)
+                    hashCode = hashCode * 59 + Source.GetHashCode();
                 return hashCode;
             }
         }
@@ -137,12 +104,12 @@ namespace OLLAMACHAT.Generated.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(FileMetadata left, FileMetadata right)
+        public static bool operator ==(ParsedEntityImportDataDto left, ParsedEntityImportDataDto right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(FileMetadata left, FileMetadata right)
+        public static bool operator !=(ParsedEntityImportDataDto left, ParsedEntityImportDataDto right)
         {
             return !Equals(left, right);
         }

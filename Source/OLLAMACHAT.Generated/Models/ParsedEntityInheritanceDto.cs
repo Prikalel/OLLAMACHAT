@@ -24,35 +24,21 @@ namespace OLLAMACHAT.Generated.Models
     /// 
     /// </summary>
     [DataContract]
-    public partial class ModelParameter : IEquatable<ModelParameter>
+    public partial class ParsedEntityInheritanceDto : IEquatable<ParsedEntityInheritanceDto>
     { 
         /// <summary>
-        /// Gets or Sets Name
+        /// Gets or Sets BaseClasses
         /// </summary>
 
-        [DataMember(Name="name")]
-        public string Name { get; set; }
+        [DataMember(Name="baseClasses")]
+        public List<string> BaseClasses { get; set; }
 
         /// <summary>
-        /// Gets or Sets Type
+        /// Gets or Sets Interfaces
         /// </summary>
 
-        [DataMember(Name="type")]
-        public string Type { get; set; }
-
-        /// <summary>
-        /// Gets or Sets Optional
-        /// </summary>
-
-        [DataMember(Name="optional")]
-        public bool? Optional { get; set; }
-
-        /// <summary>
-        /// Gets or Sets DefaultValue
-        /// </summary>
-
-        [DataMember(Name="defaultValue")]
-        public string DefaultValue { get; set; }
+        [DataMember(Name="interfaces")]
+        public List<string> Interfaces { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -61,11 +47,9 @@ namespace OLLAMACHAT.Generated.Models
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class ModelParameter {\n");
-            sb.Append("  Name: ").Append(Name).Append("\n");
-            sb.Append("  Type: ").Append(Type).Append("\n");
-            sb.Append("  Optional: ").Append(Optional).Append("\n");
-            sb.Append("  DefaultValue: ").Append(DefaultValue).Append("\n");
+            sb.Append("class ParsedEntityInheritance {\n");
+            sb.Append("  BaseClasses: ").Append(BaseClasses).Append("\n");
+            sb.Append("  Interfaces: ").Append(Interfaces).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -88,39 +72,29 @@ namespace OLLAMACHAT.Generated.Models
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((ModelParameter)obj);
+            return obj.GetType() == GetType() && Equals((ParsedEntityInheritanceDto)obj);
         }
 
         /// <summary>
-        /// Returns true if ModelParameter instances are equal
+        /// Returns true if ParsedEntityInheritance instances are equal
         /// </summary>
-        /// <param name="other">Instance of ModelParameter to be compared</param>
+        /// <param name="other">Instance of ParsedEntityInheritance to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(ModelParameter other)
+        public bool Equals(ParsedEntityInheritanceDto other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return 
                 (
-                    Name == other.Name ||
-                    Name != null &&
-                    Name.Equals(other.Name)
+                    BaseClasses == other.BaseClasses ||
+                    BaseClasses != null &&
+                    BaseClasses.SequenceEqual(other.BaseClasses)
                 ) && 
                 (
-                    Type == other.Type ||
-                    Type != null &&
-                    Type.Equals(other.Type)
-                ) && 
-                (
-                    Optional == other.Optional ||
-                    Optional != null &&
-                    Optional.Equals(other.Optional)
-                ) && 
-                (
-                    DefaultValue == other.DefaultValue ||
-                    DefaultValue != null &&
-                    DefaultValue.Equals(other.DefaultValue)
+                    Interfaces == other.Interfaces ||
+                    Interfaces != null &&
+                    Interfaces.SequenceEqual(other.Interfaces)
                 );
         }
 
@@ -134,14 +108,10 @@ namespace OLLAMACHAT.Generated.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
-                    if (Name != null)
-                    hashCode = hashCode * 59 + Name.GetHashCode();
-                    if (Type != null)
-                    hashCode = hashCode * 59 + Type.GetHashCode();
-                    if (Optional != null)
-                    hashCode = hashCode * 59 + Optional.GetHashCode();
-                    if (DefaultValue != null)
-                    hashCode = hashCode * 59 + DefaultValue.GetHashCode();
+                    if (BaseClasses != null)
+                    hashCode = hashCode * 59 + BaseClasses.GetHashCode();
+                    if (Interfaces != null)
+                    hashCode = hashCode * 59 + Interfaces.GetHashCode();
                 return hashCode;
             }
         }
@@ -149,12 +119,12 @@ namespace OLLAMACHAT.Generated.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(ModelParameter left, ModelParameter right)
+        public static bool operator ==(ParsedEntityInheritanceDto left, ParsedEntityInheritanceDto right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(ModelParameter left, ModelParameter right)
+        public static bool operator !=(ParsedEntityInheritanceDto left, ParsedEntityInheritanceDto right)
         {
             return !Equals(left, right);
         }

@@ -25,7 +25,7 @@ namespace OLLAMACHAT.Generated.Models
     /// Represents a single parsed code entity (class, method, etc.).
     /// </summary>
     [DataContract]
-    public partial class ParsedEntity : IEquatable<ParsedEntity>
+    public partial class ParsedEntityDto : IEquatable<ParsedEntityDto>
     {
         /// <summary>
         /// Gets or Sets Name
@@ -39,8 +39,8 @@ namespace OLLAMACHAT.Generated.Models
         /// Gets or Sets Type
         /// </summary>
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-        [XmlType("OLLAMACHAT.Generated.Models.ParsedEntity.TypeEnum")]
-        public enum TypeEnum
+        [XmlType("OLLAMACHAT.Generated.Models.ParsedEntityDto.TypeEnumDto")]
+        public enum TypeEnumDto
         {
             /// <summary>
             /// Enum ClassEnum for class
@@ -89,7 +89,7 @@ namespace OLLAMACHAT.Generated.Models
         [Required]
 
         [DataMember(Name="type")]
-        public TypeEnum? Type { get; set; }
+        public TypeEnumDto? Type { get; set; }
 
         /// <summary>
         /// Gets or Sets Location
@@ -97,14 +97,14 @@ namespace OLLAMACHAT.Generated.Models
         [Required]
 
         [DataMember(Name="location")]
-        public Location Location { get; set; }
+        public LocationDto Location { get; set; }
 
         /// <summary>
         /// Gets or Sets Children
         /// </summary>
 
         [DataMember(Name="children")]
-        public List<ParsedEntity> Children { get; set; }
+        public List<ParsedEntityDto> Children { get; set; }
 
         /// <summary>
         /// Gets or Sets Modifiers
@@ -118,14 +118,14 @@ namespace OLLAMACHAT.Generated.Models
         /// </summary>
 
         [DataMember(Name="decorators")]
-        public List<Decorator> Decorators { get; set; }
+        public List<DecoratorDto> Decorators { get; set; }
 
         /// <summary>
         /// Gets or Sets Inheritance
         /// </summary>
 
         [DataMember(Name="inheritance")]
-        public ParsedEntityInheritance Inheritance { get; set; }
+        public ParsedEntityInheritanceDto Inheritance { get; set; }
 
         /// <summary>
         /// Gets or Sets ReturnType
@@ -139,14 +139,14 @@ namespace OLLAMACHAT.Generated.Models
         /// </summary>
 
         [DataMember(Name="parameters")]
-        public List<ModelParameter> Parameters { get; set; }
+        public List<ModelParameterDto> Parameters { get; set; }
 
         /// <summary>
         /// Gets or Sets ImportData
         /// </summary>
 
         [DataMember(Name="importData")]
-        public ParsedEntityImportData ImportData { get; set; }
+        public ParsedEntityImportDataDto ImportData { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -188,7 +188,7 @@ namespace OLLAMACHAT.Generated.Models
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((ParsedEntity)obj);
+            return obj.GetType() == GetType() && Equals((ParsedEntityDto)obj);
         }
 
         /// <summary>
@@ -196,7 +196,7 @@ namespace OLLAMACHAT.Generated.Models
         /// </summary>
         /// <param name="other">Instance of ParsedEntity to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(ParsedEntity other)
+        public bool Equals(ParsedEntityDto other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -291,12 +291,12 @@ namespace OLLAMACHAT.Generated.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(ParsedEntity left, ParsedEntity right)
+        public static bool operator ==(ParsedEntityDto left, ParsedEntityDto right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(ParsedEntity left, ParsedEntity right)
+        public static bool operator !=(ParsedEntityDto left, ParsedEntityDto right)
         {
             return !Equals(left, right);
         }

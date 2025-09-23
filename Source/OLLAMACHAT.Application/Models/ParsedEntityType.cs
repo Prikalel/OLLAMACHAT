@@ -1,0 +1,47 @@
+namespace VelikiyPrikalel.OLLAMACHAT.Application.Models;
+
+/// <summary>
+/// Определяет тип сущности в коде.
+/// </summary>
+public enum ParsedEntityType
+{
+    /// <summary>
+    /// Класс.
+    /// </summary>
+    Class,
+
+    /// <summary>
+    /// Метод.
+    /// </summary>
+    Method,
+
+    /// <summary>
+    /// Интерфейс.
+    /// </summary>
+    Interface,
+
+    /// <summary>
+    /// Импорт.
+    /// </summary>
+    Import,
+
+    /// <summary>
+    /// Свойство.
+    /// </summary>
+    Property,
+
+    /// <summary>
+    /// Перечисление.
+    /// </summary>
+    Enum,
+
+    /// <summary>
+    /// Структура.
+    /// </summary>
+    Struct,
+
+    /// <summary>
+    /// Пространство имен.
+    /// </summary>
+    Namespace
+}
