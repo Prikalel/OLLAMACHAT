@@ -29,7 +29,7 @@ public class LlmBackgroundService(
                     x.Role == ChatMessageRole.Assistant ? "assistant" : "user",
                     x.Content))
                 .ToList());
-        await hubContext.Clients.Client(connectionId).SendAsync("ReceiveMessageChunk", fullResponse);
+        await hubContext.Clients.Client(connectionId).SendAsync("ReceiveMessageChunk", Markdig.Markdown.ToHtml(fullResponse));
 
         logger.LogInformation("Streamed response for prompt {Prompt} in chat {Id}", prompt, chatId);
 

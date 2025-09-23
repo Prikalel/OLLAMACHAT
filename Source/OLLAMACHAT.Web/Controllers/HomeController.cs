@@ -19,9 +19,15 @@ public class HomeController(
     public async Task<IActionResult> Index()
     {
         logger.LogInformation("Index requested");
-        return View(new Index()
+        List<ChatMessageDto> history = (await mediator.Send(new GetUserChatHistory.Query()))
+            .Select(x => new ChatMessageDto(
+                x.Role.ToString().ToLower(),
+                Markdig.Markdown.ToHtml(x.Content)))
+            .ToList();
+        return View(new Index
         {
-            AvailableModels = (await mediator.Send(new GetAvailableModels.Query())).ToList()
+            AvailableModels = (await mediator.Send(new GetAvailableModels.Query())).ToList(),
+            History = history
         });
     }
 }

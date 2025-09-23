@@ -16,7 +16,14 @@
         </select>
     </div>
 
-    <div id="chat-display"></div>
+    <div id="chat-display">
+        @foreach (ChatMessageDto chatElement in Model.History)
+        {
+            <div class="message @(chatElement.Role == "user" ? "user-message" : "ai-message")">
+                <strong>@(chatElement.Role == "user" ? "You:" : "AI:")</strong> <span style="color: #e0e0e0;">@Html.Raw(chatElement.Content)</span>
+            </div>
+        }
+    </div>
 
     <div id="input-area">
         <div class="input-wrapper">
@@ -104,17 +111,6 @@
                 e.preventDefault();
                 $('#send-button').click();
             }
-        });
-
-        // Load chat history
-        $(document).ready(function() {
-            fetch('/get_history')
-                .then(response => response.json())
-                .then(messages => {
-                    messages.forEach(msg => {
-                        appendMessage(msg.role, msg.content);
-                    });
-                });
         });
     </script>
 }

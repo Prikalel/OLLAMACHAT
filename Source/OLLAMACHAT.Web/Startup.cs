@@ -50,8 +50,6 @@ public class Startup
             endpoints.MapControllers();
             endpoints.MapRazorPages();
             endpoints.MapHub<ChatHub>("/chatHub");
-
-            endpoints.AddMinimalApis();
         });
 
         if (ServicesRegistrationOptions.RegisterSwagger)

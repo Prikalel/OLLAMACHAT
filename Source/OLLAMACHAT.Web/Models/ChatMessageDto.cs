@@ -1,4 +1,4 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Web.MinimalApis.Models;
+﻿namespace VelikiyPrikalel.OLLAMACHAT.Web.Models;
 
 /// <summary>
 /// Сообщение чата.
