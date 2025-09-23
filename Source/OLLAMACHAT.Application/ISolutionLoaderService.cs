@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
 
-namespace VelikiyPrikalel.OLLAMACHAT.Application.Services;
+namespace VelikiyPrikalel.OLLAMACHAT.Application;
 
 /// <summary>
 /// Service for loading and monitoring .NET solution files.

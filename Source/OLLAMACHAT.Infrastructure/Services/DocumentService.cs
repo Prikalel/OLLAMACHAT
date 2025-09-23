@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.CodeAnalysis;
-using VelikiyPrikalel.OLLAMACHAT.Application.Services;
+using VelikiyPrikalel.OLLAMACHAT.Application;
 
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services;
 
@@ -42,7 +42,8 @@ public class DocumentService : IDocumentService
             foreach (var project in solution.Projects)
             {
                 var document = project.Documents.FirstOrDefault(d =>
-                    d.FilePath?.Equals(filePath, StringComparison.OrdinalIgnoreCase) ?? false);
+                    d.FilePath?.Equals(filePath, StringComparison.OrdinalIgnoreCase) is true
+                    || d.FilePath?.Equals(Path.Join(repoPath, filePath), StringComparison.OrdinalIgnoreCase) is true);
 
                 if (document != null)
                 {

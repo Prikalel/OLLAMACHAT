@@ -1,4 +1,6 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure;
+﻿using VelikiyPrikalel.OLLAMACHAT.Application;
+
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure;
 
 using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Settings;
 

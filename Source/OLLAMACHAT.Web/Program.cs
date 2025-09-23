@@ -1,4 +1,6 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Web;
+﻿using VelikiyPrikalel.OLLAMACHAT.Application;
+
+namespace VelikiyPrikalel.OLLAMACHAT.Web;
 
 /// <summary>
 /// Входная точка запуска веб сервиса.
@@ -59,6 +61,9 @@ public class Program
             {
                 OllamaChatContext db = scope.ServiceProvider.GetRequiredService<OllamaChatContext>();
                 await db.Database.MigrateAsync();
+
+                var loader = scope.ServiceProvider.GetRequiredService<ISolutionLoaderService>();
+                await loader.LoadSolutionAsync();
             }
 
             await build

@@ -1,7 +1,9 @@
+using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
+using VelikiyPrikalel.OLLAMACHAT.Application;
 
-namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services;
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure;
 
 /// <inheritdoc />
 public class SolutionLoaderService : ISolutionLoaderService, IDisposable
@@ -65,6 +67,10 @@ public class SolutionLoaderService : ISolutionLoaderService, IDisposable
 
             logger.LogInformation("Loading solution from {SolutionPath}", solutionPath);
 
+            if (!MSBuildLocator.IsRegistered)
+            {
+                MSBuildLocator.RegisterDefaults();
+            }
             workspace = MSBuildWorkspace.Create();
             workspace.WorkspaceFailed += OnWorkspaceFailed;
 

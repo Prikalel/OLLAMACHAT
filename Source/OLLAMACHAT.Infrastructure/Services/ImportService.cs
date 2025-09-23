@@ -1,7 +1,6 @@
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using VelikiyPrikalel.OLLAMACHAT.Application.Services;
+using VelikiyPrikalel.OLLAMACHAT.Application;
 
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services;
 
