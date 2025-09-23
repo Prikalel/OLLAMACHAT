@@ -1,10 +1,4 @@
-﻿using OLLAMACHAT.Generated.Controllers;
-using OLLAMACHAT.Generated.Filters;
-using Microsoft.OpenApi.Models;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
-
-namespace VelikiyPrikalel.OLLAMACHAT.Web;
+﻿namespace VelikiyPrikalel.OLLAMACHAT.Web;
 
 /// <summary>
 /// Класс конфигурации веб-приложения.
@@ -99,6 +93,16 @@ public class Startup
 
         services.AddMediator((MediatorOptions options) =>
             options.ServiceLifetime = ServiceLifetime.Scoped);
+
+        services.AddMapster();
+
+        services.Scan(scan => scan
+            .FromApplicationDependencies()
+            .AddClasses(classes =>
+                classes.InNamespaces(
+                    typeof(IMapperInterface).Namespace))
+            .AsImplementedInterfaces()
+            .WithSingletonLifetime());
     }
 
     private static void RegisterSwagger(IServiceCollection services)

@@ -1,59 +1,51 @@
-using System.ComponentModel.DataAnnotations;
-using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+namespace OLLAMACHAT.Generated.Attributes;
 
-namespace OLLAMACHAT.Generated.Attributes
+/// <summary>
+/// Model state validation attribute
+/// </summary>
+public class ValidateModelStateAttribute : ActionFilterAttribute
 {
     /// <summary>
-    /// Model state validation attribute
+    /// Called before the action method is invoked
     /// </summary>
-    public class ValidateModelStateAttribute : ActionFilterAttribute
+    /// <param name="context"></param>
+    public override void OnActionExecuting(ActionExecutingContext context)
     {
-        /// <summary>
-        /// Called before the action method is invoked
-        /// </summary>
-        /// <param name="context"></param>
-        public override void OnActionExecuting(ActionExecutingContext context)
+        // Per https://blog.markvincze.com/how-to-validate-action-parameters-with-dataannotation-attributes/
+        var descriptor = context.ActionDescriptor as ControllerActionDescriptor;
+        if (descriptor != null)
         {
-            // Per https://blog.markvincze.com/how-to-validate-action-parameters-with-dataannotation-attributes/
-            var descriptor = context.ActionDescriptor as ControllerActionDescriptor;
-            if (descriptor != null)
+            foreach (var parameter in descriptor.MethodInfo.GetParameters())
             {
-                foreach (var parameter in descriptor.MethodInfo.GetParameters())
+                object args = null;
+                if (context.ActionArguments.ContainsKey(parameter.Name))
                 {
-                    object args = null;
-                    if (context.ActionArguments.ContainsKey(parameter.Name))
-                    { 
-                        args = context.ActionArguments[parameter.Name];
-                    }
-
-                    ValidateAttributes(parameter, args, context.ModelState);
+                    args = context.ActionArguments[parameter.Name];
                 }
-            }
 
-            if (!context.ModelState.IsValid)
-            {
-                context.Result = new BadRequestObjectResult(context.ModelState);
+                ValidateAttributes(parameter, args, context.ModelState);
             }
         }
 
-        private void ValidateAttributes(ParameterInfo parameter, object args, ModelStateDictionary modelState)
+        if (!context.ModelState.IsValid)
         {
-            foreach (var attributeData in parameter.CustomAttributes)
-            {
-                var attributeInstance = parameter.GetCustomAttribute(attributeData.AttributeType);
+            context.Result = new BadRequestObjectResult(context.ModelState);
+        }
+    }
 
-                var validationAttribute = attributeInstance as ValidationAttribute;
-                if (validationAttribute != null)
+    private void ValidateAttributes(ParameterInfo parameter, object args, ModelStateDictionary modelState)
+    {
+        foreach (var attributeData in parameter.CustomAttributes)
+        {
+            var attributeInstance = parameter.GetCustomAttribute(attributeData.AttributeType);
+
+            var validationAttribute = attributeInstance as ValidationAttribute;
+            if (validationAttribute != null)
+            {
+                var isValid = validationAttribute.IsValid(args);
+                if (!isValid)
                 {
-                    var isValid = validationAttribute.IsValid(args);
-                    if (!isValid)
-                    {
-                        modelState.AddModelError(parameter.Name, validationAttribute.FormatErrorMessage(parameter.Name));
-                    }
+                    modelState.AddModelError(parameter.Name, validationAttribute.FormatErrorMessage(parameter.Name));
                 }
             }
         }
