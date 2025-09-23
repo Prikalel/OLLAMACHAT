@@ -1,5 +1,7 @@
 ﻿namespace VelikiyPrikalel.OLLAMACHAT.Application.Mediator.CsharpParser;
 
+using VelikiyPrikalel.OLLAMACHAT.Application.Services;
+
 /// <summary>
 /// Получить доступные модели.
 /// </summary>
@@ -11,18 +13,20 @@ public sealed class GetSupportedExtensions
     public sealed record Query() : IRequest<List<string>>;
 
     /// <inheritdoc />
-    public sealed class Handler() : IRequestHandler<Query, List<string>>
+    public sealed class Handler(IRoslynParsingService roslynParsingService) : IRequestHandler<Query, List<string>>
     {
         /// <inheritdoc />
         public async ValueTask<List<string>> Handle(Query request, CancellationToken cancellationToken)
         {
-            string exampleJson = null;
-            exampleJson = "[ \".cs\", \".csx\", \".cshtml\" ]";
-
-            var example = exampleJson != null
-                ? JsonConvert.DeserializeObject<List<string>>(exampleJson)
-                : default(List<string>);            //TODO: Change the data returned
-            return example;
+            try
+            {
+                var result = await roslynParsingService.GetSupportedExtensionsAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return new List<string>();
+            }
         }
     }
 }

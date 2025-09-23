@@ -1,5 +1,8 @@
 ﻿namespace VelikiyPrikalel.OLLAMACHAT.Application.Mediator.CsharpParser;
 
+using VelikiyPrikalel.OLLAMACHAT.Application.Models;
+using VelikiyPrikalel.OLLAMACHAT.Application.Services;
+
 using ResolveImportResponse = (List<string> result, ErrorResponse? error);
 
 public sealed class ResolveImportPathDto
@@ -10,18 +13,26 @@ public sealed class ResolveImportPathDto
     public sealed record Query(ResolveImportRequest request) : IRequest<ResolveImportResponse>;
 
     /// <inheritdoc />
-    public sealed class Handler() : IRequestHandler<Query, ResolveImportResponse>
+    public sealed class Handler(IRoslynParsingService roslynParsingService) : IRequestHandler<Query, ResolveImportResponse>
     {
         /// <inheritdoc />
         public async ValueTask<ResolveImportResponse> Handle(Query request, CancellationToken cancellationToken)
         {
-            string exampleJson = null;
-            exampleJson = "[ \"src/System/Collections/Generic/List.cs\" ]";
+            try
+            {
+                var result = await roslynParsingService.ResolveImportPathAsync(
+                    request.request.ImportPath,
+                    request.request.FilePath,
+                    request.request.RepoPath);
 
-            var example = exampleJson != null
-                ? JsonConvert.DeserializeObject<List<string>>(exampleJson)
-                : default(List<string>);            //TODO: Change the data returned
-            return (example!, null);
+                return (result, null);
+            }
+            catch (Exception ex)
+            {
+                var error = new ErrorResponse( ex.GetHashCode().ToString(), $"Failed to resolve import path: {ex.Message}", ex.ToString());
+
+                return (new List<string>(), error);
+            }
         }
     }
 }

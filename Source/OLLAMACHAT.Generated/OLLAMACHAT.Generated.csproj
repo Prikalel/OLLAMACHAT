@@ -25,6 +25,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OLLAMACHAT.Application\OLLAMACHAT.Application.csproj" />
+    <ProjectReference Include="..\OLLAMACHAT.Infrastructure\OLLAMACHAT.Infrastructure.csproj" />
   </ItemGroup>
   <Target Name="Mapster" AfterTargets="AfterBuild">
     <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet tool restore" />
