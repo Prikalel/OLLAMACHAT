@@ -1,11 +1,3 @@
-- [x] нужно посмотреть как работает code-graph-rag-mcp и реализовать rest api под него тоже
-- [x] подготовил полный openApi
-- [ ] использовать roslyn
-- [ ] нужно реализовать openApi (json) см. таску:
-  - [ ] написать mediator команды которые возвращают хардкоженные значения
-  - [ ] имплементировать логику команд
-
----
 ### Расширения и полезные Nuget-пакеты
 
 - **Microsoft.CodeAnalysis.CSharp (Roslyn)**
@@ -19,7 +11,7 @@
 - **Microsoft.Unity.Analyzers**
   - Если проект — Unity, этот пакет содержит analyzers специфичные для Unity API и стилевых особенностей. Для «глубокого парсинга» нужен именно Roslyn.
 ---
-примеры (чтобы посмотреть как загрузка зависимостей реализуется в других построителях графа)
+# примеры (чтобы посмотреть как загрузка зависимостей реализуется в других построителях графа)
 
 - **DependenSee**
   - Кроссплатформенный CLI с открытым исходным кодом: https://github.com/madushans/DependenSee
@@ -36,6 +28,7 @@
 - **D3** - рендер через javascript
 
 ---
+# Диаграммы
 - **PlantUmlClassDiagramGenerator**  
   CLI-инструмент и Source Generator для генерации класс-диаграмм в формате PlantUML из C# исходников.  
   - GitHub: https://github.com/pierre3/PlantUmlClassDiagramGenerator  
