@@ -1,5 +1,7 @@
 ﻿namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure;
 
+using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Settings;
+
 /// <summary>
 /// Extension методы <see cref="IServiceCollection"/>.
 /// </summary>
@@ -19,8 +21,15 @@ public static class ServiceCollectionExtensions
         services.Configure<OpenAISettings>(options =>
             configuration.GetSection("OpenAISettings").Bind(options));
 
+        services.Configure<SolutionSettings>(options =>
+            configuration.GetSection("SolutionSettings").Bind(options));
+
         services.Configure<List<McpServerConfiguration>>(options =>
             configuration.GetSection("McpServers").Bind(options));
+
+        // Register SolutionLoaderService as a singleton
+        services.AddSingleton<ISolutionLoaderService, SolutionLoaderService>();
+
         services.Scan(scan => scan
             .FromAssemblyOf<LlmService>()
             .AddClasses(classes =>
