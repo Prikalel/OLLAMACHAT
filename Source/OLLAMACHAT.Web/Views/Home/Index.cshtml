@@ -38,6 +38,17 @@
 </div>
 
 @section Scripts {
+    <style>
+        .message-deleting {
+            transition: all 0.5s ease-in-out;
+            opacity: 0;
+            transform: scale(0.8);
+            margin: 0;
+            padding: 0;
+            height: 0;
+            overflow: hidden;
+        }
+    </style>
     <script>
         function appendMessage(role, content) {
             const chatDisplay = $('#chat-display');
@@ -90,8 +101,29 @@
             const message = $('#message-input').val().trim();
             if (!message) return;
 
+            console.log('DEBUG: Is undo command:', message.trim().toLowerCase() === '/undo');
+
             // Clear input
             $('#message-input').val('');
+
+            // Special handling for undo command
+            if (message.trim().toLowerCase() === '/undo') {
+                console.log('DEBUG: Handling undo command on client-side');
+                // Get the last message and apply dissolve animation
+                const lastMessage = $('.message').last();
+                if (lastMessage.length) {
+                    // Add the deleting class to trigger the animation
+                    lastMessage.addClass('message-deleting');
+                    
+                    // Remove the message after the animation completes
+                    setTimeout(() => {
+                        lastMessage.remove();
+                    }, 500); // Match the CSS transition duration
+                }
+                // Don't show thinking animation for undo
+                connection.invoke("SendMessage", message);
+                return;
+            }
 
             // Add user message
             appendMessage('user', message);
