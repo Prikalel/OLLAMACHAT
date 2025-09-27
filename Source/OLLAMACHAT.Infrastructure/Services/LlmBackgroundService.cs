@@ -1,4 +1,6 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services;
+﻿using ChatMessage = VelikiyPrikalel.OLLAMACHAT.Data.ChatMessage;
+
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services;
 
 /// <inheritdoc />
 public class LlmBackgroundService(

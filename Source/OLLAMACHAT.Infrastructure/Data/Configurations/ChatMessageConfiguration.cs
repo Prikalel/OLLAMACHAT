@@ -1,4 +1,6 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data.Configurations;
+﻿using ChatMessage = VelikiyPrikalel.OLLAMACHAT.Data.ChatMessage;
+
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data.Configurations;
 
 /// <inheritdoc />
 internal sealed class ChatMessageConfiguration : IEntityTypeConfiguration<ChatMessage>

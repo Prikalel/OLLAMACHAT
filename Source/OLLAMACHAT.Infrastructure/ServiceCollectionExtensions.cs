@@ -1,8 +1,4 @@
-﻿using VelikiyPrikalel.OLLAMACHAT.Application;
-
-namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure;
-
-using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Settings;
+﻿namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure;
 
 /// <summary>
 /// Extension методы <see cref="IServiceCollection"/>.

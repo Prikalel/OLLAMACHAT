@@ -1,4 +1,6 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data;
+﻿using ChatMessage = VelikiyPrikalel.OLLAMACHAT.Data.ChatMessage;
+
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data;
 
 /// <summary>
 /// Контекст БД.

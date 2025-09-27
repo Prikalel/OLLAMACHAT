@@ -1,8 +1,3 @@
-using System.Security.Cryptography;
-using System.Text;
-using Microsoft.CodeAnalysis;
-using VelikiyPrikalel.OLLAMACHAT.Application;
-
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services;
 
 /// <inheritdoc />

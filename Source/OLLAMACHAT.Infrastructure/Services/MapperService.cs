@@ -1,7 +1,3 @@
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using VelikiyPrikalel.OLLAMACHAT.Application.Models;
-using VelikiyPrikalel.OLLAMACHAT.Application.Services;
 using Location = Microsoft.CodeAnalysis.Location;
 using LocationApplication = VelikiyPrikalel.OLLAMACHAT.Application.Models.Location;
 
