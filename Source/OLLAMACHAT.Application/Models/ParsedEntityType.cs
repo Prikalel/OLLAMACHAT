@@ -26,7 +26,7 @@ public enum ParsedEntityType
     Import,
 
     /// <summary>
-    /// Свойство.
+    /// Свойство или поле.
     /// </summary>
     Property,
 

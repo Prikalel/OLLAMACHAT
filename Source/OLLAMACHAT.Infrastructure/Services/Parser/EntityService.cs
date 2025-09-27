@@ -1,49 +1,11 @@
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 
+/// <inheritdoc />
 public class EntityService(
       IMapperService mapperService,
       ILogger<EntityService> logger) : IEntityService
 {
-    public async Task<ParsedEntity> ExtractEntityAsync(ISymbol symbol, SemanticModel semanticModel)
-    {
-        logger.LogInformation("Extracting entity for symbol: {SymbolName}", symbol.Name);
-
-        try
-        {
-            var entityType = DetermineEntityType(symbol);
-            var location = mapperService.MapLocation(symbol.Locations.FirstOrDefault());
-            var modifiers = mapperService.MapModifiers(symbol).ToList();
-            var decorators = mapperService.MapAttributes(symbol);
-            var inheritance = symbol is INamedTypeSymbol namedTypeSymbol ? mapperService.MapInheritance(namedTypeSymbol) : null;
-            var returnType = mapperService.MapReturnType(symbol);
-            var parameters = symbol is IMethodSymbol methodSymbol ? mapperService.MapParameters(methodSymbol) : null;
-            var importData = mapperService.MapImportData(symbol);
-
-            var childEntities = await ExtractChildEntitiesAsync(symbol, semanticModel);
-
-            var entity = new ParsedEntity(
-                Name: symbol.Name ?? string.Empty,
-                Type: entityType,
-                Location: location,
-                Children: childEntities.Any() ? childEntities : null,
-                Modifiers: modifiers.Any() ? modifiers : null,
-                Decorators: decorators.Any() ? decorators : null,
-                Inheritance: inheritance,
-                ReturnType: returnType,
-                Parameters: parameters,
-                ImportData: importData
-            );
-
-            logger.LogInformation("Successfully extracted entity: {SymbolName} of type: {EntityType}", symbol.Name, entityType);
-            return entity;
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error extracting entity for symbol: {SymbolName}", symbol.Name);
-            throw;
-        }
-    }
-
+    /// <inheritdoc />
     public async Task<IEnumerable<ParsedEntity>> ExtractEntitiesAsync(Document document)
     {
         logger.LogInformation("Extracting entities from document: {DocumentPath}", document.FilePath);
@@ -56,7 +18,7 @@ public class EntityService(
 
             var entities = new List<ParsedEntity>();
 
-            var namespaceDeclarations = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>();
+            var namespaceDeclarations = root.DescendantNodes().OfType<BaseNamespaceDeclarationSyntax>();
             foreach (var namespaceDeclaration in namespaceDeclarations)
             {
                 var namespaceSymbol = semanticModel.GetDeclaredSymbol(namespaceDeclaration);
@@ -110,7 +72,47 @@ public class EntityService(
         }
     }
 
-    public async Task<List<ParsedEntity>> ExtractChildEntitiesAsync(ISymbol symbol, SemanticModel semanticModel)
+    private async Task<ParsedEntity> ExtractEntityAsync(ISymbol symbol, SemanticModel semanticModel)
+    {
+        logger.LogInformation("Extracting entity for symbol: {SymbolName}", symbol.Name);
+
+        try
+        {
+            var entityType = DetermineEntityType(symbol);
+            var location = mapperService.MapLocation(symbol.Locations.FirstOrDefault());
+            var modifiers = mapperService.MapModifiers(symbol).ToList();
+            var decorators = mapperService.MapAttributes(symbol);
+            var inheritance = symbol is INamedTypeSymbol namedTypeSymbol ? mapperService.MapInheritance(namedTypeSymbol) : null;
+            var returnType = mapperService.MapReturnType(symbol);
+            var parameters = symbol is IMethodSymbol methodSymbol ? mapperService.MapParameters(methodSymbol) : null;
+            var importData = mapperService.MapImportData(symbol);
+
+            var childEntities = await ExtractChildEntitiesAsync(symbol, semanticModel);
+
+            var entity = new ParsedEntity(
+                Name: symbol.Name ?? string.Empty,
+                Type: entityType,
+                Location: location,
+                Children: childEntities.Any() ? childEntities : null,
+                Modifiers: modifiers.Any() ? modifiers : null,
+                Decorators: decorators.Any() ? decorators : null,
+                Inheritance: inheritance,
+                ReturnType: returnType,
+                Parameters: parameters,
+                ImportData: importData
+            );
+
+            logger.LogInformation("Successfully extracted entity: {SymbolName} of type: {EntityType}", symbol.Name, entityType);
+            return entity;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error extracting entity for symbol: {SymbolName}", symbol.Name);
+            throw;
+        }
+    }
+
+    private async Task<List<ParsedEntity>> ExtractChildEntitiesAsync(ISymbol symbol, SemanticModel semanticModel)
     {
         logger.LogInformation("Extracting child entities for symbol: {SymbolName}", symbol.Name);
 
