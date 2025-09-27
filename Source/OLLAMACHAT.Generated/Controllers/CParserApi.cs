@@ -45,13 +45,7 @@ public class CParserApiController(IMediator mediator, IMapperInterface mapper, I
     [ValidateModelState]
     [SwaggerOperation(nameof(GetSupportedExtensions))]
     [SwaggerResponse(statusCode: 200, type: typeof(List<string>), description: "A list of supported file extensions.")]
-    public async Task<IActionResult> GetSupportedExtensions()
-    {
-        //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(200, default(List<string>));
-
-        return new ObjectResult(await mediator.Send(new GetSupportedExtensions.Query()));
-    }
+    public IActionResult GetSupportedExtensions() => new ObjectResult(new List<string>() { "*.cs" });
 
     /// <summary>
     /// Parse a C# file

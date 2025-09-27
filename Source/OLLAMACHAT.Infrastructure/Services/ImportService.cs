@@ -120,23 +120,6 @@ public class ImportService : IImportService
         }
     }
 
-    public async Task<List<string>> GetSupportedExtensionsAsync()
-    {
-        logger.LogInformation("Getting supported extensions");
-
-        try
-        {
-            var extensions = new List<string> { ".cs" };
-            logger.LogInformation("Returning {ExtensionCount} supported extensions", extensions.Count);
-            return await Task.FromResult(extensions);
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error getting supported extensions");
-            throw;
-        }
-    }
-
     private string GetRelativePath(string relativeTo, string path)
     {
         if (string.IsNullOrEmpty(relativeTo))

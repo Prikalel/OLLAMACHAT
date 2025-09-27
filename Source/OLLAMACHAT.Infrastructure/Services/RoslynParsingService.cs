@@ -1,33 +1,14 @@
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services;
 
-public class RoslynParsingService : IRoslynParsingService
+public class RoslynParsingService(
+     IDocumentService documentService,
+     IEntityService entityService,
+     IRelationshipService relationshipService,
+     IErrorService errorService,
+     IMetadataService metadataService,
+     IImportService importService,
+     ILogger<RoslynParsingService> logger) : IRoslynParsingService
 {
-    private readonly IDocumentService documentService;
-    private readonly IEntityService entityService;
-    private readonly IRelationshipService relationshipService;
-    private readonly IErrorService errorService;
-    private readonly IMetadataService metadataService;
-    private readonly IImportService importService;
-    private readonly ILogger<RoslynParsingService> logger;
-
-    public RoslynParsingService(
-        IDocumentService documentService,
-        IEntityService entityService,
-        IRelationshipService relationshipService,
-        IErrorService errorService,
-        IMetadataService metadataService,
-        IImportService importService,
-        ILogger<RoslynParsingService> logger)
-    {
-        this.documentService = documentService;
-        this.entityService = entityService;
-        this.relationshipService = relationshipService;
-        this.errorService = errorService;
-        this.metadataService = metadataService;
-        this.importService = importService;
-        this.logger = logger;
-    }
-
     public async Task<ParseResult> ParseFileAsync(string filePath, string repoPath, ParserOptions? options)
     {
         var stopwatch = Stopwatch.StartNew();
@@ -77,12 +58,6 @@ public class RoslynParsingService : IRoslynParsingService
             logger.LogError(ex, "Error parsing file: {FilePath}", filePath);
             return CreateErrorResult($"Parsing failed: {ex.Message}");
         }
-    }
-
-    public async Task<List<string>> GetSupportedExtensionsAsync()
-    {
-        logger.LogInformation("Getting supported extensions");
-        return await importService.GetSupportedExtensionsAsync();
     }
 
     public async Task<List<string>> GetInitFilesAsync(string repoPath)
