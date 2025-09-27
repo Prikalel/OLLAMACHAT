@@ -30,13 +30,6 @@ public partial class ParserOptionsDto : IEquatable<ParserOptionsDto>
     public bool? ExtractInheritance { get; set; }
 
     /// <summary>
-    /// Gets or Sets DetectPatterns
-    /// </summary>
-
-    [DataMember(Name="detectPatterns")]
-    public bool? DetectPatterns { get; set; }
-
-    /// <summary>
     /// Gets or Sets MaxDepth
     /// </summary>
 
@@ -53,7 +46,6 @@ public partial class ParserOptionsDto : IEquatable<ParserOptionsDto>
         sb.Append("class ParserOptions {\n");
         sb.Append("  ExtractReferences: ").Append(ExtractReferences).Append("\n");
         sb.Append("  ExtractInheritance: ").Append(ExtractInheritance).Append("\n");
-        sb.Append("  DetectPatterns: ").Append(DetectPatterns).Append("\n");
         sb.Append("  MaxDepth: ").Append(MaxDepth).Append("\n");
         sb.Append("}\n");
         return sb.ToString();
@@ -102,11 +94,6 @@ public partial class ParserOptionsDto : IEquatable<ParserOptionsDto>
                 ExtractInheritance.Equals(other.ExtractInheritance)
             ) &&
             (
-                DetectPatterns == other.DetectPatterns ||
-                DetectPatterns != null &&
-                DetectPatterns.Equals(other.DetectPatterns)
-            ) &&
-            (
                 MaxDepth == other.MaxDepth ||
                 MaxDepth != null &&
                 MaxDepth.Equals(other.MaxDepth)
@@ -127,8 +114,6 @@ public partial class ParserOptionsDto : IEquatable<ParserOptionsDto>
                 hashCode = hashCode * 59 + ExtractReferences.GetHashCode();
             if (ExtractInheritance != null)
                 hashCode = hashCode * 59 + ExtractInheritance.GetHashCode();
-            if (DetectPatterns != null)
-                hashCode = hashCode * 59 + DetectPatterns.GetHashCode();
             if (MaxDepth != null)
                 hashCode = hashCode * 59 + MaxDepth.GetHashCode();
             return hashCode;

@@ -4,7 +4,7 @@ namespace OLLAMACHAT.Generated.Mappers
     {
         public VelikiyPrikalel.OLLAMACHAT.Application.Models.ParserRequest Map(OLLAMACHAT.Generated.Models.ParserRequestDto p1)
         {
-            return p1 == null ? null : new VelikiyPrikalel.OLLAMACHAT.Application.Models.ParserRequest(p1.FilePath, p1.RepoPath, p1.Options == null ? null : new VelikiyPrikalel.OLLAMACHAT.Application.Models.ParserOptions(p1.Options.ExtractReferences, p1.Options.ExtractInheritance, p1.Options.DetectPatterns, p1.Options.MaxDepth) {}) {Options = p1.Options == null ? null : new VelikiyPrikalel.OLLAMACHAT.Application.Models.ParserOptions(p1.Options.ExtractReferences, p1.Options.ExtractInheritance, p1.Options.DetectPatterns, p1.Options.MaxDepth) {}};
+            return p1 == null ? null : new VelikiyPrikalel.OLLAMACHAT.Application.Models.ParserRequest(p1.FilePath, p1.RepoPath, p1.Options == null ? null : new VelikiyPrikalel.OLLAMACHAT.Application.Models.ParserOptions(p1.Options.ExtractReferences, p1.Options.ExtractInheritance, p1.Options.MaxDepth) {}) {Options = p1.Options == null ? null : new VelikiyPrikalel.OLLAMACHAT.Application.Models.ParserOptions(p1.Options.ExtractReferences, p1.Options.ExtractInheritance, p1.Options.MaxDepth) {}};
         }
         public OLLAMACHAT.Generated.Models.ParseResultDto Map(VelikiyPrikalel.OLLAMACHAT.Application.Models.ParseResult p2)
         {
