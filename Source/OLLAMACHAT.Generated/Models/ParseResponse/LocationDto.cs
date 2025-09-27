@@ -6,18 +6,18 @@ namespace OLLAMACHAT.Generated.Models.ParseResponse;
 public class LocationDto : IEquatable<LocationDto>
 {
     /// <summary>
-    /// Gets or Sets End
-    /// </summary>
-    [Required]
-    [DataMember(Name = "end")]
-    public PositionDto End { get; set; }
-
-    /// <summary>
     /// Gets or Sets Start
     /// </summary>
     [Required]
     [DataMember(Name = "start")]
     public PositionDto Start { get; set; }
+
+    /// <summary>
+    /// Gets or Sets End
+    /// </summary>
+    [Required]
+    [DataMember(Name = "end")]
+    public PositionDto End { get; set; }
 
     /// <summary>
     /// Returns true if objects are equal
