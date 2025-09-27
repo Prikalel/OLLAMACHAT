@@ -1,15 +1,17 @@
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 
+/// <inheritdoc />
 public class MetadataService(ILogger<MetadataService> logger) : IMetadataService
 {
-    public FileMetadata CalculateFileMetadata(Document document, IEnumerable<ParsedEntity> entities)
+    /// <inheritdoc />
+    public async Task<FileMetadata> CalculateFileMetadata(Document document, IEnumerable<ParsedEntity> entities)
     {
         logger.LogInformation("Calculating file metadata for document: {DocumentPath}", document.FilePath);
 
         try
         {
-            var syntaxTree = document.GetSyntaxTreeAsync().Result;
-            var root = syntaxTree.GetRootAsync().Result;
+            var syntaxTree = await document.GetSyntaxTreeAsync();
+            var root = await syntaxTree.GetRootAsync();
 
             var linesOfCode = CountLinesOfCode(root);
             var complexityScore = CalculateComplexityScore(entities);
@@ -80,7 +82,10 @@ public class MetadataService(ILogger<MetadataService> logger) : IMetadataService
 
     private string? GetPrimaryNamespace(SyntaxNode root)
     {
-        var namespaceDeclarations = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>().ToList();
+        var namespaceDeclarations = root
+            .DescendantNodes()
+            .OfType<BaseNamespaceDeclarationSyntax>()
+            .ToList();
 
         if (!namespaceDeclarations.Any())
         {
@@ -93,6 +98,14 @@ public class MetadataService(ILogger<MetadataService> logger) : IMetadataService
             .OrderByDescending(g => g.Count)
             .FirstOrDefault();
 
+        int countAllNamespaces = namespaceDeclarations.DistinctBy(x => x.Name.ToString()).Count();
+        if (countAllNamespaces > 0)
+        {
+            logger.LogWarning("Found more than 1 namespaces in file {File} : {Count}",
+                root.SyntaxTree.FilePath,
+                countAllNamespaces);
+        }
+        
         return namespaceCounts?.Namespace;
     }
 }

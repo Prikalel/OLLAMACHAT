@@ -35,10 +35,10 @@ public class RoslynParsingService(
             logger.LogWarning("Found {ErrorCount} errors in file: {FilePath}", errors.Count(), filePath);
         }
 
-        var metadata = metadataService.CalculateFileMetadata(document, entities);
+        var metadata = await metadataService.CalculateFileMetadata(document, entities);
 
         var result = new ParseResult(
-            FilePath: filePath,
+            FilePath: document.FilePath!,
             Language: ParseResultLanguage.Csharp,
             Entities: entities.ToList(),
             Relationships: relationships.ToList(),

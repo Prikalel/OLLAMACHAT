@@ -75,7 +75,7 @@ public class DocumentService(
             var hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(content));
             var hash = Convert.ToHexString(hashBytes).ToLowerInvariant();
 
-            logger.LogInformation("Successfully calculated content hash for document: {DocumentPath}", document.FilePath);
+            logger.LogTrace("Successfully calculated content hash for document: {DocumentPath}", document.FilePath);
             return hash;
         }
         catch (Exception ex)
