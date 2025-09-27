@@ -13,20 +13,12 @@ namespace OLLAMACHAT.Generated.Models.ParseResponse;
 /// Represents a single parsed code entity (class, method, etc.).
 /// </summary>
 [DataContract]
-public partial class ParsedEntityDto : IEquatable<ParsedEntityDto>
+public class ParsedEntityDto : IEquatable<ParsedEntityDto>
 {
-    /// <summary>
-    /// Gets or Sets Name
-    /// </summary>
-    [Required]
-
-    [DataMember(Name="name")]
-    public string Name { get; set; }
-
     /// <summary>
     /// Gets or Sets Type
     /// </summary>
-    [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+    [JsonConverter(typeof(StringEnumConverter))]
     [XmlType("OLLAMACHAT.Generated.Models.ParseResponse.ParsedEntityDto.TypeEnumDto")]
     public enum TypeEnumDto
     {
@@ -35,137 +27,112 @@ public partial class ParsedEntityDto : IEquatable<ParsedEntityDto>
         /// </summary>
         [EnumMember(Value = "class")]
         ClassEnum = 0,
+
         /// <summary>
         /// Enum MethodEnum for method
         /// </summary>
         [EnumMember(Value = "method")]
         MethodEnum = 1,
+
         /// <summary>
         /// Enum InterfaceEnum for interface
         /// </summary>
         [EnumMember(Value = "interface")]
         InterfaceEnum = 2,
+
         /// <summary>
         /// Enum ImportEnum for import
         /// </summary>
         [EnumMember(Value = "import")]
         ImportEnum = 3,
+
         /// <summary>
         /// Enum PropertyEnum for property
         /// </summary>
         [EnumMember(Value = "property")]
         PropertyEnum = 4,
+
         /// <summary>
         /// Enum EnumEnum for enum
         /// </summary>
         [EnumMember(Value = "enum")]
         EnumEnum = 5,
+
         /// <summary>
         /// Enum StructEnum for struct
         /// </summary>
         [EnumMember(Value = "struct")]
         StructEnum = 6,
+
         /// <summary>
         /// Enum NamespaceEnum for namespace
         /// </summary>
         [EnumMember(Value = "namespace")]
-        NamespaceEnum = 7        }
+        NamespaceEnum = 7
+    }
 
     /// <summary>
-    /// Gets or Sets Type
+    /// Gets or Sets Children
     /// </summary>
-    [Required]
+    [DataMember(Name = "children")]
+    public List<ParsedEntityDto> Children { get; set; }
 
-    [DataMember(Name="type")]
-    public TypeEnumDto? Type { get; set; }
+    /// <summary>
+    /// Gets or Sets Decorators
+    /// </summary>
+    [DataMember(Name = "decorators")]
+    public List<DecoratorDto> Decorators { get; set; }
+
+    /// <summary>
+    /// Gets or Sets ImportData
+    /// </summary>
+    [DataMember(Name = "importData")]
+    public ParsedEntityImportDataDto ImportData { get; set; }
+
+    /// <summary>
+    /// Gets or Sets Inheritance
+    /// </summary>
+    [DataMember(Name = "inheritance")]
+    public ParsedEntityInheritanceDto Inheritance { get; set; }
 
     /// <summary>
     /// Gets or Sets Location
     /// </summary>
     [Required]
-
-    [DataMember(Name="location")]
+    [DataMember(Name = "location")]
     public LocationDto Location { get; set; }
-
-    /// <summary>
-    /// Gets or Sets Children
-    /// </summary>
-
-    [DataMember(Name="children")]
-    public List<ParsedEntityDto> Children { get; set; }
 
     /// <summary>
     /// Gets or Sets Modifiers
     /// </summary>
-
-    [DataMember(Name="modifiers")]
+    [DataMember(Name = "modifiers")]
     public List<string> Modifiers { get; set; }
 
     /// <summary>
-    /// Gets or Sets Decorators
+    /// Gets or Sets Name
     /// </summary>
-
-    [DataMember(Name="decorators")]
-    public List<DecoratorDto> Decorators { get; set; }
-
-    /// <summary>
-    /// Gets or Sets Inheritance
-    /// </summary>
-
-    [DataMember(Name="inheritance")]
-    public ParsedEntityInheritanceDto Inheritance { get; set; }
-
-    /// <summary>
-    /// Gets or Sets ReturnType
-    /// </summary>
-
-    [DataMember(Name="returnType")]
-    public string ReturnType { get; set; }
+    [Required]
+    [DataMember(Name = "name")]
+    public string Name { get; set; }
 
     /// <summary>
     /// Gets or Sets Parameters
     /// </summary>
-
-    [DataMember(Name="parameters")]
+    [DataMember(Name = "parameters")]
     public List<ModelParameterDto> Parameters { get; set; }
 
     /// <summary>
-    /// Gets or Sets ImportData
+    /// Gets or Sets ReturnType
     /// </summary>
-
-    [DataMember(Name="importData")]
-    public ParsedEntityImportDataDto ImportData { get; set; }
-
-    /// <summary>
-    /// Returns the string presentation of the object
-    /// </summary>
-    /// <returns>String presentation of the object</returns>
-    public override string ToString()
-    {
-        var sb = new StringBuilder();
-        sb.Append("class ParsedEntity {\n");
-        sb.Append("  Name: ").Append(Name).Append("\n");
-        sb.Append("  Type: ").Append(Type).Append("\n");
-        sb.Append("  Location: ").Append(Location).Append("\n");
-        sb.Append("  Children: ").Append(Children).Append("\n");
-        sb.Append("  Modifiers: ").Append(Modifiers).Append("\n");
-        sb.Append("  Decorators: ").Append(Decorators).Append("\n");
-        sb.Append("  Inheritance: ").Append(Inheritance).Append("\n");
-        sb.Append("  ReturnType: ").Append(ReturnType).Append("\n");
-        sb.Append("  Parameters: ").Append(Parameters).Append("\n");
-        sb.Append("  ImportData: ").Append(ImportData).Append("\n");
-        sb.Append("}\n");
-        return sb.ToString();
-    }
+    [DataMember(Name = "returnType")]
+    public string ReturnType { get; set; }
 
     /// <summary>
-    /// Returns the JSON string presentation of the object
+    /// Gets or Sets Type
     /// </summary>
-    /// <returns>JSON string presentation of the object</returns>
-    public string ToJson()
-    {
-        return JsonConvert.SerializeObject(this, Formatting.Indented);
-    }
+    [Required]
+    [DataMember(Name = "type")]
+    public TypeEnumDto? Type { get; set; }
 
     /// <summary>
     /// Returns true if objects are equal
@@ -174,8 +141,16 @@ public partial class ParsedEntityDto : IEquatable<ParsedEntityDto>
     /// <returns>Boolean</returns>
     public override bool Equals(object obj)
     {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
+        if (ReferenceEquals(null, obj))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
         return obj.GetType() == GetType() && Equals((ParsedEntityDto)obj);
     }
 
@@ -186,8 +161,15 @@ public partial class ParsedEntityDto : IEquatable<ParsedEntityDto>
     /// <returns>Boolean</returns>
     public bool Equals(ParsedEntityDto other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
 
         return
             (
@@ -253,30 +235,89 @@ public partial class ParsedEntityDto : IEquatable<ParsedEntityDto>
             var hashCode = 41;
             // Suitable nullity checks etc, of course :)
             if (Name != null)
+            {
                 hashCode = hashCode * 59 + Name.GetHashCode();
+            }
+
             if (Type != null)
+            {
                 hashCode = hashCode * 59 + Type.GetHashCode();
+            }
+
             if (Location != null)
+            {
                 hashCode = hashCode * 59 + Location.GetHashCode();
+            }
+
             if (Children != null)
+            {
                 hashCode = hashCode * 59 + Children.GetHashCode();
+            }
+
             if (Modifiers != null)
+            {
                 hashCode = hashCode * 59 + Modifiers.GetHashCode();
+            }
+
             if (Decorators != null)
+            {
                 hashCode = hashCode * 59 + Decorators.GetHashCode();
+            }
+
             if (Inheritance != null)
+            {
                 hashCode = hashCode * 59 + Inheritance.GetHashCode();
+            }
+
             if (ReturnType != null)
+            {
                 hashCode = hashCode * 59 + ReturnType.GetHashCode();
+            }
+
             if (Parameters != null)
+            {
                 hashCode = hashCode * 59 + Parameters.GetHashCode();
+            }
+
             if (ImportData != null)
+            {
                 hashCode = hashCode * 59 + ImportData.GetHashCode();
+            }
+
             return hashCode;
         }
     }
 
+    /// <summary>
+    /// Returns the JSON string presentation of the object
+    /// </summary>
+    /// <returns>JSON string presentation of the object</returns>
+    public string ToJson() => JsonConvert.SerializeObject(this, Formatting.Indented);
+
+    /// <summary>
+    /// Returns the string presentation of the object
+    /// </summary>
+    /// <returns>String presentation of the object</returns>
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        sb.Append("class ParsedEntity {\n");
+        sb.Append("  Name: ").Append(Name).Append("\n");
+        sb.Append("  Type: ").Append(Type).Append("\n");
+        sb.Append("  Location: ").Append(Location).Append("\n");
+        sb.Append("  Children: ").Append(Children).Append("\n");
+        sb.Append("  Modifiers: ").Append(Modifiers).Append("\n");
+        sb.Append("  Decorators: ").Append(Decorators).Append("\n");
+        sb.Append("  Inheritance: ").Append(Inheritance).Append("\n");
+        sb.Append("  ReturnType: ").Append(ReturnType).Append("\n");
+        sb.Append("  Parameters: ").Append(Parameters).Append("\n");
+        sb.Append("  ImportData: ").Append(ImportData).Append("\n");
+        sb.Append("}\n");
+        return sb.ToString();
+    }
+
     #region Operators
+
 #pragma warning disable 1591
 
     public static bool operator ==(ParsedEntityDto left, ParsedEntityDto right)
@@ -290,5 +331,6 @@ public partial class ParsedEntityDto : IEquatable<ParsedEntityDto>
     }
 
 #pragma warning restore 1591
+
     #endregion Operators
 }

@@ -10,57 +10,29 @@
 namespace OLLAMACHAT.Generated.Models;
 
 /// <summary>
-///
 /// </summary>
 [DataContract]
-public partial class ErrorResponseDto : IEquatable<ErrorResponseDto>
+public class ErrorResponseDto : IEquatable<ErrorResponseDto>
 {
     /// <summary>
     /// Gets or Sets Code
     /// </summary>
     [Required]
-
-    [DataMember(Name="code")]
+    [DataMember(Name = "code")]
     public string Code { get; set; }
+
+    /// <summary>
+    /// Gets or Sets Details
+    /// </summary>
+    [DataMember(Name = "details")]
+    public string Details { get; set; }
 
     /// <summary>
     /// Gets or Sets Message
     /// </summary>
     [Required]
-
-    [DataMember(Name="message")]
+    [DataMember(Name = "message")]
     public string Message { get; set; }
-
-    /// <summary>
-    /// Gets or Sets Details
-    /// </summary>
-
-    [DataMember(Name="details")]
-    public string Details { get; set; }
-
-    /// <summary>
-    /// Returns the string presentation of the object
-    /// </summary>
-    /// <returns>String presentation of the object</returns>
-    public override string ToString()
-    {
-        var sb = new StringBuilder();
-        sb.Append("class ErrorResponse {\n");
-        sb.Append("  Code: ").Append(Code).Append("\n");
-        sb.Append("  Message: ").Append(Message).Append("\n");
-        sb.Append("  Details: ").Append(Details).Append("\n");
-        sb.Append("}\n");
-        return sb.ToString();
-    }
-
-    /// <summary>
-    /// Returns the JSON string presentation of the object
-    /// </summary>
-    /// <returns>JSON string presentation of the object</returns>
-    public string ToJson()
-    {
-        return JsonConvert.SerializeObject(this, Formatting.Indented);
-    }
 
     /// <summary>
     /// Returns true if objects are equal
@@ -69,8 +41,16 @@ public partial class ErrorResponseDto : IEquatable<ErrorResponseDto>
     /// <returns>Boolean</returns>
     public override bool Equals(object obj)
     {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
+        if (ReferenceEquals(null, obj))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
         return obj.GetType() == GetType() && Equals((ErrorResponseDto)obj);
     }
 
@@ -81,8 +61,15 @@ public partial class ErrorResponseDto : IEquatable<ErrorResponseDto>
     /// <returns>Boolean</returns>
     public bool Equals(ErrorResponseDto other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
 
         return
             (
@@ -113,16 +100,47 @@ public partial class ErrorResponseDto : IEquatable<ErrorResponseDto>
             var hashCode = 41;
             // Suitable nullity checks etc, of course :)
             if (Code != null)
+            {
                 hashCode = hashCode * 59 + Code.GetHashCode();
+            }
+
             if (Message != null)
+            {
                 hashCode = hashCode * 59 + Message.GetHashCode();
+            }
+
             if (Details != null)
+            {
                 hashCode = hashCode * 59 + Details.GetHashCode();
+            }
+
             return hashCode;
         }
     }
 
+    /// <summary>
+    /// Returns the JSON string presentation of the object
+    /// </summary>
+    /// <returns>JSON string presentation of the object</returns>
+    public string ToJson() => JsonConvert.SerializeObject(this, Formatting.Indented);
+
+    /// <summary>
+    /// Returns the string presentation of the object
+    /// </summary>
+    /// <returns>String presentation of the object</returns>
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        sb.Append("class ErrorResponse {\n");
+        sb.Append("  Code: ").Append(Code).Append("\n");
+        sb.Append("  Message: ").Append(Message).Append("\n");
+        sb.Append("  Details: ").Append(Details).Append("\n");
+        sb.Append("}\n");
+        return sb.ToString();
+    }
+
     #region Operators
+
 #pragma warning disable 1591
 
     public static bool operator ==(ErrorResponseDto left, ErrorResponseDto right)
@@ -136,5 +154,6 @@ public partial class ErrorResponseDto : IEquatable<ErrorResponseDto>
     }
 
 #pragma warning restore 1591
+
     #endregion Operators
 }

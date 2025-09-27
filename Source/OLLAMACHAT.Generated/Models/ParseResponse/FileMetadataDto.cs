@@ -13,55 +13,28 @@ namespace OLLAMACHAT.Generated.Models.ParseResponse;
 /// High-level metadata about the parsed file.
 /// </summary>
 [DataContract]
-public partial class FileMetadataDto : IEquatable<FileMetadataDto>
+public class FileMetadataDto : IEquatable<FileMetadataDto>
 {
-    /// <summary>
-    /// Lines of Code.
-    /// </summary>
-    /// <value>Lines of Code.</value>
-
-    [DataMember(Name="loc")]
-    public int? Loc { get; set; }
-
     /// <summary>
     /// Aggregated cyclomatic complexity.
     /// </summary>
     /// <value>Aggregated cyclomatic complexity.</value>
-
-    [DataMember(Name="complexityScore")]
+    [DataMember(Name = "complexityScore")]
     public int? ComplexityScore { get; set; }
+
+    /// <summary>
+    /// Lines of Code.
+    /// </summary>
+    /// <value>Lines of Code.</value>
+    [DataMember(Name = "loc")]
+    public int? Loc { get; set; }
 
     /// <summary>
     /// The primary namespace of the file.
     /// </summary>
     /// <value>The primary namespace of the file.</value>
-
-    [DataMember(Name="namespace")]
+    [DataMember(Name = "namespace")]
     public string Namespace { get; set; }
-
-    /// <summary>
-    /// Returns the string presentation of the object
-    /// </summary>
-    /// <returns>String presentation of the object</returns>
-    public override string ToString()
-    {
-        var sb = new StringBuilder();
-        sb.Append("class FileMetadata {\n");
-        sb.Append("  Loc: ").Append(Loc).Append("\n");
-        sb.Append("  ComplexityScore: ").Append(ComplexityScore).Append("\n");
-        sb.Append("  _Namespace: ").Append(Namespace).Append("\n");
-        sb.Append("}\n");
-        return sb.ToString();
-    }
-
-    /// <summary>
-    /// Returns the JSON string presentation of the object
-    /// </summary>
-    /// <returns>JSON string presentation of the object</returns>
-    public string ToJson()
-    {
-        return JsonConvert.SerializeObject(this, Formatting.Indented);
-    }
 
     /// <summary>
     /// Returns true if objects are equal
@@ -70,8 +43,16 @@ public partial class FileMetadataDto : IEquatable<FileMetadataDto>
     /// <returns>Boolean</returns>
     public override bool Equals(object obj)
     {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
+        if (ReferenceEquals(null, obj))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
         return obj.GetType() == GetType() && Equals((FileMetadataDto)obj);
     }
 
@@ -82,8 +63,15 @@ public partial class FileMetadataDto : IEquatable<FileMetadataDto>
     /// <returns>Boolean</returns>
     public bool Equals(FileMetadataDto other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
 
         return
             (
@@ -114,16 +102,47 @@ public partial class FileMetadataDto : IEquatable<FileMetadataDto>
             var hashCode = 41;
             // Suitable nullity checks etc, of course :)
             if (Loc != null)
+            {
                 hashCode = hashCode * 59 + Loc.GetHashCode();
+            }
+
             if (ComplexityScore != null)
+            {
                 hashCode = hashCode * 59 + ComplexityScore.GetHashCode();
+            }
+
             if (Namespace != null)
+            {
                 hashCode = hashCode * 59 + Namespace.GetHashCode();
+            }
+
             return hashCode;
         }
     }
 
+    /// <summary>
+    /// Returns the JSON string presentation of the object
+    /// </summary>
+    /// <returns>JSON string presentation of the object</returns>
+    public string ToJson() => JsonConvert.SerializeObject(this, Formatting.Indented);
+
+    /// <summary>
+    /// Returns the string presentation of the object
+    /// </summary>
+    /// <returns>String presentation of the object</returns>
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        sb.Append("class FileMetadata {\n");
+        sb.Append("  Loc: ").Append(Loc).Append("\n");
+        sb.Append("  ComplexityScore: ").Append(ComplexityScore).Append("\n");
+        sb.Append("  _Namespace: ").Append(Namespace).Append("\n");
+        sb.Append("}\n");
+        return sb.ToString();
+    }
+
     #region Operators
+
 #pragma warning disable 1591
 
     public static bool operator ==(FileMetadataDto left, FileMetadataDto right)
@@ -137,5 +156,6 @@ public partial class FileMetadataDto : IEquatable<FileMetadataDto>
     }
 
 #pragma warning restore 1591
+
     #endregion Operators
 }

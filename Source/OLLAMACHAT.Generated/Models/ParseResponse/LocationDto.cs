@@ -10,49 +10,23 @@
 namespace OLLAMACHAT.Generated.Models.ParseResponse;
 
 /// <summary>
-///
 /// </summary>
 [DataContract]
-public partial class LocationDto : IEquatable<LocationDto>
+public class LocationDto : IEquatable<LocationDto>
 {
-    /// <summary>
-    /// Gets or Sets Start
-    /// </summary>
-    [Required]
-
-    [DataMember(Name="start")]
-    public PositionDto Start { get; set; }
-
     /// <summary>
     /// Gets or Sets End
     /// </summary>
     [Required]
-
-    [DataMember(Name="end")]
+    [DataMember(Name = "end")]
     public PositionDto End { get; set; }
 
     /// <summary>
-    /// Returns the string presentation of the object
+    /// Gets or Sets Start
     /// </summary>
-    /// <returns>String presentation of the object</returns>
-    public override string ToString()
-    {
-        var sb = new StringBuilder();
-        sb.Append("class Location {\n");
-        sb.Append("  Start: ").Append(Start).Append("\n");
-        sb.Append("  End: ").Append(End).Append("\n");
-        sb.Append("}\n");
-        return sb.ToString();
-    }
-
-    /// <summary>
-    /// Returns the JSON string presentation of the object
-    /// </summary>
-    /// <returns>JSON string presentation of the object</returns>
-    public string ToJson()
-    {
-        return JsonConvert.SerializeObject(this, Formatting.Indented);
-    }
+    [Required]
+    [DataMember(Name = "start")]
+    public PositionDto Start { get; set; }
 
     /// <summary>
     /// Returns true if objects are equal
@@ -61,8 +35,16 @@ public partial class LocationDto : IEquatable<LocationDto>
     /// <returns>Boolean</returns>
     public override bool Equals(object obj)
     {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
+        if (ReferenceEquals(null, obj))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
         return obj.GetType() == GetType() && Equals((LocationDto)obj);
     }
 
@@ -73,8 +55,15 @@ public partial class LocationDto : IEquatable<LocationDto>
     /// <returns>Boolean</returns>
     public bool Equals(LocationDto other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
 
         return
             (
@@ -100,14 +89,41 @@ public partial class LocationDto : IEquatable<LocationDto>
             var hashCode = 41;
             // Suitable nullity checks etc, of course :)
             if (Start != null)
+            {
                 hashCode = hashCode * 59 + Start.GetHashCode();
+            }
+
             if (End != null)
+            {
                 hashCode = hashCode * 59 + End.GetHashCode();
+            }
+
             return hashCode;
         }
     }
 
+    /// <summary>
+    /// Returns the JSON string presentation of the object
+    /// </summary>
+    /// <returns>JSON string presentation of the object</returns>
+    public string ToJson() => JsonConvert.SerializeObject(this, Formatting.Indented);
+
+    /// <summary>
+    /// Returns the string presentation of the object
+    /// </summary>
+    /// <returns>String presentation of the object</returns>
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        sb.Append("class Location {\n");
+        sb.Append("  Start: ").Append(Start).Append("\n");
+        sb.Append("  End: ").Append(End).Append("\n");
+        sb.Append("}\n");
+        return sb.ToString();
+    }
+
     #region Operators
+
 #pragma warning disable 1591
 
     public static bool operator ==(LocationDto left, LocationDto right)
@@ -121,5 +137,6 @@ public partial class LocationDto : IEquatable<LocationDto>
     }
 
 #pragma warning restore 1591
+
     #endregion Operators
 }

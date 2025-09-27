@@ -10,58 +10,30 @@
 namespace OLLAMACHAT.Generated.Models.ParseResponse;
 
 /// <summary>
-///
 /// </summary>
 [DataContract]
-public partial class PositionDto : IEquatable<PositionDto>
+public class PositionDto : IEquatable<PositionDto>
 {
-    /// <summary>
-    /// 1-based line number.
-    /// </summary>
-    /// <value>1-based line number.</value>
-
-    [DataMember(Name="line")]
-    public int? Line { get; set; }
-
     /// <summary>
     /// 0-based column position.
     /// </summary>
     /// <value>0-based column position.</value>
-
-    [DataMember(Name="column")]
+    [DataMember(Name = "column")]
     public int? Column { get; set; }
 
     /// <summary>
     /// 0-based character index from the start of the file.
     /// </summary>
     /// <value>0-based character index from the start of the file.</value>
-
-    [DataMember(Name="index")]
+    [DataMember(Name = "index")]
     public int? Index { get; set; }
 
     /// <summary>
-    /// Returns the string presentation of the object
+    /// 1-based line number.
     /// </summary>
-    /// <returns>String presentation of the object</returns>
-    public override string ToString()
-    {
-        var sb = new StringBuilder();
-        sb.Append("class Position {\n");
-        sb.Append("  Line: ").Append(Line).Append("\n");
-        sb.Append("  Column: ").Append(Column).Append("\n");
-        sb.Append("  Index: ").Append(Index).Append("\n");
-        sb.Append("}\n");
-        return sb.ToString();
-    }
-
-    /// <summary>
-    /// Returns the JSON string presentation of the object
-    /// </summary>
-    /// <returns>JSON string presentation of the object</returns>
-    public string ToJson()
-    {
-        return JsonConvert.SerializeObject(this, Formatting.Indented);
-    }
+    /// <value>1-based line number.</value>
+    [DataMember(Name = "line")]
+    public int? Line { get; set; }
 
     /// <summary>
     /// Returns true if objects are equal
@@ -70,8 +42,16 @@ public partial class PositionDto : IEquatable<PositionDto>
     /// <returns>Boolean</returns>
     public override bool Equals(object obj)
     {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
+        if (ReferenceEquals(null, obj))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
         return obj.GetType() == GetType() && Equals((PositionDto)obj);
     }
 
@@ -82,8 +62,15 @@ public partial class PositionDto : IEquatable<PositionDto>
     /// <returns>Boolean</returns>
     public bool Equals(PositionDto other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
 
         return
             (
@@ -114,16 +101,47 @@ public partial class PositionDto : IEquatable<PositionDto>
             var hashCode = 41;
             // Suitable nullity checks etc, of course :)
             if (Line != null)
+            {
                 hashCode = hashCode * 59 + Line.GetHashCode();
+            }
+
             if (Column != null)
+            {
                 hashCode = hashCode * 59 + Column.GetHashCode();
+            }
+
             if (Index != null)
+            {
                 hashCode = hashCode * 59 + Index.GetHashCode();
+            }
+
             return hashCode;
         }
     }
 
+    /// <summary>
+    /// Returns the JSON string presentation of the object
+    /// </summary>
+    /// <returns>JSON string presentation of the object</returns>
+    public string ToJson() => JsonConvert.SerializeObject(this, Formatting.Indented);
+
+    /// <summary>
+    /// Returns the string presentation of the object
+    /// </summary>
+    /// <returns>String presentation of the object</returns>
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        sb.Append("class Position {\n");
+        sb.Append("  Line: ").Append(Line).Append("\n");
+        sb.Append("  Column: ").Append(Column).Append("\n");
+        sb.Append("  Index: ").Append(Index).Append("\n");
+        sb.Append("}\n");
+        return sb.ToString();
+    }
+
     #region Operators
+
 #pragma warning disable 1591
 
     public static bool operator ==(PositionDto left, PositionDto right)
@@ -137,5 +155,6 @@ public partial class PositionDto : IEquatable<PositionDto>
     }
 
 #pragma warning restore 1591
+
     #endregion Operators
 }

@@ -10,47 +10,21 @@
 namespace OLLAMACHAT.Generated.Models.ParseResponse;
 
 /// <summary>
-///
 /// </summary>
 [DataContract]
-public partial class DecoratorDto : IEquatable<DecoratorDto>
+public class DecoratorDto : IEquatable<DecoratorDto>
 {
-    /// <summary>
-    /// Gets or Sets Name
-    /// </summary>
-
-    [DataMember(Name="name")]
-    public string Name { get; set; }
-
     /// <summary>
     /// Gets or Sets Arguments
     /// </summary>
-
-    [DataMember(Name="arguments")]
+    [DataMember(Name = "arguments")]
     public List<string> Arguments { get; set; }
 
     /// <summary>
-    /// Returns the string presentation of the object
+    /// Gets or Sets Name
     /// </summary>
-    /// <returns>String presentation of the object</returns>
-    public override string ToString()
-    {
-        var sb = new StringBuilder();
-        sb.Append("class Decorator {\n");
-        sb.Append("  Name: ").Append(Name).Append("\n");
-        sb.Append("  Arguments: ").Append(Arguments).Append("\n");
-        sb.Append("}\n");
-        return sb.ToString();
-    }
-
-    /// <summary>
-    /// Returns the JSON string presentation of the object
-    /// </summary>
-    /// <returns>JSON string presentation of the object</returns>
-    public string ToJson()
-    {
-        return JsonConvert.SerializeObject(this, Formatting.Indented);
-    }
+    [DataMember(Name = "name")]
+    public string Name { get; set; }
 
     /// <summary>
     /// Returns true if objects are equal
@@ -59,8 +33,16 @@ public partial class DecoratorDto : IEquatable<DecoratorDto>
     /// <returns>Boolean</returns>
     public override bool Equals(object obj)
     {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
+        if (ReferenceEquals(null, obj))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
         return obj.GetType() == GetType() && Equals((DecoratorDto)obj);
     }
 
@@ -71,8 +53,15 @@ public partial class DecoratorDto : IEquatable<DecoratorDto>
     /// <returns>Boolean</returns>
     public bool Equals(DecoratorDto other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
 
         return
             (
@@ -98,14 +87,41 @@ public partial class DecoratorDto : IEquatable<DecoratorDto>
             var hashCode = 41;
             // Suitable nullity checks etc, of course :)
             if (Name != null)
+            {
                 hashCode = hashCode * 59 + Name.GetHashCode();
+            }
+
             if (Arguments != null)
+            {
                 hashCode = hashCode * 59 + Arguments.GetHashCode();
+            }
+
             return hashCode;
         }
     }
 
+    /// <summary>
+    /// Returns the JSON string presentation of the object
+    /// </summary>
+    /// <returns>JSON string presentation of the object</returns>
+    public string ToJson() => JsonConvert.SerializeObject(this, Formatting.Indented);
+
+    /// <summary>
+    /// Returns the string presentation of the object
+    /// </summary>
+    /// <returns>String presentation of the object</returns>
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        sb.Append("class Decorator {\n");
+        sb.Append("  Name: ").Append(Name).Append("\n");
+        sb.Append("  Arguments: ").Append(Arguments).Append("\n");
+        sb.Append("}\n");
+        return sb.ToString();
+    }
+
     #region Operators
+
 #pragma warning disable 1591
 
     public static bool operator ==(DecoratorDto left, DecoratorDto right)
@@ -119,5 +135,6 @@ public partial class DecoratorDto : IEquatable<DecoratorDto>
     }
 
 #pragma warning restore 1591
+
     #endregion Operators
 }

@@ -13,111 +13,75 @@ namespace OLLAMACHAT.Generated.Models.ParseResponse;
 /// Complete parsing result for a single file.
 /// </summary>
 [DataContract]
-public partial class ParseResultDto : IEquatable<ParseResultDto>
+public class ParseResultDto : IEquatable<ParseResultDto>
 {
-    /// <summary>
-    /// Gets or Sets FilePath
-    /// </summary>
-    [Required]
-
-    [DataMember(Name="filePath")]
-    public string FilePath { get; set; }
-
     /// <summary>
     /// Gets or Sets Language
     /// </summary>
-    [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum LanguageEnumDto
     {
         /// <summary>
         /// Enum CsharpEnum for csharp
         /// </summary>
         [EnumMember(Value = "csharp")]
-        CsharpEnum = 0        }
-
-    /// <summary>
-    /// Gets or Sets Language
-    /// </summary>
-    [Required]
-
-    [DataMember(Name="language")]
-    public LanguageEnumDto? Language { get; set; }
-
-    /// <summary>
-    /// Gets or Sets Entities
-    /// </summary>
-    [Required]
-
-    [DataMember(Name="entities")]
-    public List<ParsedEntityDto> Entities { get; set; }
-
-    /// <summary>
-    /// Gets or Sets Relationships
-    /// </summary>
-
-    [DataMember(Name="relationships")]
-    public List<RelationshipDto> Relationships { get; set; }
+        CsharpEnum = 0
+    }
 
     /// <summary>
     /// SHA-256 hash of the file content for caching.
     /// </summary>
     /// <value>SHA-256 hash of the file content for caching.</value>
     [Required]
-
-    [DataMember(Name="contentHash")]
+    [DataMember(Name = "contentHash")]
     public string ContentHash { get; set; }
+
+    /// <summary>
+    /// Gets or Sets Entities
+    /// </summary>
+    [Required]
+    [DataMember(Name = "entities")]
+    public List<ParsedEntityDto> Entities { get; set; }
+
+    /// <summary>
+    /// Gets or Sets Errors
+    /// </summary>
+    [DataMember(Name = "errors")]
+    public List<ParseErrorDto> Errors { get; set; }
+
+    /// <summary>
+    /// Gets or Sets FilePath
+    /// </summary>
+    [Required]
+    [DataMember(Name = "filePath")]
+    public string FilePath { get; set; }
+
+    /// <summary>
+    /// Gets or Sets Language
+    /// </summary>
+    [Required]
+    [DataMember(Name = "language")]
+    public LanguageEnumDto? Language { get; set; }
+
+    /// <summary>
+    /// Gets or Sets Metadata
+    /// </summary>
+    [DataMember(Name = "metadata")]
+    public FileMetadataDto Metadata { get; set; }
 
     /// <summary>
     /// Time taken for parsing in milliseconds.
     /// </summary>
     /// <value>Time taken for parsing in milliseconds.</value>
     [Required]
-
-    [DataMember(Name="parseTimeMs")]
+    [DataMember(Name = "parseTimeMs")]
     public int? ParseTimeMs { get; set; }
 
     /// <summary>
-    /// Gets or Sets Errors
+    /// Gets or Sets Relationships
     /// </summary>
-
-    [DataMember(Name="errors")]
-    public List<ParseErrorDto> Errors { get; set; }
-
-    /// <summary>
-    /// Gets or Sets Metadata
-    /// </summary>
-
-    [DataMember(Name="metadata")]
-    public FileMetadataDto Metadata { get; set; }
-
-    /// <summary>
-    /// Returns the string presentation of the object
-    /// </summary>
-    /// <returns>String presentation of the object</returns>
-    public override string ToString()
-    {
-        var sb = new StringBuilder();
-        sb.Append("class ParseResult {\n");
-        sb.Append("  FilePath: ").Append(FilePath).Append("\n");
-        sb.Append("  Language: ").Append(Language).Append("\n");
-        sb.Append("  Entities: ").Append(Entities).Append("\n");
-        sb.Append("  Relationships: ").Append(Relationships).Append("\n");
-        sb.Append("  ContentHash: ").Append(ContentHash).Append("\n");
-        sb.Append("  ParseTimeMs: ").Append(ParseTimeMs).Append("\n");
-        sb.Append("  Errors: ").Append(Errors).Append("\n");
-        sb.Append("  Metadata: ").Append(Metadata).Append("\n");
-        sb.Append("}\n");
-        return sb.ToString();
-    }
-
-    /// <summary>
-    /// Returns the JSON string presentation of the object
-    /// </summary>
-    /// <returns>JSON string presentation of the object</returns>
-    public string ToJson()
-    {
-        return JsonConvert.SerializeObject(this, Formatting.Indented);
-    }
+    [DataMember(Name = "relationships")]
+    public List<RelationshipDto> Relationships { get; set; }
 
     /// <summary>
     /// Returns true if objects are equal
@@ -126,8 +90,16 @@ public partial class ParseResultDto : IEquatable<ParseResultDto>
     /// <returns>Boolean</returns>
     public override bool Equals(object obj)
     {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
+        if (ReferenceEquals(null, obj))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
         return obj.GetType() == GetType() && Equals((ParseResultDto)obj);
     }
 
@@ -138,8 +110,15 @@ public partial class ParseResultDto : IEquatable<ParseResultDto>
     /// <returns>Boolean</returns>
     public bool Equals(ParseResultDto other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
 
         return
             (
@@ -195,26 +174,77 @@ public partial class ParseResultDto : IEquatable<ParseResultDto>
             var hashCode = 41;
             // Suitable nullity checks etc, of course :)
             if (FilePath != null)
+            {
                 hashCode = hashCode * 59 + FilePath.GetHashCode();
+            }
+
             if (Language != null)
+            {
                 hashCode = hashCode * 59 + Language.GetHashCode();
+            }
+
             if (Entities != null)
+            {
                 hashCode = hashCode * 59 + Entities.GetHashCode();
+            }
+
             if (Relationships != null)
+            {
                 hashCode = hashCode * 59 + Relationships.GetHashCode();
+            }
+
             if (ContentHash != null)
+            {
                 hashCode = hashCode * 59 + ContentHash.GetHashCode();
+            }
+
             if (ParseTimeMs != null)
+            {
                 hashCode = hashCode * 59 + ParseTimeMs.GetHashCode();
+            }
+
             if (Errors != null)
+            {
                 hashCode = hashCode * 59 + Errors.GetHashCode();
+            }
+
             if (Metadata != null)
+            {
                 hashCode = hashCode * 59 + Metadata.GetHashCode();
+            }
+
             return hashCode;
         }
     }
 
+    /// <summary>
+    /// Returns the JSON string presentation of the object
+    /// </summary>
+    /// <returns>JSON string presentation of the object</returns>
+    public string ToJson() => JsonConvert.SerializeObject(this, Formatting.Indented);
+
+    /// <summary>
+    /// Returns the string presentation of the object
+    /// </summary>
+    /// <returns>String presentation of the object</returns>
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        sb.Append("class ParseResult {\n");
+        sb.Append("  FilePath: ").Append(FilePath).Append("\n");
+        sb.Append("  Language: ").Append(Language).Append("\n");
+        sb.Append("  Entities: ").Append(Entities).Append("\n");
+        sb.Append("  Relationships: ").Append(Relationships).Append("\n");
+        sb.Append("  ContentHash: ").Append(ContentHash).Append("\n");
+        sb.Append("  ParseTimeMs: ").Append(ParseTimeMs).Append("\n");
+        sb.Append("  Errors: ").Append(Errors).Append("\n");
+        sb.Append("  Metadata: ").Append(Metadata).Append("\n");
+        sb.Append("}\n");
+        return sb.ToString();
+    }
+
     #region Operators
+
 #pragma warning disable 1591
 
     public static bool operator ==(ParseResultDto left, ParseResultDto right)
@@ -228,5 +258,6 @@ public partial class ParseResultDto : IEquatable<ParseResultDto>
     }
 
 #pragma warning restore 1591
+
     #endregion Operators
 }

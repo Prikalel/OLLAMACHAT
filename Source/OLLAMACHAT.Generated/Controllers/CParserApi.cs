@@ -10,7 +10,6 @@
 namespace OLLAMACHAT.Generated.Controllers;
 
 /// <summary>
-///
 /// </summary>
 [ApiController]
 public class CParserApiController(
@@ -24,7 +23,10 @@ public class CParserApiController(
     /// <summary>
     /// Get initialization file names
     /// </summary>
-    /// <remarks>Returns a list of common initialization file names for C# projects, such as AssemblyInfo.cs or GlobalUsings.cs.</remarks>
+    /// <remarks>
+    /// Returns a list of common initialization file names for C# projects, such as AssemblyInfo.cs or
+    /// GlobalUsings.cs.
+    /// </remarks>
     /// <response code="200">A list of initialization file names.</response>
     [HttpGet]
     [Route("init-files")]
@@ -47,14 +49,17 @@ public class CParserApiController(
     public IActionResult GetSupportedExtensions()
     {
         logger.LogInformation("Requested extensions");
-        
-        return new ObjectResult(new List<string>() { "*.cs" });
+
+        return new ObjectResult(new List<string> { "*.cs" });
     }
 
     /// <summary>
     /// Parse a C# file
     /// </summary>
-    /// <remarks>Returns a normalized ParseResult structure with detailed entities, relationships, and metadata for a given C# file.</remarks>
+    /// <remarks>
+    /// Returns a normalized ParseResult structure with detailed entities, relationships, and metadata for a given C#
+    /// file.
+    /// </remarks>
     /// <param name="body"></param>
     /// <response code="200">Successful parsing result.</response>
     /// <response code="400">Invalid request (e.g., malformed JSON or invalid file paths).</response>
@@ -66,7 +71,7 @@ public class CParserApiController(
     [SwaggerResponse(statusCode: 200, type: typeof(ParseResultDto), description: "Successful parsing result.")]
     [SwaggerResponse(statusCode: 400, type: typeof(ErrorResponseDto), description: "Invalid request (e.g., malformed JSON or invalid file paths).")]
     [SwaggerResponse(statusCode: 500, type: typeof(ErrorResponseDto), description: "Internal server error during parsing.")]
-    public async Task<IActionResult> ParseCsharpFile([FromBody]ParserRequestDto body)
+    public async Task<IActionResult> ParseCsharpFile([FromBody] ParserRequestDto body)
     {
         if (CheckBasePath(body.RepoPath))
         {
@@ -74,7 +79,7 @@ public class CParserApiController(
             string message = $"repo directory must be {SolutionDirectory} and nothing else";
             return StatusCode(404, mapper.Map(new ErrorResponse(message, message, null)));
         }
-        
+
         (ParseResult result, ErrorResponse? error) = await mediator.Send(new ParseCsharpFile.Query(mapper.Map(body)));
         if (error != null)
         {
@@ -97,7 +102,7 @@ public class CParserApiController(
     [SwaggerOperation(nameof(ResolveImportPath))]
     [SwaggerResponse(statusCode: 200, type: typeof(List<string>), description: "A list of resolved relative file paths.")]
     [SwaggerResponse(statusCode: 400, type: typeof(ErrorResponseDto), description: "Invalid import path or file context.")]
-    public async Task<IActionResult> ResolveImportPath([FromBody]ResolveImportRequestDto body)
+    public async Task<IActionResult> ResolveImportPath([FromBody] ResolveImportRequestDto body)
     {
         if (CheckBasePath(body.RepoPath))
         {

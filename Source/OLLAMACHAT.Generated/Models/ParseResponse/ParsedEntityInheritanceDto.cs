@@ -10,47 +10,21 @@
 namespace OLLAMACHAT.Generated.Models.ParseResponse;
 
 /// <summary>
-/// 
 /// </summary>
 [DataContract]
-public partial class ParsedEntityInheritanceDto : IEquatable<ParsedEntityInheritanceDto>
-{ 
+public class ParsedEntityInheritanceDto : IEquatable<ParsedEntityInheritanceDto>
+{
     /// <summary>
     /// Gets or Sets BaseClasses
     /// </summary>
-
-    [DataMember(Name="baseClasses")]
+    [DataMember(Name = "baseClasses")]
     public List<string> BaseClasses { get; set; }
 
     /// <summary>
     /// Gets or Sets Interfaces
     /// </summary>
-
-    [DataMember(Name="interfaces")]
+    [DataMember(Name = "interfaces")]
     public List<string> Interfaces { get; set; }
-
-    /// <summary>
-    /// Returns the string presentation of the object
-    /// </summary>
-    /// <returns>String presentation of the object</returns>
-    public override string ToString()
-    {
-        var sb = new StringBuilder();
-        sb.Append("class ParsedEntityInheritance {\n");
-        sb.Append("  BaseClasses: ").Append(BaseClasses).Append("\n");
-        sb.Append("  Interfaces: ").Append(Interfaces).Append("\n");
-        sb.Append("}\n");
-        return sb.ToString();
-    }
-
-    /// <summary>
-    /// Returns the JSON string presentation of the object
-    /// </summary>
-    /// <returns>JSON string presentation of the object</returns>
-    public string ToJson()
-    {
-        return JsonConvert.SerializeObject(this, Formatting.Indented);
-    }
 
     /// <summary>
     /// Returns true if objects are equal
@@ -59,8 +33,16 @@ public partial class ParsedEntityInheritanceDto : IEquatable<ParsedEntityInherit
     /// <returns>Boolean</returns>
     public override bool Equals(object obj)
     {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
+        if (ReferenceEquals(null, obj))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
         return obj.GetType() == GetType() && Equals((ParsedEntityInheritanceDto)obj);
     }
 
@@ -71,15 +53,22 @@ public partial class ParsedEntityInheritanceDto : IEquatable<ParsedEntityInherit
     /// <returns>Boolean</returns>
     public bool Equals(ParsedEntityInheritanceDto other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
 
-        return 
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return
             (
                 BaseClasses == other.BaseClasses ||
                 BaseClasses != null &&
                 BaseClasses.SequenceEqual(other.BaseClasses)
-            ) && 
+            ) &&
             (
                 Interfaces == other.Interfaces ||
                 Interfaces != null &&
@@ -98,14 +87,41 @@ public partial class ParsedEntityInheritanceDto : IEquatable<ParsedEntityInherit
             var hashCode = 41;
             // Suitable nullity checks etc, of course :)
             if (BaseClasses != null)
+            {
                 hashCode = hashCode * 59 + BaseClasses.GetHashCode();
+            }
+
             if (Interfaces != null)
+            {
                 hashCode = hashCode * 59 + Interfaces.GetHashCode();
+            }
+
             return hashCode;
         }
     }
 
+    /// <summary>
+    /// Returns the JSON string presentation of the object
+    /// </summary>
+    /// <returns>JSON string presentation of the object</returns>
+    public string ToJson() => JsonConvert.SerializeObject(this, Formatting.Indented);
+
+    /// <summary>
+    /// Returns the string presentation of the object
+    /// </summary>
+    /// <returns>String presentation of the object</returns>
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        sb.Append("class ParsedEntityInheritance {\n");
+        sb.Append("  BaseClasses: ").Append(BaseClasses).Append("\n");
+        sb.Append("  Interfaces: ").Append(Interfaces).Append("\n");
+        sb.Append("}\n");
+        return sb.ToString();
+    }
+
     #region Operators
+
 #pragma warning disable 1591
 
     public static bool operator ==(ParsedEntityInheritanceDto left, ParsedEntityInheritanceDto right)
@@ -119,5 +135,6 @@ public partial class ParsedEntityInheritanceDto : IEquatable<ParsedEntityInherit
     }
 
 #pragma warning restore 1591
+
     #endregion Operators
 }

@@ -16,6 +16,7 @@ global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Options;
 global using Microsoft.OpenApi.Models;
 global using Newtonsoft.Json;
+global using Newtonsoft.Json.Converters;
 global using OLLAMACHAT.Generated.Attributes;
 global using OLLAMACHAT.Generated.Mappers;
 global using OLLAMACHAT.Generated.Models;

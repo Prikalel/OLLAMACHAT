@@ -13,52 +13,25 @@ namespace OLLAMACHAT.Generated.Models.ParseRequest;
 /// Configuration options for selective parsing.
 /// </summary>
 [DataContract]
-public partial class ParserOptionsDto : IEquatable<ParserOptionsDto>
+public class ParserOptionsDto : IEquatable<ParserOptionsDto>
 {
-    /// <summary>
-    /// Gets or Sets ExtractReferences
-    /// </summary>
-
-    [DataMember(Name="extractReferences")]
-    public bool? ExtractReferences { get; set; }
-
     /// <summary>
     /// Gets or Sets ExtractInheritance
     /// </summary>
-
-    [DataMember(Name="extractInheritance")]
+    [DataMember(Name = "extractInheritance")]
     public bool? ExtractInheritance { get; set; }
+
+    /// <summary>
+    /// Gets or Sets ExtractReferences
+    /// </summary>
+    [DataMember(Name = "extractReferences")]
+    public bool? ExtractReferences { get; set; }
 
     /// <summary>
     /// Gets or Sets MaxDepth
     /// </summary>
-
-    [DataMember(Name="maxDepth")]
+    [DataMember(Name = "maxDepth")]
     public int? MaxDepth { get; set; }
-
-    /// <summary>
-    /// Returns the string presentation of the object
-    /// </summary>
-    /// <returns>String presentation of the object</returns>
-    public override string ToString()
-    {
-        var sb = new StringBuilder();
-        sb.Append("class ParserOptions {\n");
-        sb.Append("  ExtractReferences: ").Append(ExtractReferences).Append("\n");
-        sb.Append("  ExtractInheritance: ").Append(ExtractInheritance).Append("\n");
-        sb.Append("  MaxDepth: ").Append(MaxDepth).Append("\n");
-        sb.Append("}\n");
-        return sb.ToString();
-    }
-
-    /// <summary>
-    /// Returns the JSON string presentation of the object
-    /// </summary>
-    /// <returns>JSON string presentation of the object</returns>
-    public string ToJson()
-    {
-        return JsonConvert.SerializeObject(this, Formatting.Indented);
-    }
 
     /// <summary>
     /// Returns true if objects are equal
@@ -67,8 +40,16 @@ public partial class ParserOptionsDto : IEquatable<ParserOptionsDto>
     /// <returns>Boolean</returns>
     public override bool Equals(object obj)
     {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
+        if (ReferenceEquals(null, obj))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
         return obj.GetType() == GetType() && Equals((ParserOptionsDto)obj);
     }
 
@@ -79,8 +60,15 @@ public partial class ParserOptionsDto : IEquatable<ParserOptionsDto>
     /// <returns>Boolean</returns>
     public bool Equals(ParserOptionsDto other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
 
         return
             (
@@ -111,16 +99,47 @@ public partial class ParserOptionsDto : IEquatable<ParserOptionsDto>
             var hashCode = 41;
             // Suitable nullity checks etc, of course :)
             if (ExtractReferences != null)
+            {
                 hashCode = hashCode * 59 + ExtractReferences.GetHashCode();
+            }
+
             if (ExtractInheritance != null)
+            {
                 hashCode = hashCode * 59 + ExtractInheritance.GetHashCode();
+            }
+
             if (MaxDepth != null)
+            {
                 hashCode = hashCode * 59 + MaxDepth.GetHashCode();
+            }
+
             return hashCode;
         }
     }
 
+    /// <summary>
+    /// Returns the JSON string presentation of the object
+    /// </summary>
+    /// <returns>JSON string presentation of the object</returns>
+    public string ToJson() => JsonConvert.SerializeObject(this, Formatting.Indented);
+
+    /// <summary>
+    /// Returns the string presentation of the object
+    /// </summary>
+    /// <returns>String presentation of the object</returns>
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        sb.Append("class ParserOptions {\n");
+        sb.Append("  ExtractReferences: ").Append(ExtractReferences).Append("\n");
+        sb.Append("  ExtractInheritance: ").Append(ExtractInheritance).Append("\n");
+        sb.Append("  MaxDepth: ").Append(MaxDepth).Append("\n");
+        sb.Append("}\n");
+        return sb.ToString();
+    }
+
     #region Operators
+
 #pragma warning disable 1591
 
     public static bool operator ==(ParserOptionsDto left, ParserOptionsDto right)
@@ -134,5 +153,6 @@ public partial class ParserOptionsDto : IEquatable<ParserOptionsDto>
     }
 
 #pragma warning restore 1591
+
     #endregion Operators
 }

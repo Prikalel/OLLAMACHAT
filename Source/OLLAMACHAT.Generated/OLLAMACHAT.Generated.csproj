@@ -1,42 +1,42 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <Description>OLLAMACHAT.Generated</Description>
-    <Copyright>OLLAMACHAT.Generated</Copyright>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PreserveCompilationContext>true</PreserveCompilationContext>
-    <AssemblyName>OLLAMACHAT.Generated</AssemblyName>
-    <PackageId>OLLAMACHAT.Generated</PackageId>
-    <CsProjectName>OLLAMACHAT.Generated</CsProjectName>
-    <OutputPath>..\..\Out\$(Configuration)\$(CsProjectName)\</OutputPath>
-    <DocumentationFile>..\..\Out\$(Configuration)\$(CsProjectName)\$(CsProjectName).xml</DocumentationFile>
-    <RootNamespace>$(CsProjectName)</RootNamespace>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Mapster" Version="7.4.0" />
-    <PackageReference Include="Mediator.Abstractions" Version="3.0.0-preview.65" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.4.0"/>
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.4.0"/>
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.4.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.4.0"/>
-  </ItemGroup>
-  <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\OLLAMACHAT.Application\OLLAMACHAT.Application.csproj" />
-    <ProjectReference Include="..\OLLAMACHAT.Infrastructure\OLLAMACHAT.Infrastructure.csproj" />
-  </ItemGroup>
-  <Target Name="Mapster" AfterTargets="AfterBuild">
-    <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet tool restore" />
-     <Exec WorkingDirectory="$(ProjectDir)"
-          Command="dotnet mapster mapper -a &quot;$(TargetDir)$(ProjectName).dll&quot; -n OLLAMACHAT.Generated.Mappers -p -o Mappers" />
-  </Target>
+    <PropertyGroup>
+        <Description>OLLAMACHAT.Generated</Description>
+        <Copyright>OLLAMACHAT.Generated</Copyright>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <PreserveCompilationContext>true</PreserveCompilationContext>
+        <AssemblyName>OLLAMACHAT.Generated</AssemblyName>
+        <PackageId>OLLAMACHAT.Generated</PackageId>
+        <CsProjectName>OLLAMACHAT.Generated</CsProjectName>
+        <OutputPath>..\..\Out\$(Configuration)\$(CsProjectName)\</OutputPath>
+        <DocumentationFile>..\..\Out\$(Configuration)\$(CsProjectName)\$(CsProjectName).xml</DocumentationFile>
+        <RootNamespace>$(CsProjectName)</RootNamespace>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Mapster" Version="7.4.0"/>
+        <PackageReference Include="Mediator.Abstractions" Version="3.0.0-preview.65"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.4.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.4.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.4.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.4.0"/>
+    </ItemGroup>
+    <ItemGroup>
+        <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\OLLAMACHAT.Application\OLLAMACHAT.Application.csproj"/>
+        <ProjectReference Include="..\OLLAMACHAT.Infrastructure\OLLAMACHAT.Infrastructure.csproj"/>
+    </ItemGroup>
+    <Target Name="Mapster" AfterTargets="AfterBuild">
+        <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet tool restore"/>
+        <Exec WorkingDirectory="$(ProjectDir)"
+              Command="dotnet mapster mapper -a &quot;$(TargetDir)$(ProjectName).dll&quot; -n OLLAMACHAT.Generated.Mappers -p -o Mappers"/>
+    </Target>
 
-  <ItemGroup>
-    <Generated Include="**\*.g.cs" />
-  </ItemGroup>
-  <Target Name="CleanGenerated">
-    <Delete Files="@(Generated)" />
-  </Target>
+    <ItemGroup>
+        <Generated Include="**\*.g.cs"/>
+    </ItemGroup>
+    <Target Name="CleanGenerated">
+        <Delete Files="@(Generated)"/>
+    </Target>
 </Project>

@@ -13,30 +13,12 @@ namespace OLLAMACHAT.Generated.Models.ParseResponse;
 /// Represents a relationship between two entities.
 /// </summary>
 [DataContract]
-public partial class RelationshipDto : IEquatable<RelationshipDto>
+public class RelationshipDto : IEquatable<RelationshipDto>
 {
-    /// <summary>
-    /// Name of the source entity.
-    /// </summary>
-    /// <value>Name of the source entity.</value>
-    [Required]
-
-    [DataMember(Name="from")]
-    public string From { get; set; }
-
-    /// <summary>
-    /// Name of the target entity.
-    /// </summary>
-    /// <value>Name of the target entity.</value>
-    [Required]
-
-    [DataMember(Name="to")]
-    public string To { get; set; }
-
     /// <summary>
     /// Gets or Sets Type
     /// </summary>
-    [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+    [JsonConverter(typeof(StringEnumConverter))]
     [XmlType("OLLAMACHAT.Generated.Models.ParseResponse.RelationshipDto.TypeEnumDto")]
     public enum TypeEnumDto
     {
@@ -45,70 +27,61 @@ public partial class RelationshipDto : IEquatable<RelationshipDto>
         /// </summary>
         [EnumMember(Value = "inherits")]
         InheritsEnum = 0,
+
         /// <summary>
         /// Enum ImplementsEnum for implements
         /// </summary>
         [EnumMember(Value = "implements")]
         ImplementsEnum = 1,
+
         /// <summary>
         /// Enum CallsEnum for calls
         /// </summary>
         [EnumMember(Value = "calls")]
         CallsEnum = 2,
+
         /// <summary>
         /// Enum ReferencesEnum for references
         /// </summary>
         [EnumMember(Value = "references")]
-        ReferencesEnum = 3        }
+        ReferencesEnum = 3
+    }
 
     /// <summary>
-    /// Gets or Sets Type
+    /// Name of the source entity.
     /// </summary>
+    /// <value>Name of the source entity.</value>
     [Required]
+    [DataMember(Name = "from")]
+    public string From { get; set; }
 
-    [DataMember(Name="type")]
-    public TypeEnumDto? Type { get; set; }
+    /// <summary>
+    /// Gets or Sets Location
+    /// </summary>
+    [DataMember(Name = "location")]
+    public LocationDto Location { get; set; }
 
     /// <summary>
     /// Relative path to the target file if the relationship is cross-file.
     /// </summary>
     /// <value>Relative path to the target file if the relationship is cross-file.</value>
-
-    [DataMember(Name="targetFile")]
+    [DataMember(Name = "targetFile")]
     public string TargetFile { get; set; }
 
     /// <summary>
-    /// Gets or Sets Location
+    /// Name of the target entity.
     /// </summary>
-
-    [DataMember(Name="location")]
-    public LocationDto Location { get; set; }
-
-    /// <summary>
-    /// Returns the string presentation of the object
-    /// </summary>
-    /// <returns>String presentation of the object</returns>
-    public override string ToString()
-    {
-        var sb = new StringBuilder();
-        sb.Append("class Relationship {\n");
-        sb.Append("  From: ").Append(From).Append("\n");
-        sb.Append("  To: ").Append(To).Append("\n");
-        sb.Append("  Type: ").Append(Type).Append("\n");
-        sb.Append("  TargetFile: ").Append(TargetFile).Append("\n");
-        sb.Append("  Location: ").Append(Location).Append("\n");
-        sb.Append("}\n");
-        return sb.ToString();
-    }
+    /// <value>Name of the target entity.</value>
+    [Required]
+    [DataMember(Name = "to")]
+    public string To { get; set; }
 
     /// <summary>
-    /// Returns the JSON string presentation of the object
+    /// Gets or Sets Type
     /// </summary>
-    /// <returns>JSON string presentation of the object</returns>
-    public string ToJson()
-    {
-        return JsonConvert.SerializeObject(this, Formatting.Indented);
-    }
+    [Required]
+    [DataMember(Name = "type")]
+    public TypeEnumDto? Type { get; set; }
 
     /// <summary>
     /// Returns true if objects are equal
@@ -117,8 +90,16 @@ public partial class RelationshipDto : IEquatable<RelationshipDto>
     /// <returns>Boolean</returns>
     public override bool Equals(object obj)
     {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
+        if (ReferenceEquals(null, obj))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
         return obj.GetType() == GetType() && Equals((RelationshipDto)obj);
     }
 
@@ -129,8 +110,15 @@ public partial class RelationshipDto : IEquatable<RelationshipDto>
     /// <returns>Boolean</returns>
     public bool Equals(RelationshipDto other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
 
         return
             (
@@ -171,20 +159,59 @@ public partial class RelationshipDto : IEquatable<RelationshipDto>
             var hashCode = 41;
             // Suitable nullity checks etc, of course :)
             if (From != null)
+            {
                 hashCode = hashCode * 59 + From.GetHashCode();
+            }
+
             if (To != null)
+            {
                 hashCode = hashCode * 59 + To.GetHashCode();
+            }
+
             if (Type != null)
+            {
                 hashCode = hashCode * 59 + Type.GetHashCode();
+            }
+
             if (TargetFile != null)
+            {
                 hashCode = hashCode * 59 + TargetFile.GetHashCode();
+            }
+
             if (Location != null)
+            {
                 hashCode = hashCode * 59 + Location.GetHashCode();
+            }
+
             return hashCode;
         }
     }
 
+    /// <summary>
+    /// Returns the JSON string presentation of the object
+    /// </summary>
+    /// <returns>JSON string presentation of the object</returns>
+    public string ToJson() => JsonConvert.SerializeObject(this, Formatting.Indented);
+
+    /// <summary>
+    /// Returns the string presentation of the object
+    /// </summary>
+    /// <returns>String presentation of the object</returns>
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        sb.Append("class Relationship {\n");
+        sb.Append("  From: ").Append(From).Append("\n");
+        sb.Append("  To: ").Append(To).Append("\n");
+        sb.Append("  Type: ").Append(Type).Append("\n");
+        sb.Append("  TargetFile: ").Append(TargetFile).Append("\n");
+        sb.Append("  Location: ").Append(Location).Append("\n");
+        sb.Append("}\n");
+        return sb.ToString();
+    }
+
     #region Operators
+
 #pragma warning disable 1591
 
     public static bool operator ==(RelationshipDto left, RelationshipDto right)
@@ -198,5 +225,6 @@ public partial class RelationshipDto : IEquatable<RelationshipDto>
     }
 
 #pragma warning restore 1591
+
     #endregion Operators
 }

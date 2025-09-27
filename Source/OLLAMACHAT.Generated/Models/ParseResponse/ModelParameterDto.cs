@@ -10,63 +10,33 @@
 namespace OLLAMACHAT.Generated.Models.ParseResponse;
 
 /// <summary>
-///
 /// </summary>
 [DataContract]
-public partial class ModelParameterDto : IEquatable<ModelParameterDto>
+public class ModelParameterDto : IEquatable<ModelParameterDto>
 {
+    /// <summary>
+    /// Gets or Sets DefaultValue
+    /// </summary>
+    [DataMember(Name = "defaultValue")]
+    public string DefaultValue { get; set; }
+
     /// <summary>
     /// Gets or Sets Name
     /// </summary>
-
-    [DataMember(Name="name")]
+    [DataMember(Name = "name")]
     public string Name { get; set; }
-
-    /// <summary>
-    /// Gets or Sets Type
-    /// </summary>
-
-    [DataMember(Name="type")]
-    public string Type { get; set; }
 
     /// <summary>
     /// Gets or Sets Optional
     /// </summary>
-
-    [DataMember(Name="optional")]
+    [DataMember(Name = "optional")]
     public bool? Optional { get; set; }
 
     /// <summary>
-    /// Gets or Sets DefaultValue
+    /// Gets or Sets Type
     /// </summary>
-
-    [DataMember(Name="defaultValue")]
-    public string DefaultValue { get; set; }
-
-    /// <summary>
-    /// Returns the string presentation of the object
-    /// </summary>
-    /// <returns>String presentation of the object</returns>
-    public override string ToString()
-    {
-        var sb = new StringBuilder();
-        sb.Append("class ModelParameter {\n");
-        sb.Append("  Name: ").Append(Name).Append("\n");
-        sb.Append("  Type: ").Append(Type).Append("\n");
-        sb.Append("  Optional: ").Append(Optional).Append("\n");
-        sb.Append("  DefaultValue: ").Append(DefaultValue).Append("\n");
-        sb.Append("}\n");
-        return sb.ToString();
-    }
-
-    /// <summary>
-    /// Returns the JSON string presentation of the object
-    /// </summary>
-    /// <returns>JSON string presentation of the object</returns>
-    public string ToJson()
-    {
-        return JsonConvert.SerializeObject(this, Formatting.Indented);
-    }
+    [DataMember(Name = "type")]
+    public string Type { get; set; }
 
     /// <summary>
     /// Returns true if objects are equal
@@ -75,8 +45,16 @@ public partial class ModelParameterDto : IEquatable<ModelParameterDto>
     /// <returns>Boolean</returns>
     public override bool Equals(object obj)
     {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
+        if (ReferenceEquals(null, obj))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
         return obj.GetType() == GetType() && Equals((ModelParameterDto)obj);
     }
 
@@ -87,8 +65,15 @@ public partial class ModelParameterDto : IEquatable<ModelParameterDto>
     /// <returns>Boolean</returns>
     public bool Equals(ModelParameterDto other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
 
         return
             (
@@ -124,18 +109,53 @@ public partial class ModelParameterDto : IEquatable<ModelParameterDto>
             var hashCode = 41;
             // Suitable nullity checks etc, of course :)
             if (Name != null)
+            {
                 hashCode = hashCode * 59 + Name.GetHashCode();
+            }
+
             if (Type != null)
+            {
                 hashCode = hashCode * 59 + Type.GetHashCode();
+            }
+
             if (Optional != null)
+            {
                 hashCode = hashCode * 59 + Optional.GetHashCode();
+            }
+
             if (DefaultValue != null)
+            {
                 hashCode = hashCode * 59 + DefaultValue.GetHashCode();
+            }
+
             return hashCode;
         }
     }
 
+    /// <summary>
+    /// Returns the JSON string presentation of the object
+    /// </summary>
+    /// <returns>JSON string presentation of the object</returns>
+    public string ToJson() => JsonConvert.SerializeObject(this, Formatting.Indented);
+
+    /// <summary>
+    /// Returns the string presentation of the object
+    /// </summary>
+    /// <returns>String presentation of the object</returns>
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        sb.Append("class ModelParameter {\n");
+        sb.Append("  Name: ").Append(Name).Append("\n");
+        sb.Append("  Type: ").Append(Type).Append("\n");
+        sb.Append("  Optional: ").Append(Optional).Append("\n");
+        sb.Append("  DefaultValue: ").Append(DefaultValue).Append("\n");
+        sb.Append("}\n");
+        return sb.ToString();
+    }
+
     #region Operators
+
 #pragma warning disable 1591
 
     public static bool operator ==(ModelParameterDto left, ModelParameterDto right)
@@ -149,5 +169,6 @@ public partial class ModelParameterDto : IEquatable<ModelParameterDto>
     }
 
 #pragma warning restore 1591
+
     #endregion Operators
 }
