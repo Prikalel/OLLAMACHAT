@@ -1,5 +1,7 @@
 ## 1. Service Interfaces
 
+РЕВЬЮ:
+
 ### 1.1 Core Parsing Service (Orchestrator)
 
 ### 1.2 Document Service
@@ -13,8 +15,14 @@
 
 ### 1.6 ✅ Error Service
 
-### 1.7 ✅ Metadata Service (сделать complexity)
+### 1.7 ✅ Metadata Service (TODO: сделать complexity)
 
 ### 1.8 Import Service
  - [ ] `Task<List<string>> ResolveImportPathAsync(string importPath, Document document);`
  - [x] ~~`Task<List<string>> FindCommonInitFilesAsync(string repoPath);`~~
+
+## TODO
+
+- [ ] code complexity
+- [ ] `Import Entity Type Not Implemented`
+- [ ] `улучшить отображение модификаторов для всех типов символов.`
