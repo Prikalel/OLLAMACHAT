@@ -1,14 +1,7 @@
-namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services;
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 
-public class MetadataService : IMetadataService
+public class MetadataService(ILogger<MetadataService> logger) : IMetadataService
 {
-    private readonly ILogger<MetadataService> logger;
-
-    public MetadataService(ILogger<MetadataService> logger)
-    {
-        this.logger = logger;
-    }
-
     public FileMetadata CalculateFileMetadata(Document document, IEnumerable<ParsedEntity> entities)
     {
         logger.LogInformation("Calculating file metadata for document: {DocumentPath}", document.FilePath);

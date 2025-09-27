@@ -19,7 +19,6 @@ public sealed class ParseCsharpFile
             {
                 var result = await roslynParsingService.ParseFileAsync(
                     request.request.FilePath,
-                    request.request.RepoPath,
                     request.request.Options);
 
                 return (result, null);

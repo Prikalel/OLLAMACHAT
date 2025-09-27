@@ -1,21 +1,13 @@
-namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services;
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 
 /// <inheritdoc />
-public class DocumentService : IDocumentService
+public class DocumentService(
+    ISolutionLoaderService solutionLoaderService,
+    IOptions<SolutionSettings> slnSettings,
+    ILogger<DocumentService> logger) : IDocumentService
 {
-    private readonly ISolutionLoaderService solutionLoaderService;
-    private readonly ILogger<DocumentService> logger;
-
-    public DocumentService(
-        ISolutionLoaderService solutionLoaderService,
-        ILogger<DocumentService> logger)
-    {
-        this.solutionLoaderService = solutionLoaderService;
-        this.logger = logger;
-    }
-
     /// <inheritdoc />
-    public async Task<Document?> GetDocumentAsync(string filePath, string repoPath)
+    public async Task<Document?> GetDocumentAsync(string filePath)
     {
         logger.LogInformation("Getting document for file: {FilePath}", filePath);
 
@@ -38,6 +30,7 @@ public class DocumentService : IDocumentService
             {
                 var document = project.Documents.FirstOrDefault(d =>
                 {
+                    string repoPath = slnSettings.Value.SolutionFilePath!;
                     string pathsss = Path.Join(repoPath, filePath);
                     return d.FilePath?.Equals(filePath, StringComparison.OrdinalIgnoreCase) is true
                         || d.FilePath?.Equals(pathsss, StringComparison.OrdinalIgnoreCase) is true;

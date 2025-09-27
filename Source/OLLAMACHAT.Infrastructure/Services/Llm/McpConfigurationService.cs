@@ -1,4 +1,4 @@
-namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services;
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Llm;
 
 /// <inheritdoc />
 public class McpConfigurationService : IMcpConfigurationService

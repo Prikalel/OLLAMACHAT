@@ -1,18 +1,9 @@
-namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services;
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 
-public class EntityService : IEntityService
+public class EntityService(
+      IMapperService mapperService,
+      ILogger<EntityService> logger) : IEntityService
 {
-    private readonly IMapperService mapperService;
-    private readonly ILogger<EntityService> logger;
-
-    public EntityService(
-        IMapperService mapperService,
-        ILogger<EntityService> logger)
-    {
-        this.mapperService = mapperService;
-        this.logger = logger;
-    }
-
     public async Task<ParsedEntity> ExtractEntityAsync(ISymbol symbol, SemanticModel semanticModel)
     {
         logger.LogInformation("Extracting entity for symbol: {SymbolName}", symbol.Name);

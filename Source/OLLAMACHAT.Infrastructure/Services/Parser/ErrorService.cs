@@ -1,18 +1,9 @@
-namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services;
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 
-public class ErrorService : IErrorService
+public class ErrorService(
+     IMapperService mapperService,
+     ILogger<ErrorService> logger) : IErrorService
 {
-    private readonly IMapperService mapperService;
-    private readonly ILogger<ErrorService> logger;
-
-    public ErrorService(
-        IMapperService mapperService,
-        ILogger<ErrorService> logger)
-    {
-        this.mapperService = mapperService;
-        this.logger = logger;
-    }
-
     public async Task<IEnumerable<ParseError>> GetDiagnosticsAsync(Document document)
     {
         logger.LogInformation("Getting diagnostics for document: {DocumentPath}", document.FilePath);

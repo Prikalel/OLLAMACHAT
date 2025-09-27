@@ -1,17 +1,10 @@
 using Location = Microsoft.CodeAnalysis.Location;
 using LocationApplication = VelikiyPrikalel.OLLAMACHAT.Application.Models.Location;
 
-namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services;
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 
-public class MapperService : IMapperService
+public class MapperService(ILogger<MapperService> logger) : IMapperService
 {
-    private readonly ILogger<MapperService> logger;
-
-    public MapperService(ILogger<MapperService> logger)
-    {
-        this.logger = logger;
-    }
-
     public LocationApplication MapLocation(Location location)
     {
         if (location == null)

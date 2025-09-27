@@ -1,4 +1,4 @@
-namespace VelikiyPrikalel.OLLAMACHAT.Application.Services;
+namespace VelikiyPrikalel.OLLAMACHAT.Application.Services.Parser;
 
 public interface IImportService
 {

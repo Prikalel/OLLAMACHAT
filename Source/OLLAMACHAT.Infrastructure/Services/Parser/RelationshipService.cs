@@ -1,14 +1,7 @@
-namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services;
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 
-public class RelationshipService : IRelationshipService
+public class RelationshipService(ILogger<RelationshipService> logger) : IRelationshipService
 {
-    private readonly ILogger<RelationshipService> logger;
-
-    public RelationshipService(ILogger<RelationshipService> logger)
-    {
-        this.logger = logger;
-    }
-
     public async Task<IEnumerable<Relationship>> AnalyzeRelationshipsAsync(IEnumerable<ParsedEntity> entities, Document document)
     {
         logger.LogInformation("Analyzing relationships for document: {DocumentPath}", document.FilePath);

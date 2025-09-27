@@ -1,4 +1,4 @@
-namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services;
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 
 public class RoslynParsingService(
      IDocumentService documentService,
@@ -9,14 +9,14 @@ public class RoslynParsingService(
      IImportService importService,
      ILogger<RoslynParsingService> logger) : IRoslynParsingService
 {
-    public async Task<ParseResult> ParseFileAsync(string filePath, string repoPath, ParserOptions? options)
+    public async Task<ParseResult> ParseFileAsync(string filePath, ParserOptions? options)
     {
         var stopwatch = Stopwatch.StartNew();
         logger.LogInformation("Starting to parse file: {FilePath}", filePath);
 
         try
         {
-            var document = await documentService.GetDocumentAsync(filePath, repoPath);
+            var document = await documentService.GetDocumentAsync(filePath);
             if (document == null)
             {
                 logger.LogWarning("Document not found: {FilePath}", filePath);
@@ -60,10 +60,10 @@ public class RoslynParsingService(
         }
     }
 
-    public async Task<List<string>> ResolveImportPathAsync(string importPath, string filePath, string repoPath)
+    public async Task<List<string>> ResolveImportPathAsync(string importPath, string filePath)
     {
         logger.LogInformation("Resolving import path: {ImportPath} for file: {FilePath}", importPath, filePath);
-        var document = await documentService.GetDocumentAsync(filePath, repoPath);
+        var document = await documentService.GetDocumentAsync(filePath);
         if (document == null)
         {
             logger.LogWarning("Document not found: {FilePath}", filePath);

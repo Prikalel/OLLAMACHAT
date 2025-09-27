@@ -1,7 +1,7 @@
 using Location = Microsoft.CodeAnalysis.Location;
 using LocationApplication = VelikiyPrikalel.OLLAMACHAT.Application.Models.Location;
 
-namespace VelikiyPrikalel.OLLAMACHAT.Application.Services;
+namespace VelikiyPrikalel.OLLAMACHAT.Application.Services.Parser;
 
 public interface IMapperService
 {

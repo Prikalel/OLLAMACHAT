@@ -1,6 +1,6 @@
 ﻿using ChatMessage = OpenAI.Chat.ChatMessage;
 
-namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services;
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Llm;
 
 /// <inheritdoc />
 public class LlmService : ILlmService

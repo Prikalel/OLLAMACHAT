@@ -19,8 +19,7 @@ public sealed class ResolveImportPath
             {
                 var result = await roslynParsingService.ResolveImportPathAsync(
                     request.request.ImportPath,
-                    request.request.FilePath,
-                    request.request.RepoPath);
+                    request.request.FilePath);
 
                 return (result, null);
             }
