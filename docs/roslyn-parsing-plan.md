@@ -4,8 +4,8 @@
 
 ### 1.1 Core Parsing Service (Orchestrator)
 
-### 1.2 Document Service
- - [ ] `Task<Document?> GetDocumentAsync(string filePath, string repoPath);`
+### ✅ 1.2 Document Service
+ - [x] ~~`Task<Document?> GetDocumentAsync(string filePath, string repoPath);`~~
  - [x] ~~`Task<string> GetContentHashAsync(Document document);`~~
 ### 1.3 Entity Service
 

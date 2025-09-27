@@ -17,40 +17,48 @@ public class DocumentService(
             return null;
         }
 
-        try
+        if (!filePath.EndsWith(".cs"))
         {
-            var solution = solutionLoaderService.CurrentSolution;
-            if (solution == null)
+            int lastIndexOfDot = filePath.LastIndexOf('.');
+            if (lastIndexOfDot == -1)
             {
-                logger.LogWarning("No solution available");
+                logger.LogWarning("Current parser supports only .cs files but the passed file path do not contain extension");
                 return null;
             }
 
-            foreach (var project in solution.Projects)
-            {
-                var document = project.Documents.FirstOrDefault(d =>
-                {
-                    string repoPath = slnSettings.Value.SolutionFilePath!;
-                    string pathsss = Path.Join(repoPath, filePath);
-                    return d.FilePath?.Equals(filePath, StringComparison.OrdinalIgnoreCase) is true
-                        || d.FilePath?.Equals(pathsss, StringComparison.OrdinalIgnoreCase) is true;
-                });
-
-                if (document != null)
-                {
-                    logger.LogInformation("Found document in project: {ProjectName}", project.Name);
-                    return document;
-                }
-            }
-
-            logger.LogWarning("Document not found in any project: {FilePath}", filePath);
+            string substring = filePath.Substring(lastIndexOfDot, filePath.Length - lastIndexOfDot);
+            logger.LogWarning("Current parser supports only .cs files not the {Extension}",
+                substring);
             return null;
         }
-        catch (Exception ex)
+
+        var solution = solutionLoaderService.CurrentSolution;
+        if (solution == null)
         {
-            logger.LogError(ex, "Error getting document: {FilePath}", filePath);
+            logger.LogWarning("No solution available");
             return null;
         }
+
+        string repoPath = Path.GetDirectoryName(slnSettings.Value.SolutionFilePath)!;
+        string pathToTestAgainst = Path.IsPathRooted(filePath)
+            ? Path.GetFullPath(filePath)
+            : Path.Join(repoPath, filePath);
+        logger.LogTrace("Will check against {Path}", pathToTestAgainst);
+
+        foreach (var project in solution.Projects)
+        {
+            Document? document = project.Documents
+                .FirstOrDefault(d => d.FilePath?.Equals(pathToTestAgainst, StringComparison.OrdinalIgnoreCase) is true);
+
+            if (document != null)
+            {
+                logger.LogInformation("Found document in project: {ProjectName}", project.Name);
+                return document;
+            }
+        }
+
+        logger.LogWarning("Document not found in any project: {FilePath}", filePath);
+        return null;
     }
 
     /// <inheritdoc />
