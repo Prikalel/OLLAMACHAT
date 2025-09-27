@@ -1,11 +1,8 @@
 ﻿namespace VelikiyPrikalel.OLLAMACHAT.Application.Mediator.CsharpParser;
 
-using VelikiyPrikalel.OLLAMACHAT.Application.Models;
-using VelikiyPrikalel.OLLAMACHAT.Application.Services;
-
 using ResolveImportResponse = (List<string> result, ErrorResponse? error);
 
-public sealed class ResolveImportPathDto
+public sealed class ResolveImportPath
 {
     /// <summary>
     /// Запрос.

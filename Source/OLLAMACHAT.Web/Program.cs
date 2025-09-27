@@ -1,6 +1,4 @@
-﻿using VelikiyPrikalel.OLLAMACHAT.Application;
-
-namespace VelikiyPrikalel.OLLAMACHAT.Web;
+﻿namespace VelikiyPrikalel.OLLAMACHAT.Web;
 
 /// <summary>
 /// Входная точка запуска веб сервиса.

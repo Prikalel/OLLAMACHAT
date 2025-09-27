@@ -1,4 +1,4 @@
-namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Settings;
+namespace VelikiyPrikalel.OLLAMACHAT.Application;
 
 public class SolutionSettings
 {

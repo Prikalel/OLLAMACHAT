@@ -1,8 +1,10 @@
 global using System;
 global using Mediator;
 global using Microsoft.AspNetCore.SignalR;
+global using Microsoft.CodeAnalysis;
+global using Microsoft.CodeAnalysis.CSharp.Syntax;
 global using Microsoft.Extensions.Logging;
-global using Newtonsoft.Json;
+global using Microsoft.Extensions.Options;
 global using VelikiyPrikalel.OLLAMACHAT.Application.Mediator;
 global using VelikiyPrikalel.OLLAMACHAT.Application.Models;
 global using VelikiyPrikalel.OLLAMACHAT.Application.Repositories;

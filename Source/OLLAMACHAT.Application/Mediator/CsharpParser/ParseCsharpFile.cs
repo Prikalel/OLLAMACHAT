@@ -1,8 +1,5 @@
 ﻿namespace VelikiyPrikalel.OLLAMACHAT.Application.Mediator.CsharpParser;
 
-using VelikiyPrikalel.OLLAMACHAT.Application.Models;
-using VelikiyPrikalel.OLLAMACHAT.Application.Services;
-
 using ParseCsharpFileResponse = (ParseResult result, ErrorResponse? error);
 
 public sealed class ParseCsharpFile

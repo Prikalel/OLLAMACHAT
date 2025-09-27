@@ -37,8 +37,11 @@ public class DocumentService : IDocumentService
             foreach (var project in solution.Projects)
             {
                 var document = project.Documents.FirstOrDefault(d =>
-                    d.FilePath?.Equals(filePath, StringComparison.OrdinalIgnoreCase) is true
-                    || d.FilePath?.Equals(Path.Join(repoPath, filePath), StringComparison.OrdinalIgnoreCase) is true);
+                {
+                    string pathsss = Path.Join(repoPath, filePath);
+                    return d.FilePath?.Equals(filePath, StringComparison.OrdinalIgnoreCase) is true
+                        || d.FilePath?.Equals(pathsss, StringComparison.OrdinalIgnoreCase) is true;
+                });
 
                 if (document != null)
                 {

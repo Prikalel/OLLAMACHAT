@@ -1,7 +1,5 @@
 ﻿namespace VelikiyPrikalel.OLLAMACHAT.Application.Mediator.CsharpParser;
 
-using VelikiyPrikalel.OLLAMACHAT.Application.Services;
-
 /// <summary>
 /// Получить доступные модели.
 /// </summary>

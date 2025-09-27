@@ -1,5 +1,3 @@
-using Microsoft.CodeAnalysis;
-
 namespace VelikiyPrikalel.OLLAMACHAT.Application;
 
 /// <summary>
