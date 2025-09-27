@@ -19,6 +19,8 @@ global using Newtonsoft.Json;
 global using OLLAMACHAT.Generated.Attributes;
 global using OLLAMACHAT.Generated.Mappers;
 global using OLLAMACHAT.Generated.Models;
+global using OLLAMACHAT.Generated.Models.ParseRequest;
+global using OLLAMACHAT.Generated.Models.ParseResponse;
 global using Swashbuckle.AspNetCore.Annotations;
 global using Swashbuckle.AspNetCore.SwaggerGen;
 global using VelikiyPrikalel.OLLAMACHAT.Application;
