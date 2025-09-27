@@ -12,6 +12,7 @@ global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Mvc.Controllers;
 global using Microsoft.AspNetCore.Mvc.Filters;
 global using Microsoft.AspNetCore.Mvc.ModelBinding;
+global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Options;
 global using Microsoft.OpenApi.Models;
 global using Newtonsoft.Json;

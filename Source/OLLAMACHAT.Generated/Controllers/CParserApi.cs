@@ -13,8 +13,14 @@ namespace OLLAMACHAT.Generated.Controllers;
 ///
 /// </summary>
 [ApiController]
-public class CParserApiController(IMediator mediator, IMapperInterface mapper, IOptions<SolutionSettings> slnSettings) : ControllerBase
+public class CParserApiController(
+    IMediator mediator,
+    IMapperInterface mapper,
+    IOptions<SolutionSettings> slnSettings,
+    ILogger<CParserApiController> logger) : ControllerBase
 {
+    private string SolutionDirectory => Path.GetDirectoryName(slnSettings.Value.SolutionFilePath)!;
+
     /// <summary>
     /// Get initialization file names
     /// </summary>
@@ -26,7 +32,7 @@ public class CParserApiController(IMediator mediator, IMapperInterface mapper, I
     [SwaggerOperation(nameof(GetInitFiles))]
     [SwaggerResponse(statusCode: 200, type: typeof(List<string>), description: "A list of initialization file names.")]
     public async Task<IActionResult> GetInitFiles() =>
-        new ObjectResult(await mediator.Send(new GetInitFiles.Query(Path.GetDirectoryName(slnSettings.Value.SolutionFilePath!)!)));
+        new ObjectResult(await mediator.Send(new GetInitFiles.Query(SolutionDirectory)));
 
     /// <summary>
     /// Get supported file extensions
@@ -38,7 +44,12 @@ public class CParserApiController(IMediator mediator, IMapperInterface mapper, I
     [ValidateModelState]
     [SwaggerOperation(nameof(GetSupportedExtensions))]
     [SwaggerResponse(statusCode: 200, type: typeof(List<string>), description: "A list of supported file extensions.")]
-    public IActionResult GetSupportedExtensions() => new ObjectResult(new List<string>() { "*.cs" });
+    public IActionResult GetSupportedExtensions()
+    {
+        logger.LogInformation("Requested extensions");
+        
+        return new ObjectResult(new List<string>() { "*.cs" });
+    }
 
     /// <summary>
     /// Parse a C# file
@@ -57,6 +68,17 @@ public class CParserApiController(IMediator mediator, IMapperInterface mapper, I
     [SwaggerResponse(statusCode: 500, type: typeof(ErrorResponseDto), description: "Internal server error during parsing.")]
     public async Task<IActionResult> ParseCsharpFile([FromBody]ParserRequestDto body)
     {
+        if (
+            String.Compare(
+                Path.GetFullPath(SolutionDirectory).TrimEnd('\\').TrimEnd('/'),
+                Path.GetFullPath(body.RepoPath).TrimEnd('\\').TrimEnd('/'),
+                StringComparison.InvariantCultureIgnoreCase) != 0)
+        {
+            logger.LogError("Incorrect repo path in request: {Request}", body);
+            string message = $"repo directory must be {SolutionDirectory} and nothing else";
+            return StatusCode(404, mapper.Map(new ErrorResponse(message, message, null)));
+        }
+        
         (ParseResult result, ErrorResponse? error) = await mediator.Send(new ParseCsharpFile.Query(mapper.Map(body)));
         if (error != null)
         {
