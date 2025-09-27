@@ -1,18 +1,9 @@
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services;
 
-public class ImportService : IImportService
+public class ImportService(
+    ISolutionLoaderService solutionLoaderService,
+    ILogger<ImportService> logger) : IImportService
 {
-    private readonly ISolutionLoaderService solutionLoaderService;
-    private readonly ILogger<ImportService> logger;
-
-    public ImportService(
-        ISolutionLoaderService solutionLoaderService,
-        ILogger<ImportService> logger)
-    {
-        this.solutionLoaderService = solutionLoaderService;
-        this.logger = logger;
-    }
-
     public async Task<List<string>> ResolveImportPathAsync(string importPath, Document document)
     {
         logger.LogInformation("Resolving import path: {ImportPath} for document: {DocumentPath}", importPath, document.FilePath);
@@ -90,28 +81,20 @@ public class ImportService : IImportService
 
         try
         {
-            var initFiles = new List<string>();
-
             if (!Directory.Exists(repoPath))
             {
                 logger.LogWarning("Repository path does not exist: {RepoPath}", repoPath);
-                return initFiles;
+                return new List<string>();
             }
 
-            var commonInitFiles = new[] { "Program.cs", "Startup.cs", "Global.asax.cs" };
+            var regex = new Regex(@"^.*(GlobalUsings\.cs|\.csproj)", RegexOptions.Compiled);
+            var files = new DirectoryInfo(repoPath)
+                .EnumerateFiles("*.*", SearchOption.AllDirectories)
+                .Where(fi => regex.IsMatch(fi.Name))
+                .ToList();
 
-            foreach (var file in commonInitFiles)
-            {
-                var filePath = Path.Combine(repoPath, file);
-                if (File.Exists(filePath))
-                {
-                    var relativePath = Path.GetRelativePath(repoPath, filePath);
-                    initFiles.Add(relativePath);
-                }
-            }
-
-            logger.LogInformation("Found {InitFileCount} common init files for repo: {RepoPath}", initFiles.Count, repoPath);
-            return initFiles;
+            logger.LogInformation("Found {InitFileCount} common init files for repo: {RepoPath}", files.Count, repoPath);
+            return files.Select(x => x.FullName!).ToList();
         }
         catch (Exception ex)
         {

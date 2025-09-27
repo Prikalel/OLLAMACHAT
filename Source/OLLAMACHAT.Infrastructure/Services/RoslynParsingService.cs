@@ -60,12 +60,6 @@ public class RoslynParsingService(
         }
     }
 
-    public async Task<List<string>> GetInitFilesAsync(string repoPath)
-    {
-        logger.LogInformation("Getting init files for repo: {RepoPath}", repoPath);
-        return await importService.FindCommonInitFilesAsync(repoPath);
-    }
-
     public async Task<List<string>> ResolveImportPathAsync(string importPath, string filePath, string repoPath)
     {
         logger.LogInformation("Resolving import path: {ImportPath} for file: {FilePath}", importPath, filePath);

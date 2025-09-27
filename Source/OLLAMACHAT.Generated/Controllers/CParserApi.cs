@@ -25,15 +25,8 @@ public class CParserApiController(IMediator mediator, IMapperInterface mapper, I
     [ValidateModelState]
     [SwaggerOperation(nameof(GetInitFiles))]
     [SwaggerResponse(statusCode: 200, type: typeof(List<string>), description: "A list of initialization file names.")]
-    public async Task<IActionResult> GetInitFiles()
-    {
-        //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(200, default(List<string>));
-
-        var res = await mediator.Send(new GetInitFiles.Query(Path.GetDirectoryName(slnSettings.Value.SolutionFilePath!)!));
-
-        return new ObjectResult(res);
-    }
+    public async Task<IActionResult> GetInitFiles() =>
+        new ObjectResult(await mediator.Send(new GetInitFiles.Query(Path.GetDirectoryName(slnSettings.Value.SolutionFilePath!)!)));
 
     /// <summary>
     /// Get supported file extensions

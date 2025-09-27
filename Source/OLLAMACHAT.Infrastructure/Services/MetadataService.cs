@@ -38,52 +38,49 @@ public class MetadataService : IMetadataService
         }
     }
 
-    private int CountLinesOfCode(SyntaxNode root)
-    {
-        var lines = root.DescendantNodesAndTokens()
+    private int CountLinesOfCode(SyntaxNode root) =>
+        root.DescendantNodesAndTokens()
             .Where(t => t.IsKind(SyntaxKind.EndOfFileToken) == false)
             .Select(t => t.GetLocation().GetLineSpan().StartLinePosition.Line)
             .Distinct()
             .Count();
 
-        return lines;
-    }
-
     private int CalculateComplexityScore(IEnumerable<ParsedEntity> entities)
     {
         var complexity = 0;
 
-        foreach (var entity in entities)
-        {
-            if (entity.Type == ParsedEntityType.Method)
-            {
-                complexity += 1;
-
-                if (entity.Decorators != null)
-                {
-                    complexity += entity.Decorators.Count;
-                }
-            }
-            else if (entity.Type == ParsedEntityType.Class || entity.Type == ParsedEntityType.Interface)
-            {
-                complexity += 2;
-
-                if (entity.Children != null)
-                {
-                    complexity += entity.Children.Count;
-                }
-
-                if (entity.Inheritance?.BaseClasses != null)
-                {
-                    complexity += entity.Inheritance.BaseClasses.Count;
-                }
-
-                if (entity.Inheritance?.Interfaces != null)
-                {
-                    complexity += entity.Inheritance.Interfaces.Count;
-                }
-            }
-        }
+        // TODO: proper algorithm to get complexity score
+        // foreach (var entity in entities)
+        // {
+        //     if (entity.Type == ParsedEntityType.Method)
+        //     {
+        //         complexity += 1;
+        //
+        //         if (entity.Decorators != null)
+        //         {
+        //             complexity += entity.Decorators.Count;
+        //         }
+        //     }
+        //     else if (entity.Type == ParsedEntityType.Class || entity.Type == ParsedEntityType.Interface)
+        //     {
+        //         complexity += 2;
+        //
+        //         if (entity.Children != null)
+        //         {
+        //             complexity += entity.Children.Count;
+        //         }
+        //
+        //         if (entity.Inheritance?.BaseClasses != null)
+        //         {
+        //             complexity += entity.Inheritance.BaseClasses.Count;
+        //         }
+        //
+        //         if (entity.Inheritance?.Interfaces != null)
+        //         {
+        //             complexity += entity.Inheritance.Interfaces.Count;
+        //         }
+        //     }
+        // }
 
         return complexity;
     }
