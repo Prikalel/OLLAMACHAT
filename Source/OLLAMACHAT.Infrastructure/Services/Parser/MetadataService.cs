@@ -14,7 +14,7 @@ public class MetadataService(ILogger<MetadataService> logger) : IMetadataService
             var root = await syntaxTree.GetRootAsync();
 
             var linesOfCode = CountLinesOfCode(root);
-            var complexityScore = CalculateComplexityScore(entities);
+            int? complexityScore = CalculateComplexityScore(entities);
             var primaryNamespace = GetPrimaryNamespace(root);
 
             var metadata = new FileMetadata(
@@ -40,7 +40,7 @@ public class MetadataService(ILogger<MetadataService> logger) : IMetadataService
             .Distinct()
             .Count();
 
-    private int CalculateComplexityScore(IEnumerable<ParsedEntity> entities)
+    private int? CalculateComplexityScore(IEnumerable<ParsedEntity> entities)
     {
         var complexity = 0;
 
@@ -77,7 +77,7 @@ public class MetadataService(ILogger<MetadataService> logger) : IMetadataService
         //     }
         // }
 
-        return complexity;
+        return null;
     }
 
     private string? GetPrimaryNamespace(SyntaxNode root)
