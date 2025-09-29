@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace OLLAMACHAT.Generated.Models.ParseRequest;
 
 /// <summary>
@@ -10,6 +12,7 @@ public class ParserOptionsDto : IEquatable<ParserOptionsDto>
     /// Gets or Sets ExtractFullExtractInheritance
     /// </summary>
     [DataMember(Name = "extractFullInheritance")]
+    [JsonPropertyName("extractFullInheritance")]
     public bool? ExtractFullExtractInheritance { get; set; }
 
     /// <summary>

@@ -3,6 +3,7 @@ namespace OLLAMACHAT.Generated.Controllers;
 /// <summary>
 /// </summary>
 [ApiController]
+[Route("/api/v1/parser/csharp/")]
 public class CParserApiController(
     IMediator mediator,
     IMapperInterface mapper,
@@ -15,7 +16,7 @@ public class CParserApiController(
     /// Get initialization file names
     /// </summary>
     /// <remarks>
-    /// Returns a list of common initialization file names for C# projects, such as AssemblyInfo.cs or
+    /// Returns a list of common initialization file names for C# projects, such as .csproj or
     /// GlobalUsings.cs.
     /// </remarks>
     /// <response code="200">A list of initialization file names.</response>

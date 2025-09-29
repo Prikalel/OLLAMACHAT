@@ -1,66 +1,59 @@
 {
-  "openapi": "3.0.3",
+  "openapi": "3.0.1",
   "info": {
-    "title": "C# Parser Microservice API",
-    "description": "A generic REST API for C# code analysis. Provides endpoints to extract code structure, entities, and relationships from C# source files.",
-    "version": "1.0.0"
+    "title": "VelikiyPrikalel.OLLAMACHAT.Web",
+    "version": "1.0"
   },
-  "servers": [
-    {
-      "url": "http://localhost:8080",
-      "description": "Local development server"
-    },
-    {
-      "url": "https://csharp-parser.example.com",
-      "description": "Production server"
-    }
-  ],
   "paths": {
-    "/api/v1/parser/csharp/parse": {
-      "post": {
+    "/api/v1/parser/csharp/init-files": {
+      "get": {
         "tags": [
-          "C# Parser"
+          "CParserApi"
         ],
-        "summary": "Parse a C# file",
-        "description": "Returns a normalized ParseResult structure with detailed entities, relationships, and metadata for a given C# file.",
-        "operationId": "parseCsharpFile",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ParserRequest"
-              }
-            }
-          }
-        },
+        "summary": "Get initialization file names",
+        "description": "Returns a list of common initialization file names for C# projects, such as .csproj or\r\nGlobalUsings.cs.",
         "responses": {
           "200": {
-            "description": "Successful parsing result.",
+            "description": "A list of initialization file names.",
             "content": {
-              "application/json": {
+              "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ParseResult"
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request (e.g., malformed JSON or invalid file paths).",
-            "content": {
+              },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error during parsing.",
-            "content": {
-              "application/json": {
+              },
+              "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -71,26 +64,52 @@
     "/api/v1/parser/csharp/supported-extensions": {
       "get": {
         "tags": [
-          "C# Parser"
+          "CParserApi"
         ],
         "summary": "Get supported file extensions",
         "description": "Returns a list of file extensions recognized by the C# parser.",
-        "operationId": "getSupportedExtensions",
         "responses": {
           "200": {
             "description": "A list of supported file extensions.",
             "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
                     "type": "string"
-                  },
-                  "example": [
-                    ".cs",
-                    ".csx",
-                    ".cshtml"
-                  ]
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -98,28 +117,140 @@
         }
       }
     },
-    "/api/v1/parser/csharp/init-files": {
-      "get": {
+    "/api/v1/parser/csharp/parse": {
+      "post": {
         "tags": [
-          "C# Parser"
+          "CParserApi"
         ],
-        "summary": "Get initialization file names",
-        "description": "Returns a list of common initialization file names for C# projects, such as AssemblyInfo.cs or GlobalUsings.cs.",
-        "operationId": "getInitFiles",
+        "summary": "Parse a C# file",
+        "description": "Returns a normalized ParseResult structure with detailed entities, relationships, and metadata for a given C#\r\nfile.",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseRequest.ParserRequestDto"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseRequest.ParserRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseRequest.ParserRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseRequest.ParserRequestDto"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseRequest.ParserRequestDto"
+              }
+            },
+            "text/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseRequest.ParserRequestDto"
+              }
+            },
+            "application/*+xml": {
+              "schema": {
+                "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseRequest.ParserRequestDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "A list of initialization file names.",
+            "description": "Successful parsing result.",
             "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseResponse.ParseResultDto"
+                }
+              },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "example": [
-                    "AssemblyInfo.cs",
-                    "GlobalUsings.cs"
-                  ]
+                  "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseResponse.ParseResultDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseResponse.ParseResultDto"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseResponse.ParseResultDto"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseResponse.ParseResultDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request (e.g., malformed JSON or invalid file paths).",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ErrorResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ErrorResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ErrorResponseDto"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ErrorResponseDto"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error during parsing.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ErrorResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ErrorResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ErrorResponseDto"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ErrorResponseDto"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ErrorResponseDto"
                 }
               }
             }
@@ -130,17 +261,46 @@
     "/api/v1/parser/csharp/resolve-import": {
       "post": {
         "tags": [
-          "C# Parser"
+          "CParserApi"
         ],
         "summary": "Resolve an import path to file paths",
         "description": "Resolves a C# 'using' statement to one or more potential relative file paths within the repository.",
-        "operationId": "resolveImportPath",
         "requestBody": {
-          "required": true,
+          "description": "",
           "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ResolveImportRequestDto"
+              }
+            },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ResolveImportRequest"
+                "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ResolveImportRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ResolveImportRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ResolveImportRequestDto"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ResolveImportRequestDto"
+              }
+            },
+            "text/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ResolveImportRequestDto"
+              }
+            },
+            "application/*+xml": {
+              "schema": {
+                "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ResolveImportRequestDto"
               }
             }
           }
@@ -149,15 +309,44 @@
           "200": {
             "description": "A list of resolved relative file paths.",
             "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
                     "type": "string"
-                  },
-                  "example": [
-                    "src/System/Collections/Generic/List.cs"
-                  ]
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -165,9 +354,29 @@
           "400": {
             "description": "Invalid import path or file context.",
             "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ErrorResponseDto"
+                }
+              },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ErrorResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ErrorResponseDto"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ErrorResponseDto"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ErrorResponseDto"
                 }
               }
             }
@@ -178,410 +387,473 @@
   },
   "components": {
     "schemas": {
-      "ParserRequest": {
-        "type": "object",
-        "description": "Request to parse a C# file.",
+      "OLLAMACHAT.Generated.Models.ErrorResponseDto": {
         "required": [
-          "filePath",
-          "repoPath"
+          "code",
+          "message"
         ],
-        "properties": {
-          "filePath": {
-            "type": "string",
-            "description": "Path to the C# source file to parse, relative to the repository root.",
-            "example": "src/Services/UserService.cs"
-          },
-          "repoPath": {
-            "type": "string",
-            "description": "Absolute path to the repository root for resolving context.",
-            "example": "/path/to/your/project"
-          },
-          "options": {
-            "$ref": "#/components/schemas/ParserOptions"
-          }
-        }
-      },
-      "ParserOptions": {
         "type": "object",
-        "description": "Configuration options for selective parsing.",
         "properties": {
-          "extractReferences": {
-            "type": "boolean",
-            "default": true
+          "code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Gets or Sets Code"
           },
-          "extractInheritance": {
-            "type": "boolean",
-            "default": true
+          "details": {
+            "type": "string",
+            "description": "Gets or Sets Details"
           },
-          "detectPatterns": {
+          "message": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Gets or Sets Message"
+          }
+        },
+        "additionalProperties": false,
+        "description": ""
+      },
+      "OLLAMACHAT.Generated.Models.ParseErrorDto": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseResponse.LocationDto"
+          },
+          "message": {
+            "type": "string",
+            "description": "Gets or Sets Message"
+          },
+          "severity": {
+            "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseErrorDto.SeverityEnumDto"
+          }
+        },
+        "additionalProperties": false,
+        "description": ""
+      },
+      "OLLAMACHAT.Generated.Models.ParseErrorDto.SeverityEnumDto": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "description": "Gets or Sets Severity",
+        "format": "int32"
+      },
+      "OLLAMACHAT.Generated.Models.ParseRequest.ParserOptionsDto": {
+        "type": "object",
+        "properties": {
+          "extractFullInheritance": {
             "type": "boolean",
-            "default": true
+            "description": "Gets or Sets ExtractFullExtractInheritance",
+            "nullable": true
+          },
+          "extractUsingStatementData": {
+            "type": "boolean",
+            "description": "Gets or Sets ExtractUsingStatementData",
+            "nullable": true
           },
           "maxDepth": {
             "type": "integer",
-            "default": 5
+            "description": "Gets or Sets MaxDepth",
+            "format": "int32",
+            "nullable": true
           }
-        }
+        },
+        "additionalProperties": false,
+        "description": "Configuration options for selective parsing."
       },
-      "ResolveImportRequest": {
-        "type": "object",
+      "OLLAMACHAT.Generated.Models.ParseRequest.ParserRequestDto": {
         "required": [
-          "importPath",
           "filePath",
           "repoPath"
         ],
+        "type": "object",
         "properties": {
-          "importPath": {
-            "type": "string",
-            "description": "The import/using path to resolve.",
-            "example": "System.Collections.Generic"
-          },
           "filePath": {
+            "minLength": 1,
             "type": "string",
-            "description": "The path of the file containing the import.",
-            "example": "src/Services/UserService.cs"
+            "description": "Path to the C# source file to parse, relative to the repository root."
+          },
+          "options": {
+            "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseRequest.ParserOptionsDto"
           },
           "repoPath": {
+            "minLength": 1,
             "type": "string",
-            "description": "Absolute path to the repository root.",
-            "example": "/path/to/your/project"
+            "description": "Absolute path to the repository root for resolving context."
           }
-        }
+        },
+        "additionalProperties": false,
+        "description": "Request to parse a C# file."
       },
-      "ParseResult": {
+      "OLLAMACHAT.Generated.Models.ParseResponse.AttributeDto": {
         "type": "object",
-        "description": "Complete parsing result for a single file.",
+        "properties": {
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Gets or Sets Arguments"
+          },
+          "name": {
+            "type": "string",
+            "description": "Gets or Sets Name"
+          }
+        },
+        "additionalProperties": false,
+        "description": ""
+      },
+      "OLLAMACHAT.Generated.Models.ParseResponse.FileMetadataDto": {
+        "type": "object",
+        "properties": {
+          "complexityScore": {
+            "type": "integer",
+            "description": "Aggregated cyclomatic complexity.",
+            "format": "int32",
+            "nullable": true
+          },
+          "loc": {
+            "type": "integer",
+            "description": "Lines of Code.",
+            "format": "int32",
+            "nullable": true
+          },
+          "namespace": {
+            "type": "string",
+            "description": "The primary namespace of the file."
+          }
+        },
+        "additionalProperties": false,
+        "description": "High-level metadata about the parsed file."
+      },
+      "OLLAMACHAT.Generated.Models.ParseResponse.LocationDto": {
         "required": [
+          "end",
+          "start"
+        ],
+        "type": "object",
+        "properties": {
+          "start": {
+            "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseResponse.PositionDto"
+          },
+          "end": {
+            "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseResponse.PositionDto"
+          }
+        },
+        "additionalProperties": false,
+        "description": ""
+      },
+      "OLLAMACHAT.Generated.Models.ParseResponse.ModelParameterDto": {
+        "type": "object",
+        "properties": {
+          "defaultValue": {
+            "type": "string",
+            "description": "Gets or Sets DefaultValue"
+          },
+          "name": {
+            "type": "string",
+            "description": "Gets or Sets Name"
+          },
+          "nullable": {
+            "type": "boolean",
+            "description": "Gets or Sets Nullable",
+            "nullable": true
+          },
+          "fullTypeName": {
+            "type": "string",
+            "description": "Gets or Sets FullTypeName"
+          }
+        },
+        "additionalProperties": false,
+        "description": ""
+      },
+      "OLLAMACHAT.Generated.Models.ParseResponse.ParseResultDto": {
+        "required": [
+          "contentHash",
+          "entities",
           "filePath",
           "language",
-          "entities",
-          "contentHash",
           "parseTimeMs"
         ],
+        "type": "object",
         "properties": {
-          "filePath": {
+          "contentHash": {
+            "minLength": 1,
             "type": "string",
-            "example": "src/Services/UserService.cs"
-          },
-          "language": {
-            "type": "string",
-            "enum": [
-              "csharp"
-            ],
-            "example": "csharp"
+            "description": "SHA-256 hash of the file content for caching."
           },
           "entities": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ParsedEntity"
-            }
-          },
-          "relationships": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Relationship"
-            }
-          },
-          "contentHash": {
-            "type": "string",
-            "description": "SHA-256 hash of the file content for caching.",
-            "example": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-          },
-          "parseTimeMs": {
-            "type": "integer",
-            "description": "Time taken for parsing in milliseconds.",
-            "example": 156
+              "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseResponse.ParsedEntityDto"
+            },
+            "description": "Gets or Sets Entities"
           },
           "errors": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ParseError"
-            }
+              "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseErrorDto"
+            },
+            "description": "Gets or Sets Errors"
+          },
+          "filePath": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Gets or Sets FilePath"
+          },
+          "language": {
+            "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseResponse.ParseResultDto.LanguageEnumDto"
           },
           "metadata": {
-            "$ref": "#/components/schemas/FileMetadata"
+            "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseResponse.FileMetadataDto"
+          },
+          "parseTimeMs": {
+            "type": "integer",
+            "description": "Time taken for parsing in milliseconds.",
+            "format": "int32"
+          },
+          "relationships": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseResponse.RelationshipDto"
+            },
+            "description": "Gets or Sets Relationships"
           }
-        }
+        },
+        "additionalProperties": false,
+        "description": "Complete parsing result for a single file."
       },
-      "ParsedEntity": {
-        "type": "object",
-        "description": "Represents a single parsed code entity (class, method, etc.).",
-        "required": [
-          "name",
-          "type",
-          "location"
+      "OLLAMACHAT.Generated.Models.ParseResponse.ParseResultDto.LanguageEnumDto": {
+        "enum": [
+          0
         ],
+        "type": "integer",
+        "description": "Gets or Sets Language",
+        "format": "int32"
+      },
+      "OLLAMACHAT.Generated.Models.ParseResponse.ParsedEntityDto": {
+        "required": [
+          "location",
+          "simpleName",
+          "type"
+        ],
+        "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "example": "GetUserAsync"
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "class",
-              "method",
-              "interface",
-              "import",
-              "property",
-              "enum",
-              "struct",
-              "namespace"
-            ],
-            "example": "method"
-          },
-          "location": {
-            "$ref": "#/components/schemas/Location"
-          },
           "children": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ParsedEntity"
-            }
+              "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseResponse.ParsedEntityDto"
+            },
+            "description": "Gets or Sets Children"
+          },
+          "attributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseResponse.AttributeDto"
+            },
+            "description": "Gets or Sets Attributes"
+          },
+          "usingStatementData": {
+            "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseResponse.UsingStatementDataDto"
+          },
+          "inheritance": {
+            "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseResponse.ParsedEntityInheritanceDto"
+          },
+          "location": {
+            "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseResponse.LocationDto"
           },
           "modifiers": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "example": [
-              "public",
-              "async"
-            ]
+            "description": "Модификаторы - private/static etc."
           },
-          "decorators": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Decorator"
-            }
-          },
-          "inheritance": {
-            "type": "object",
-            "properties": {
-              "baseClasses": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                },
-                "example": [
-                  "ControllerBase"
-                ]
-              },
-              "interfaces": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                },
-                "example": [
-                  "IUserService"
-                ]
-              }
-            }
-          },
-          "returnType": {
+          "simpleName": {
+            "minLength": 1,
             "type": "string",
-            "example": "Task<User>"
+            "description": "Gets or Sets SimpleName"
           },
           "parameters": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Parameter"
-            }
+              "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseResponse.ModelParameterDto"
+            },
+            "description": "Gets or Sets Parameters"
           },
-          "importData": {
-            "type": "object",
-            "properties": {
-              "source": {
-                "type": "string",
-                "example": "MyApp.Services"
-              }
-            }
-          }
-        }
-      },
-      "Relationship": {
-        "type": "object",
-        "description": "Represents a relationship between two entities.",
-        "required": [
-          "from",
-          "to",
-          "type"
-        ],
-        "properties": {
-          "from": {
+          "returnType": {
             "type": "string",
-            "description": "Name of the source entity.",
-            "example": "UserService"
+            "description": "Gets or Sets ReturnType"
           },
-          "to": {
+          "fullName": {
             "type": "string",
-            "description": "Name of the target entity.",
-            "example": "IUserRepository"
+            "description": "Gets or Sets FullName"
           },
           "type": {
-            "type": "string",
-            "enum": [
-              "inherits",
-              "implements",
-              "calls",
-              "references"
-            ],
-            "example": "implements"
-          },
-          "targetFile": {
-            "type": "string",
-            "description": "Relative path to the target file if the relationship is cross-file.",
-            "nullable": true,
-            "example": "src/Interfaces/IUserRepository.cs"
-          },
-          "location": {
-            "$ref": "#/components/schemas/Location"
+            "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseResponse.ParsedEntityDto.TypeEnumDto"
           }
-        }
+        },
+        "additionalProperties": false,
+        "description": "Represents a single parsed code entity (class, method, etc.)."
       },
-      "Location": {
-        "type": "object",
-        "required": [
-          "start",
-          "end"
+      "OLLAMACHAT.Generated.Models.ParseResponse.ParsedEntityDto.TypeEnumDto": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
         ],
-        "properties": {
-          "start": {
-            "$ref": "#/components/schemas/Position"
-          },
-          "end": {
-            "$ref": "#/components/schemas/Position"
-          }
-        }
+        "type": "integer",
+        "description": "Gets or Sets Type",
+        "format": "int32"
       },
-      "Position": {
+      "OLLAMACHAT.Generated.Models.ParseResponse.ParsedEntityInheritanceDto": {
         "type": "object",
         "properties": {
-          "line": {
-            "type": "integer",
-            "description": "1-based line number.",
-            "example": 12
-          },
-          "column": {
-            "type": "integer",
-            "description": "0-based column position.",
-            "example": 19
-          },
-          "index": {
-            "type": "integer",
-            "description": "0-based character index from the start of the file.",
-            "example": 156
-          }
-        }
-      },
-      "Decorator": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "example": "ApiController"
-          },
-          "arguments": {
+          "directBaseClasses": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "example": [
-              "\"api/[controller]\""
-            ]
+            "description": "Gets or Sets DirectBaseClasses"
+          },
+          "directInterfaces": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Gets or Sets DirectInterfaces"
+          },
+          "allBaseClasses": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Gets or Sets AllBaseClasses",
+            "nullable": true
+          },
+          "allInterfaces": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Gets or Sets AllInterfaces",
+            "nullable": true
           }
-        }
+        },
+        "additionalProperties": false,
+        "description": ""
       },
-      "Parameter": {
+      "OLLAMACHAT.Generated.Models.ParseResponse.PositionDto": {
         "type": "object",
         "properties": {
-          "name": {
+          "column": {
+            "type": "integer",
+            "description": "0-based column position.",
+            "format": "int32",
+            "nullable": true
+          },
+          "index": {
+            "type": "integer",
+            "description": "0-based character index from the start of the file.",
+            "format": "int32",
+            "nullable": true
+          },
+          "line": {
+            "type": "integer",
+            "description": "1-based line number.",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": ""
+      },
+      "OLLAMACHAT.Generated.Models.ParseResponse.RelationshipDto": {
+        "required": [
+          "fullNameFrom",
+          "fullNameTo",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "fullNameFrom": {
+            "minLength": 1,
             "type": "string",
-            "example": "userId"
+            "description": "Full name of the source entity."
+          },
+          "targetDefinitionFilePath": {
+            "type": "string",
+            "description": "Relative path to the target file if the relationship is cross-file."
+          },
+          "fullNameTo": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Full name of the target entity."
           },
           "type": {
-            "type": "string",
-            "example": "int"
-          },
-          "optional": {
-            "type": "boolean",
-            "default": false
-          },
-          "defaultValue": {
-            "type": "string",
-            "nullable": true
+            "$ref": "#/components/schemas/OLLAMACHAT.Generated.Models.ParseResponse.RelationshipDto.TypeEnumDto"
           }
-        }
+        },
+        "additionalProperties": false,
+        "description": "Represents a relationship between two entities."
       },
-      "ParseError": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "example": "CS0103: The name 'userRepo' does not exist in the current context"
-          },
-          "severity": {
-            "type": "string",
-            "enum": [
-              "error",
-              "warning",
-              "info"
-            ],
-            "example": "error"
-          },
-          "location": {
-            "$ref": "#/components/schemas/Location"
-          }
-        }
-      },
-      "FileMetadata": {
-        "type": "object",
-        "description": "High-level metadata about the parsed file.",
-        "properties": {
-          "loc": {
-            "type": "integer",
-            "description": "Lines of Code.",
-            "example": 245
-          },
-          "complexityScore": {
-            "type": "integer",
-            "description": "Aggregated cyclomatic complexity.",
-            "example": 8
-          },
-          "namespace": {
-            "type": "string",
-            "description": "The primary namespace of the file.",
-            "example": "MyApp.Services"
-          }
-        }
-      },
-      "ErrorResponse": {
-        "type": "object",
-        "required": [
-          "code",
-          "message"
+      "OLLAMACHAT.Generated.Models.ParseResponse.RelationshipDto.TypeEnumDto": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4
         ],
+        "type": "integer",
+        "description": "Gets or Sets Type",
+        "format": "int32"
+      },
+      "OLLAMACHAT.Generated.Models.ParseResponse.UsingStatementDataDto": {
+        "type": "object",
         "properties": {
-          "code": {
+          "source": {
             "type": "string",
-            "example": "INVALID_FILE_PATH"
-          },
-          "message": {
-            "type": "string",
-            "example": "File path does not exist or is outside the repository."
-          },
-          "details": {
-            "type": "string",
-            "nullable": true
+            "description": "Gets or Sets Source"
           }
-        }
+        },
+        "additionalProperties": false,
+        "description": ""
+      },
+      "OLLAMACHAT.Generated.Models.ResolveImportRequestDto": {
+        "required": [
+          "filePath",
+          "importPath",
+          "repoPath"
+        ],
+        "type": "object",
+        "properties": {
+          "filePath": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The path of the file containing the import."
+          },
+          "importPath": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The import/using path to resolve."
+          },
+          "repoPath": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Absolute path to the repository root."
+          }
+        },
+        "additionalProperties": false,
+        "description": ""
       }
     }
-  },
-  "tags": [
-    {
-      "name": "C# Parser",
-      "description": "Endpoints for C# code analysis and parsing."
-    }
-  ]
+  }
 }
