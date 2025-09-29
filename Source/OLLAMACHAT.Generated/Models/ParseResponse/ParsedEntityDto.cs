@@ -32,10 +32,10 @@ public class ParsedEntityDto : IEquatable<ParsedEntityDto>
         InterfaceEnum = 2,
 
         /// <summary>
-        /// Enum ImportEnum for import
+        /// Enum UsingStatementEnum for import
         /// </summary>
         [EnumMember(Value = "import")]
-        ImportEnum = 3,
+        UsingStatementEnum = 3,
 
         /// <summary>
         /// Enum PropertyEnum for property
@@ -59,7 +59,13 @@ public class ParsedEntityDto : IEquatable<ParsedEntityDto>
         /// Enum NamespaceEnum for namespace
         /// </summary>
         [EnumMember(Value = "namespace")]
-        NamespaceEnum = 7
+        NamespaceEnum = 7,
+
+        /// <summary>
+        /// Enum UnityEventEnum for unityEvent
+        /// </summary>
+        [EnumMember(Value = "unityEvent")]
+        UnityEventEnum = 8
     }
 
     /// <summary>
@@ -69,16 +75,16 @@ public class ParsedEntityDto : IEquatable<ParsedEntityDto>
     public List<ParsedEntityDto> Children { get; set; }
 
     /// <summary>
-    /// Gets or Sets Decorators
+    /// Gets or Sets Attributes
     /// </summary>
-    [DataMember(Name = "decorators")]
-    public List<DecoratorDto> Decorators { get; set; }
+    [DataMember(Name = "attributes")]
+    public List<AttributeDto> Attributes { get; set; }
 
     /// <summary>
-    /// Gets or Sets ImportData
+    /// Gets or Sets UsingStatementData
     /// </summary>
     [DataMember(Name = "importData")]
-    public ParsedEntityImportDataDto ImportData { get; set; }
+    public UsingStatementDataDto UsingStatementData { get; set; }
 
     /// <summary>
     /// Gets or Sets Inheritance
@@ -94,17 +100,17 @@ public class ParsedEntityDto : IEquatable<ParsedEntityDto>
     public LocationDto Location { get; set; }
 
     /// <summary>
-    /// Gets or Sets Modifiers
+    /// Модификаторы - private/static etc.
     /// </summary>
     [DataMember(Name = "modifiers")]
     public List<string> Modifiers { get; set; }
 
     /// <summary>
-    /// Gets or Sets Name
+    /// Gets or Sets SimpleName
     /// </summary>
     [Required]
-    [DataMember(Name = "name")]
-    public string Name { get; set; }
+    [DataMember(Name = "simpleName")]
+    public string SimpleName { get; set; }
 
     /// <summary>
     /// Gets or Sets Parameters
@@ -117,6 +123,12 @@ public class ParsedEntityDto : IEquatable<ParsedEntityDto>
     /// </summary>
     [DataMember(Name = "returnType")]
     public string ReturnType { get; set; }
+
+    /// <summary>
+    /// Gets or Sets FullName
+    /// </summary>
+    [DataMember(Name = "fullName")]
+    public string FullName { get; set; }
 
     /// <summary>
     /// Gets or Sets Type
@@ -164,9 +176,14 @@ public class ParsedEntityDto : IEquatable<ParsedEntityDto>
 
         return
             (
-                Name == other.Name ||
-                Name != null &&
-                Name.Equals(other.Name)
+                SimpleName == other.SimpleName ||
+                SimpleName != null &&
+                SimpleName.Equals(other.SimpleName)
+            ) &&
+            (
+                FullName == other.FullName ||
+                FullName != null &&
+                FullName.Equals(other.FullName)
             ) &&
             (
                 Type == other.Type ||
@@ -189,9 +206,9 @@ public class ParsedEntityDto : IEquatable<ParsedEntityDto>
                 Modifiers.SequenceEqual(other.Modifiers)
             ) &&
             (
-                Decorators == other.Decorators ||
-                Decorators != null &&
-                Decorators.SequenceEqual(other.Decorators)
+                Attributes == other.Attributes ||
+                Attributes != null &&
+                Attributes.SequenceEqual(other.Attributes)
             ) &&
             (
                 Inheritance == other.Inheritance ||
@@ -209,9 +226,9 @@ public class ParsedEntityDto : IEquatable<ParsedEntityDto>
                 Parameters.SequenceEqual(other.Parameters)
             ) &&
             (
-                ImportData == other.ImportData ||
-                ImportData != null &&
-                ImportData.Equals(other.ImportData)
+                UsingStatementData == other.UsingStatementData ||
+                UsingStatementData != null &&
+                UsingStatementData.Equals(other.UsingStatementData)
             );
     }
 
@@ -225,9 +242,14 @@ public class ParsedEntityDto : IEquatable<ParsedEntityDto>
         {
             var hashCode = 41;
             // Suitable nullity checks etc, of course :)
-            if (Name != null)
+            if (SimpleName != null)
             {
-                hashCode = hashCode * 59 + Name.GetHashCode();
+                hashCode = hashCode * 59 + SimpleName.GetHashCode();
+            }
+
+            if (FullName != null)
+            {
+                hashCode = hashCode * 59 + FullName.GetHashCode();
             }
 
             if (Type != null)
@@ -250,9 +272,9 @@ public class ParsedEntityDto : IEquatable<ParsedEntityDto>
                 hashCode = hashCode * 59 + Modifiers.GetHashCode();
             }
 
-            if (Decorators != null)
+            if (Attributes != null)
             {
-                hashCode = hashCode * 59 + Decorators.GetHashCode();
+                hashCode = hashCode * 59 + Attributes.GetHashCode();
             }
 
             if (Inheritance != null)
@@ -270,9 +292,9 @@ public class ParsedEntityDto : IEquatable<ParsedEntityDto>
                 hashCode = hashCode * 59 + Parameters.GetHashCode();
             }
 
-            if (ImportData != null)
+            if (UsingStatementData != null)
             {
-                hashCode = hashCode * 59 + ImportData.GetHashCode();
+                hashCode = hashCode * 59 + UsingStatementData.GetHashCode();
             }
 
             return hashCode;
@@ -293,16 +315,17 @@ public class ParsedEntityDto : IEquatable<ParsedEntityDto>
     {
         var sb = new StringBuilder();
         sb.Append("class ParsedEntity {\n");
-        sb.Append("  Name: ").Append(Name).Append("\n");
+        sb.Append("  SimpleName: ").Append(SimpleName).Append("\n");
+        sb.Append("  FullName: ").Append(FullName).Append("\n");
         sb.Append("  Type: ").Append(Type).Append("\n");
         sb.Append("  Location: ").Append(Location).Append("\n");
         sb.Append("  Children: ").Append(Children).Append("\n");
         sb.Append("  Modifiers: ").Append(Modifiers).Append("\n");
-        sb.Append("  Decorators: ").Append(Decorators).Append("\n");
+        sb.Append("  Attributes: ").Append(Attributes).Append("\n");
         sb.Append("  Inheritance: ").Append(Inheritance).Append("\n");
         sb.Append("  ReturnType: ").Append(ReturnType).Append("\n");
         sb.Append("  Parameters: ").Append(Parameters).Append("\n");
-        sb.Append("  ImportData: ").Append(ImportData).Append("\n");
+        sb.Append("  UsingStatementData: ").Append(UsingStatementData).Append("\n");
         sb.Append("}\n");
         return sb.ToString();
     }

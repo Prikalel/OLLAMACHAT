@@ -21,7 +21,17 @@ public enum RelationshipType
     Calls,
 
     /// <summary>
-    /// Ссылка.
+    /// Является базовым для.
     /// </summary>
-    References
+    IsBaseFor,
+
+    /// <summary>
+    /// Подписывается на.
+    /// </summary>
+    SubscribesTo,
+
+    /// <summary>
+    /// Наблюдается.
+    /// </summary>
+    ObservedBy
 }

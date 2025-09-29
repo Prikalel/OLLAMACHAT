@@ -6,16 +6,28 @@ namespace OLLAMACHAT.Generated.Models.ParseResponse;
 public class ParsedEntityInheritanceDto : IEquatable<ParsedEntityInheritanceDto>
 {
     /// <summary>
-    /// Gets or Sets BaseClasses
+    /// Gets or Sets DirectBaseClasses
     /// </summary>
-    [DataMember(Name = "baseClasses")]
-    public List<string> BaseClasses { get; set; }
+    [DataMember(Name = "directBaseClasses")]
+    public List<string> DirectBaseClasses { get; set; }
 
     /// <summary>
-    /// Gets or Sets Interfaces
+    /// Gets or Sets DirectInterfaces
     /// </summary>
-    [DataMember(Name = "interfaces")]
-    public List<string> Interfaces { get; set; }
+    [DataMember(Name = "directInterfaces")]
+    public List<string> DirectInterfaces { get; set; }
+
+    /// <summary>
+    /// Gets or Sets AllBaseClasses
+    /// </summary>
+    [DataMember(Name = "allBaseClasses")]
+    public List<string>? AllBaseClasses { get; set; }
+
+    /// <summary>
+    /// Gets or Sets AllInterfaces
+    /// </summary>
+    [DataMember(Name = "allInterfaces")]
+    public List<string>? AllInterfaces { get; set; }
 
     /// <summary>
     /// Returns true if objects are equal
@@ -56,14 +68,24 @@ public class ParsedEntityInheritanceDto : IEquatable<ParsedEntityInheritanceDto>
 
         return
             (
-                BaseClasses == other.BaseClasses ||
-                BaseClasses != null &&
-                BaseClasses.SequenceEqual(other.BaseClasses)
+                DirectBaseClasses == other.DirectBaseClasses ||
+                DirectBaseClasses != null &&
+                DirectBaseClasses.SequenceEqual(other.DirectBaseClasses)
             ) &&
             (
-                Interfaces == other.Interfaces ||
-                Interfaces != null &&
-                Interfaces.SequenceEqual(other.Interfaces)
+                DirectInterfaces == other.DirectInterfaces ||
+                DirectInterfaces != null &&
+                DirectInterfaces.SequenceEqual(other.DirectInterfaces)
+            ) &&
+            (
+                AllBaseClasses == other.AllBaseClasses ||
+                AllBaseClasses != null &&
+                AllBaseClasses.SequenceEqual(other.AllBaseClasses)
+            ) &&
+            (
+                AllInterfaces == other.AllInterfaces ||
+                AllInterfaces != null &&
+                AllInterfaces.SequenceEqual(other.AllInterfaces)
             );
     }
 
@@ -77,14 +99,24 @@ public class ParsedEntityInheritanceDto : IEquatable<ParsedEntityInheritanceDto>
         {
             var hashCode = 41;
             // Suitable nullity checks etc, of course :)
-            if (BaseClasses != null)
+            if (DirectBaseClasses != null)
             {
-                hashCode = hashCode * 59 + BaseClasses.GetHashCode();
+                hashCode = hashCode * 59 + DirectBaseClasses.GetHashCode();
             }
 
-            if (Interfaces != null)
+            if (DirectInterfaces != null)
             {
-                hashCode = hashCode * 59 + Interfaces.GetHashCode();
+                hashCode = hashCode * 59 + DirectInterfaces.GetHashCode();
+            }
+
+            if (AllBaseClasses != null)
+            {
+                hashCode = hashCode * 59 + AllBaseClasses.GetHashCode();
+            }
+
+            if (AllInterfaces != null)
+            {
+                hashCode = hashCode * 59 + AllInterfaces.GetHashCode();
             }
 
             return hashCode;
@@ -105,8 +137,10 @@ public class ParsedEntityInheritanceDto : IEquatable<ParsedEntityInheritanceDto>
     {
         var sb = new StringBuilder();
         sb.Append("class ParsedEntityInheritance {\n");
-        sb.Append("  BaseClasses: ").Append(BaseClasses).Append("\n");
-        sb.Append("  Interfaces: ").Append(Interfaces).Append("\n");
+        sb.Append("  DirectBaseClasses: ").Append(DirectBaseClasses).Append("\n");
+        sb.Append("  DirectInterfaces: ").Append(DirectInterfaces).Append("\n");
+        sb.Append("  AllBaseClasses: ").Append(AllBaseClasses).Append("\n");
+        sb.Append("  AllInterfaces: ").Append(AllInterfaces).Append("\n");
         sb.Append("}\n");
         return sb.ToString();
     }

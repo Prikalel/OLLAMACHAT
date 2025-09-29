@@ -81,7 +81,7 @@ public class EntityService(
             var entityType = DetermineEntityType(symbol);
             var location = mapperService.MapLocation(symbol.Locations.FirstOrDefault());
             var modifiers = mapperService.MapModifiers(symbol).ToList();
-            var decorators = mapperService.MapAttributes(symbol);
+            var attributes = mapperService.MapAttributes(symbol);
             var inheritance = symbol is INamedTypeSymbol namedTypeSymbol ? mapperService.MapInheritance(namedTypeSymbol) : null;
             var returnType = mapperService.MapReturnType(symbol);
             var parameters = symbol is IMethodSymbol methodSymbol ? mapperService.MapParameters(methodSymbol) : null;
@@ -90,16 +90,17 @@ public class EntityService(
             var childEntities = await ExtractChildEntitiesAsync(symbol, semanticModel);
 
             var entity = new ParsedEntity(
-                Name: symbol.Name ?? string.Empty,
+                SimpleName: symbol.Name ?? string.Empty,
+                FullName: String.Empty,
                 Type: entityType,
                 Location: location,
                 Children: childEntities.Any() ? childEntities : null,
                 Modifiers: modifiers.Any() ? modifiers : null,
-                Decorators: decorators.Any() ? decorators : null,
+                Attributes: attributes.Any() ? attributes : null,
                 Inheritance: inheritance,
                 ReturnType: returnType,
                 Parameters: parameters,
-                ImportData: importData
+                UsingStatementData: importData
             );
 
             logger.LogInformation("Successfully extracted entity: {SymbolName} of type: {EntityType}", symbol.Name, entityType);
@@ -152,9 +153,8 @@ public class EntityService(
         }
     }
 
-    private ParsedEntityType DetermineEntityType(ISymbol symbol)
-    {
-        return symbol switch
+    private ParsedEntityType DetermineEntityType(ISymbol symbol) =>
+        symbol switch
         {
             INamespaceSymbol => ParsedEntityType.Namespace,
             INamedTypeSymbol namedTypeSymbol when namedTypeSymbol.TypeKind == TypeKind.Class => ParsedEntityType.Class,
@@ -163,7 +163,7 @@ public class EntityService(
             INamedTypeSymbol namedTypeSymbol when namedTypeSymbol.TypeKind == TypeKind.Struct => ParsedEntityType.Struct,
             IMethodSymbol => ParsedEntityType.Method,
             IPropertySymbol => ParsedEntityType.Property,
+            IFieldSymbol => ParsedEntityType.Property,
             _ => ParsedEntityType.Class
         };
-    }
 }

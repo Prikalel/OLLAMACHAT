@@ -1,3 +1,4 @@
+using Attribute = VelikiyPrikalel.OLLAMACHAT.Application.Models.Attribute;
 using Location = Microsoft.CodeAnalysis.Location;
 using LocationApplication = VelikiyPrikalel.OLLAMACHAT.Application.Models.Location;
 
@@ -10,8 +11,8 @@ public interface IMapperService
     ParsedEntityInheritance MapInheritance(INamedTypeSymbol typeSymbol);
     string? MapReturnType(ISymbol symbol);
     List<ModelParameter> MapParameters(IMethodSymbol methodSymbol);
-    ParsedEntityImportData MapImportData(ISymbol symbol);
-    List<Decorator> MapAttributes(ISymbol symbol);
+    UsingStatementData MapImportData(ISymbol symbol);
+    List<Attribute> MapAttributes(ISymbol symbol);
     ParseErrorSeverity MapSeverity(DiagnosticSeverity diagnosticSeverity);
     LocationApplication MapErrorLocation(Location location);
 }

@@ -13,7 +13,7 @@ public class RelationshipService(ILogger<RelationshipService> logger) : IRelatio
             var syntaxTree = await document.GetSyntaxTreeAsync();
             var root = await syntaxTree.GetRootAsync();
 
-            var entityDict = entities.ToDictionary(e => e.Name, e => e);
+            var entityDict = entities.ToDictionary(e => e.SimpleName, e => e);
 
             foreach (var entity in entities)
             {
@@ -41,19 +41,18 @@ public class RelationshipService(ILogger<RelationshipService> logger) : IRelatio
 
     private void AnalyzeInheritanceRelationships(ParsedEntity entity, Dictionary<string, ParsedEntity> entityDict, List<Relationship> relationships)
     {
-        if (entity.Inheritance?.BaseClasses == null)
+        if (entity.Inheritance?.DirectBaseClasses == null)
             return;
 
-        foreach (var baseClass in entity.Inheritance.BaseClasses)
+        foreach (var baseClass in entity.Inheritance.AllBaseClasses)
         {
             if (entityDict.TryGetValue(baseClass, out var baseEntity))
             {
                 relationships.Add(new Relationship(
-                    From: entity.Name,
-                    To: baseEntity.Name,
+                    FullNameFrom: entity.FullName,
+                    FullNameTo: baseEntity.FullName,
                     Type: RelationshipType.Inherits,
-                    TargetFile: null,
-                    Location: entity.Location
+                    TargetDefinitionFilePath: null
                 ));
             }
         }
@@ -61,7 +60,7 @@ public class RelationshipService(ILogger<RelationshipService> logger) : IRelatio
 
     private void AnalyzeInterfaceImplementationRelationships(ParsedEntity entity, Dictionary<string, ParsedEntity> entityDict, List<Relationship> relationships)
     {
-        if (entity.Inheritance?.Interfaces == null)
+        if (entity.Inheritance?.DirectInterfaces == null)
             return;
 
         foreach (var interfaceName in entity.Inheritance.Interfaces)

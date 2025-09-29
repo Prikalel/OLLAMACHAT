@@ -20,52 +20,52 @@ public class RelationshipDto : IEquatable<RelationshipDto>
         InheritsEnum = 0,
 
         /// <summary>
-        /// Enum ImplementsEnum for implements
-        /// </summary>
-        [EnumMember(Value = "implements")]
-        ImplementsEnum = 1,
-
-        /// <summary>
         /// Enum CallsEnum for calls
         /// </summary>
         [EnumMember(Value = "calls")]
-        CallsEnum = 2,
+        CallsEnum = 1,
 
         /// <summary>
-        /// Enum ReferencesEnum for references
+        /// Enum IsBaseForEnum for isBaseFor
         /// </summary>
-        [EnumMember(Value = "references")]
-        ReferencesEnum = 3
+        [EnumMember(Value = "isBaseFor")]
+        IsBaseForEnum = 2,
+
+        /// <summary>
+        /// Enum SubscribesToEnum for subscribesTo
+        /// </summary>
+        [EnumMember(Value = "subscribesTo")]
+        SubscribesToEnum = 3,
+
+        /// <summary>
+        /// Enum ObservedByEnum for observedBy
+        /// </summary>
+        [EnumMember(Value = "observedBy")]
+        ObservedByEnum = 4
     }
 
     /// <summary>
-    /// Name of the source entity.
+    /// Full name of the source entity.
     /// </summary>
-    /// <value>Name of the source entity.</value>
+    /// <value>Full name of the source entity.</value>
     [Required]
-    [DataMember(Name = "from")]
-    public string From { get; set; }
-
-    /// <summary>
-    /// Gets or Sets Location
-    /// </summary>
-    [DataMember(Name = "location")]
-    public LocationDto Location { get; set; }
+    [DataMember(Name = "fullNameFrom")]
+    public string FullNameFrom { get; set; }
 
     /// <summary>
     /// Relative path to the target file if the relationship is cross-file.
     /// </summary>
     /// <value>Relative path to the target file if the relationship is cross-file.</value>
-    [DataMember(Name = "targetFile")]
-    public string TargetFile { get; set; }
+    [DataMember(Name = "targetDefinitionFilePath")]
+    public string TargetDefinitionFilePath { get; set; }
 
     /// <summary>
-    /// Name of the target entity.
+    /// Full name of the target entity.
     /// </summary>
-    /// <value>Name of the target entity.</value>
+    /// <value>Full name of the target entity.</value>
     [Required]
-    [DataMember(Name = "to")]
-    public string To { get; set; }
+    [DataMember(Name = "fullNameTo")]
+    public string FullNameTo { get; set; }
 
     /// <summary>
     /// Gets or Sets Type
@@ -113,14 +113,14 @@ public class RelationshipDto : IEquatable<RelationshipDto>
 
         return
             (
-                From == other.From ||
-                From != null &&
-                From.Equals(other.From)
+                FullNameFrom == other.FullNameFrom ||
+                FullNameFrom != null &&
+                FullNameFrom.Equals(other.FullNameFrom)
             ) &&
             (
-                To == other.To ||
-                To != null &&
-                To.Equals(other.To)
+                FullNameTo == other.FullNameTo ||
+                FullNameTo != null &&
+                FullNameTo.Equals(other.FullNameTo)
             ) &&
             (
                 Type == other.Type ||
@@ -128,14 +128,9 @@ public class RelationshipDto : IEquatable<RelationshipDto>
                 Type.Equals(other.Type)
             ) &&
             (
-                TargetFile == other.TargetFile ||
-                TargetFile != null &&
-                TargetFile.Equals(other.TargetFile)
-            ) &&
-            (
-                Location == other.Location ||
-                Location != null &&
-                Location.Equals(other.Location)
+                TargetDefinitionFilePath == other.TargetDefinitionFilePath ||
+                TargetDefinitionFilePath != null &&
+                TargetDefinitionFilePath.Equals(other.TargetDefinitionFilePath)
             );
     }
 
@@ -149,14 +144,14 @@ public class RelationshipDto : IEquatable<RelationshipDto>
         {
             var hashCode = 41;
             // Suitable nullity checks etc, of course :)
-            if (From != null)
+            if (FullNameFrom != null)
             {
-                hashCode = hashCode * 59 + From.GetHashCode();
+                hashCode = hashCode * 59 + FullNameFrom.GetHashCode();
             }
 
-            if (To != null)
+            if (FullNameTo != null)
             {
-                hashCode = hashCode * 59 + To.GetHashCode();
+                hashCode = hashCode * 59 + FullNameTo.GetHashCode();
             }
 
             if (Type != null)
@@ -164,14 +159,9 @@ public class RelationshipDto : IEquatable<RelationshipDto>
                 hashCode = hashCode * 59 + Type.GetHashCode();
             }
 
-            if (TargetFile != null)
+            if (TargetDefinitionFilePath != null)
             {
-                hashCode = hashCode * 59 + TargetFile.GetHashCode();
-            }
-
-            if (Location != null)
-            {
-                hashCode = hashCode * 59 + Location.GetHashCode();
+                hashCode = hashCode * 59 + TargetDefinitionFilePath.GetHashCode();
             }
 
             return hashCode;
@@ -192,11 +182,10 @@ public class RelationshipDto : IEquatable<RelationshipDto>
     {
         var sb = new StringBuilder();
         sb.Append("class Relationship {\n");
-        sb.Append("  From: ").Append(From).Append("\n");
-        sb.Append("  To: ").Append(To).Append("\n");
+        sb.Append("  FullNameFrom: ").Append(FullNameFrom).Append("\n");
+        sb.Append("  FullNameTo: ").Append(FullNameTo).Append("\n");
         sb.Append("  Type: ").Append(Type).Append("\n");
-        sb.Append("  TargetFile: ").Append(TargetFile).Append("\n");
-        sb.Append("  Location: ").Append(Location).Append("\n");
+        sb.Append("  TargetDefinitionFilePath: ").Append(TargetDefinitionFilePath).Append("\n");
         sb.Append("}\n");
         return sb.ToString();
     }

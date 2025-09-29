@@ -3,7 +3,7 @@ namespace VelikiyPrikalel.OLLAMACHAT.Application.Models;
 /// <summary>
 /// Представляет опции конфигурации для выборочного парсинга.
 /// </summary>
-/// <param name="ExtractReferences">Извлекать ссылки.</param>
-/// <param name="ExtractInheritance">Извлекать информацию о наследовании.</param>
+/// <param name="ExtractFullExtractInheritance">Извлекать полную информацию о наследовании.</param>
 /// <param name="MaxDepth">Максимальная глубина.</param>
-public record ParserOptions(bool? ExtractReferences, bool? ExtractInheritance, int? MaxDepth);
+/// <param name="ExtractUsingStatementData">Извлекать данные о using-директивах.</param>
+public record ParserOptions(bool? ExtractFullExtractInheritance, int? MaxDepth, bool? ExtractUsingStatementData);

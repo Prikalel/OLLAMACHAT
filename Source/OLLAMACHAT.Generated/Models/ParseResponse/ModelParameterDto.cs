@@ -18,16 +18,16 @@ public class ModelParameterDto : IEquatable<ModelParameterDto>
     public string Name { get; set; }
 
     /// <summary>
-    /// Gets or Sets Optional
+    /// Gets or Sets Nullable
     /// </summary>
-    [DataMember(Name = "optional")]
-    public bool? Optional { get; set; }
+    [DataMember(Name = "nullable")]
+    public bool? Nullable { get; set; }
 
     /// <summary>
-    /// Gets or Sets Type
+    /// Gets or Sets FullTypeName
     /// </summary>
-    [DataMember(Name = "type")]
-    public string Type { get; set; }
+    [DataMember(Name = "fullTypeName")]
+    public string FullTypeName { get; set; }
 
     /// <summary>
     /// Returns true if objects are equal
@@ -73,14 +73,14 @@ public class ModelParameterDto : IEquatable<ModelParameterDto>
                 Name.Equals(other.Name)
             ) &&
             (
-                Type == other.Type ||
-                Type != null &&
-                Type.Equals(other.Type)
+                FullTypeName == other.FullTypeName ||
+                FullTypeName != null &&
+                FullTypeName.Equals(other.FullTypeName)
             ) &&
             (
-                Optional == other.Optional ||
-                Optional != null &&
-                Optional.Equals(other.Optional)
+                Nullable == other.Nullable ||
+                Nullable != null &&
+                Nullable.Equals(other.Nullable)
             ) &&
             (
                 DefaultValue == other.DefaultValue ||
@@ -104,14 +104,14 @@ public class ModelParameterDto : IEquatable<ModelParameterDto>
                 hashCode = hashCode * 59 + Name.GetHashCode();
             }
 
-            if (Type != null)
+            if (FullTypeName != null)
             {
-                hashCode = hashCode * 59 + Type.GetHashCode();
+                hashCode = hashCode * 59 + FullTypeName.GetHashCode();
             }
 
-            if (Optional != null)
+            if (Nullable != null)
             {
-                hashCode = hashCode * 59 + Optional.GetHashCode();
+                hashCode = hashCode * 59 + Nullable.GetHashCode();
             }
 
             if (DefaultValue != null)
@@ -138,8 +138,8 @@ public class ModelParameterDto : IEquatable<ModelParameterDto>
         var sb = new StringBuilder();
         sb.Append("class ModelParameter {\n");
         sb.Append("  Name: ").Append(Name).Append("\n");
-        sb.Append("  Type: ").Append(Type).Append("\n");
-        sb.Append("  Optional: ").Append(Optional).Append("\n");
+        sb.Append("  FullTypeName: ").Append(FullTypeName).Append("\n");
+        sb.Append("  Nullable: ").Append(Nullable).Append("\n");
         sb.Append("  DefaultValue: ").Append(DefaultValue).Append("\n");
         sb.Append("}\n");
         return sb.ToString();

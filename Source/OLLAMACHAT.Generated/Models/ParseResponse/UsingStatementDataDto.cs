@@ -3,7 +3,7 @@ namespace OLLAMACHAT.Generated.Models.ParseResponse;
 /// <summary>
 /// </summary>
 [DataContract]
-public class ParsedEntityImportDataDto : IEquatable<ParsedEntityImportDataDto>
+public class UsingStatementDataDto : IEquatable<UsingStatementDataDto>
 {
     /// <summary>
     /// Gets or Sets Source
@@ -28,15 +28,15 @@ public class ParsedEntityImportDataDto : IEquatable<ParsedEntityImportDataDto>
             return true;
         }
 
-        return obj.GetType() == GetType() && Equals((ParsedEntityImportDataDto)obj);
+        return obj.GetType() == GetType() && Equals((UsingStatementDataDto)obj);
     }
 
     /// <summary>
-    /// Returns true if ParsedEntityImportData instances are equal
+    /// Returns true if UsingStatementData instances are equal
     /// </summary>
-    /// <param name="other">Instance of ParsedEntityImportData to be compared</param>
+    /// <param name="other">Instance of UsingStatementData to be compared</param>
     /// <returns>Boolean</returns>
-    public bool Equals(ParsedEntityImportDataDto other)
+    public bool Equals(UsingStatementDataDto other)
     {
         if (ReferenceEquals(null, other))
         {
@@ -86,7 +86,7 @@ public class ParsedEntityImportDataDto : IEquatable<ParsedEntityImportDataDto>
     public override string ToString()
     {
         var sb = new StringBuilder();
-        sb.Append("class ParsedEntityImportData {\n");
+        sb.Append("class UsingStatementData {\n");
         sb.Append("  Source: ").Append(Source).Append("\n");
         sb.Append("}\n");
         return sb.ToString();
@@ -96,12 +96,12 @@ public class ParsedEntityImportDataDto : IEquatable<ParsedEntityImportDataDto>
 
 #pragma warning disable 1591
 
-    public static bool operator ==(ParsedEntityImportDataDto left, ParsedEntityImportDataDto right)
+    public static bool operator ==(UsingStatementDataDto left, UsingStatementDataDto right)
     {
         return Equals(left, right);
     }
 
-    public static bool operator !=(ParsedEntityImportDataDto left, ParsedEntityImportDataDto right)
+    public static bool operator !=(UsingStatementDataDto left, UsingStatementDataDto right)
     {
         return !Equals(left, right);
     }

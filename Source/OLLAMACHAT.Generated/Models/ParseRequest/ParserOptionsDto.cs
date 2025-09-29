@@ -7,16 +7,16 @@ namespace OLLAMACHAT.Generated.Models.ParseRequest;
 public class ParserOptionsDto : IEquatable<ParserOptionsDto>
 {
     /// <summary>
-    /// Gets or Sets ExtractInheritance
+    /// Gets or Sets ExtractFullExtractInheritance
     /// </summary>
-    [DataMember(Name = "extractInheritance")]
-    public bool? ExtractInheritance { get; set; }
+    [DataMember(Name = "extractFullExtractInheritance")]
+    public bool? ExtractFullExtractInheritance { get; set; }
 
     /// <summary>
-    /// Gets or Sets ExtractReferences
+    /// Gets or Sets ExtractUsingStatementData
     /// </summary>
-    [DataMember(Name = "extractReferences")]
-    public bool? ExtractReferences { get; set; }
+    [DataMember(Name = "extractUsingStatementData")]
+    public bool? ExtractUsingStatementData { get; set; }
 
     /// <summary>
     /// Gets or Sets MaxDepth
@@ -63,14 +63,14 @@ public class ParserOptionsDto : IEquatable<ParserOptionsDto>
 
         return
             (
-                ExtractReferences == other.ExtractReferences ||
-                ExtractReferences != null &&
-                ExtractReferences.Equals(other.ExtractReferences)
+                ExtractFullExtractInheritance == other.ExtractFullExtractInheritance ||
+                ExtractFullExtractInheritance != null &&
+                ExtractFullExtractInheritance.Equals(other.ExtractFullExtractInheritance)
             ) &&
             (
-                ExtractInheritance == other.ExtractInheritance ||
-                ExtractInheritance != null &&
-                ExtractInheritance.Equals(other.ExtractInheritance)
+                ExtractUsingStatementData == other.ExtractUsingStatementData ||
+                ExtractUsingStatementData != null &&
+                ExtractUsingStatementData.Equals(other.ExtractUsingStatementData)
             ) &&
             (
                 MaxDepth == other.MaxDepth ||
@@ -89,14 +89,14 @@ public class ParserOptionsDto : IEquatable<ParserOptionsDto>
         {
             var hashCode = 41;
             // Suitable nullity checks etc, of course :)
-            if (ExtractReferences != null)
+            if (ExtractFullExtractInheritance != null)
             {
-                hashCode = hashCode * 59 + ExtractReferences.GetHashCode();
+                hashCode = hashCode * 59 + ExtractFullExtractInheritance.GetHashCode();
             }
 
-            if (ExtractInheritance != null)
+            if (ExtractUsingStatementData != null)
             {
-                hashCode = hashCode * 59 + ExtractInheritance.GetHashCode();
+                hashCode = hashCode * 59 + ExtractUsingStatementData.GetHashCode();
             }
 
             if (MaxDepth != null)
@@ -122,8 +122,8 @@ public class ParserOptionsDto : IEquatable<ParserOptionsDto>
     {
         var sb = new StringBuilder();
         sb.Append("class ParserOptions {\n");
-        sb.Append("  ExtractReferences: ").Append(ExtractReferences).Append("\n");
-        sb.Append("  ExtractInheritance: ").Append(ExtractInheritance).Append("\n");
+        sb.Append("  ExtractFullExtractInheritance: ").Append(ExtractFullExtractInheritance).Append("\n");
+        sb.Append("  ExtractUsingStatementData: ").Append(ExtractUsingStatementData).Append("\n");
         sb.Append("  MaxDepth: ").Append(MaxDepth).Append("\n");
         sb.Append("}\n");
         return sb.ToString();

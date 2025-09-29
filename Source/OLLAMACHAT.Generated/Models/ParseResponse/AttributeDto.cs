@@ -3,7 +3,7 @@ namespace OLLAMACHAT.Generated.Models.ParseResponse;
 /// <summary>
 /// </summary>
 [DataContract]
-public class DecoratorDto : IEquatable<DecoratorDto>
+public class AttributeDto : IEquatable<AttributeDto>
 {
     /// <summary>
     /// Gets or Sets Arguments
@@ -34,15 +34,15 @@ public class DecoratorDto : IEquatable<DecoratorDto>
             return true;
         }
 
-        return obj.GetType() == GetType() && Equals((DecoratorDto)obj);
+        return obj.GetType() == GetType() && Equals((AttributeDto)obj);
     }
 
     /// <summary>
-    /// Returns true if Decorator instances are equal
+    /// Returns true if Attribute instances are equal
     /// </summary>
-    /// <param name="other">Instance of Decorator to be compared</param>
+    /// <param name="other">Instance of Attribute to be compared</param>
     /// <returns>Boolean</returns>
-    public bool Equals(DecoratorDto other)
+    public bool Equals(AttributeDto other)
     {
         if (ReferenceEquals(null, other))
         {
@@ -104,7 +104,7 @@ public class DecoratorDto : IEquatable<DecoratorDto>
     public override string ToString()
     {
         var sb = new StringBuilder();
-        sb.Append("class Decorator {\n");
+        sb.Append("class Attribute {\n");
         sb.Append("  Name: ").Append(Name).Append("\n");
         sb.Append("  Arguments: ").Append(Arguments).Append("\n");
         sb.Append("}\n");
@@ -115,12 +115,12 @@ public class DecoratorDto : IEquatable<DecoratorDto>
 
 #pragma warning disable 1591
 
-    public static bool operator ==(DecoratorDto left, DecoratorDto right)
+    public static bool operator ==(AttributeDto left, AttributeDto right)
     {
         return Equals(left, right);
     }
 
-    public static bool operator !=(DecoratorDto left, DecoratorDto right)
+    public static bool operator !=(AttributeDto left, AttributeDto right)
     {
         return !Equals(left, right);
     }

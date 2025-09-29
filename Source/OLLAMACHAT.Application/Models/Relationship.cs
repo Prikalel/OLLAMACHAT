@@ -3,15 +3,13 @@ namespace VelikiyPrikalel.OLLAMACHAT.Application.Models;
 /// <summary>
 /// Представляет отношение между двумя сущностями.
 /// </summary>
-/// <param name="From">Имя исходной сущности.</param>
-/// <param name="To">Имя целевой сущности.</param>
+/// <param name="FullNameFrom">Полное имя исходной сущности.</param>
+/// <param name="FullNameTo">Полное имя целевой сущности.</param>
 /// <param name="Type">Тип отношения.</param>
-/// <param name="TargetFile">Относительный путь к целевому файлу, если отношение межфайловое.</param>
-/// <param name="Location">Расположение отношения в коде.</param>
+/// <param name="TargetDefinitionFilePath">Относительный путь к целевому файлу, если отношение межфайловое.</param>
 public record Relationship(
-    string From,
-    string To,
+    string FullNameFrom,
+    string FullNameTo,
     RelationshipType Type,
-    string? TargetFile,
-    Location? Location
+    string? TargetDefinitionFilePath
 );

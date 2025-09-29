@@ -21,9 +21,9 @@ public enum ParsedEntityType
     Interface,
 
     /// <summary>
-    /// Импорт.
+    /// Using-директива.
     /// </summary>
-    Import,
+    UsingStatement,
 
     /// <summary>
     /// Свойство или поле.
@@ -43,5 +43,10 @@ public enum ParsedEntityType
     /// <summary>
     /// Пространство имен.
     /// </summary>
-    Namespace
+    Namespace,
+
+    /// <summary>
+    /// Unity-событие.
+    /// </summary>
+    UnityEvent
 }

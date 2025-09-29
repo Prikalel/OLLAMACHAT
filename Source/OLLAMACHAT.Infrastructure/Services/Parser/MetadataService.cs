@@ -51,9 +51,9 @@ public class MetadataService(ILogger<MetadataService> logger) : IMetadataService
         //     {
         //         complexity += 1;
         //
-        //         if (entity.Decorators != null)
+        //         if (entity.Attributes != null)
         //         {
-        //             complexity += entity.Decorators.Count;
+        //             complexity += entity.Attributes.Count;
         //         }
         //     }
         //     else if (entity.Type == ParsedEntityType.Class || entity.Type == ParsedEntityType.Interface)

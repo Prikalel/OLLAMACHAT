@@ -1,3 +1,4 @@
+using Attribute = VelikiyPrikalel.OLLAMACHAT.Application.Models.Attribute;
 using Location = Microsoft.CodeAnalysis.Location;
 using LocationApplication = VelikiyPrikalel.OLLAMACHAT.Application.Models.Location;
 
@@ -89,7 +90,9 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
 
         return new ParsedEntityInheritance(
             baseClasses.Any() ? baseClasses : null,
-            interfaces.Any() ? interfaces : null
+            interfaces.Any() ? interfaces : null,
+            [],
+            []
         );
     }
 
@@ -125,15 +128,15 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
         return parameters;
     }
 
-    public ParsedEntityImportData MapImportData(ISymbol symbol)
+    public UsingStatementData MapImportData(ISymbol symbol)
     {
         var namespaceSymbol = symbol.ContainingNamespace;
-        return new ParsedEntityImportData(namespaceSymbol?.Name);
+        return new UsingStatementData(namespaceSymbol?.Name);
     }
 
-    public List<Decorator> MapAttributes(ISymbol symbol)
+    public List<Attribute> MapAttributes(ISymbol symbol)
     {
-        var decorators = new List<Decorator>();
+        var attributes = new List<Attribute>();
 
         foreach (var attribute in symbol.GetAttributes())
         {
@@ -143,10 +146,10 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
                 arguments.Add(argument.Value?.ToString() ?? "null");
             }
 
-            decorators.Add(new Decorator(attribute.AttributeClass?.Name, arguments));
+            attributes.Add(new Attribute(attribute.AttributeClass?.Name, arguments));
         }
 
-        return decorators;
+        return attributes;
     }
 
     public ParseErrorSeverity MapSeverity(DiagnosticSeverity diagnosticSeverity)
