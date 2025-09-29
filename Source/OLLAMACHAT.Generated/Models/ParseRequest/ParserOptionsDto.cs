@@ -9,7 +9,7 @@ public class ParserOptionsDto : IEquatable<ParserOptionsDto>
     /// <summary>
     /// Gets or Sets ExtractFullExtractInheritance
     /// </summary>
-    [DataMember(Name = "extractFullExtractInheritance")]
+    [DataMember(Name = "extractFullInheritance")]
     public bool? ExtractFullExtractInheritance { get; set; }
 
     /// <summary>

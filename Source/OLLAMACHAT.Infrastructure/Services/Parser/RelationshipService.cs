@@ -1,7 +1,9 @@
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 
+[UsedImplicitly]
 public class RelationshipService(ILogger<RelationshipService> logger) : IRelationshipService
 {
+    //TODO: в некоторых местах устанавливается null
     public async Task<IEnumerable<Relationship>> AnalyzeRelationshipsAsync(IEnumerable<ParsedEntity> entities, Document document)
     {
         logger.LogInformation("Analyzing relationships for document: {DocumentPath}", document.FilePath);
@@ -63,16 +65,15 @@ public class RelationshipService(ILogger<RelationshipService> logger) : IRelatio
         if (entity.Inheritance?.DirectInterfaces == null)
             return;
 
-        foreach (var interfaceName in entity.Inheritance.Interfaces)
+        foreach (var interfaceName in entity.Inheritance.AllInterfaces)
         {
             if (entityDict.TryGetValue(interfaceName, out var interfaceEntity))
             {
                 relationships.Add(new Relationship(
-                    From: entity.Name,
-                    To: interfaceEntity.Name,
+                    FullNameFrom: entity.FullName,
+                    FullNameTo: interfaceEntity.FullName,
                     Type: RelationshipType.Implements,
-                    TargetFile: null,
-                    Location: entity.Location
+                    TargetDefinitionFilePath: null
                 ));
             }
         }
@@ -81,7 +82,7 @@ public class RelationshipService(ILogger<RelationshipService> logger) : IRelatio
     private void AnalyzeMethodCallRelationships(ParsedEntity methodEntity, Dictionary<string, ParsedEntity> entityDict, SemanticModel semanticModel, SyntaxNode root, List<Relationship> relationships)
     {
         var methodDeclarations = root.DescendantNodes().OfType<MethodDeclarationSyntax>();
-        var methodDeclaration = methodDeclarations.FirstOrDefault(m => m.Identifier.Text == methodEntity.Name);
+        var methodDeclaration = methodDeclarations.FirstOrDefault(m => m.Identifier.Text == methodEntity.FullName);
 
         if (methodDeclaration == null)
             return;
@@ -101,11 +102,10 @@ public class RelationshipService(ILogger<RelationshipService> logger) : IRelatio
                 if (!string.IsNullOrEmpty(containingTypeName) && entityDict.TryGetValue(containingTypeName, out var containingTypeEntity))
                 {
                     relationships.Add(new Relationship(
-                        From: methodEntity.Name,
-                        To: calledMethodName,
+                        FullNameFrom: methodEntity.FullName,
+                        FullNameTo: calledMethodName,
                         Type: RelationshipType.Calls,
-                        TargetFile: null,
-                        Location: methodEntity.Location
+                        TargetDefinitionFilePath: null
                     ));
                 }
             }
@@ -129,11 +129,10 @@ public class RelationshipService(ILogger<RelationshipService> logger) : IRelatio
                     entityDict.TryGetValue(containingTypeName, out var containingTypeEntity))
                 {
                     relationships.Add(new Relationship(
-                        From: methodEntity.Name,
-                        To: memberName,
-                        Type: RelationshipType.References,
-                        TargetFile: null,
-                        Location: methodEntity.Location
+                        FullNameFrom: methodEntity.FullName,
+                        FullNameTo: memberName,
+                        Type: RelationshipType.Calls,
+                        TargetDefinitionFilePath: null
                     ));
                 }
             }
