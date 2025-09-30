@@ -1,0 +1,710 @@
+﻿[
+  {
+    "SimpleName": "System",
+    "FullName": "System",
+    "Type": 3,
+    "Location": {
+      "Start": {
+        "Line": 2,
+        "Column": 0,
+        "Index": 2
+      },
+      "End": {
+        "Line": 2,
+        "Column": 13,
+        "Index": 15
+      }
+    },
+    "Children": null,
+    "Modifiers": null,
+    "Attributes": [
+      {
+        "Name": "UsingType",
+        "Arguments": [
+          "Local"
+        ]
+      }
+    ],
+    "Inheritance": null,
+    "ReturnType": null,
+    "Parameters": null,
+    "UsingStatementData": null
+  },
+  {
+    "SimpleName": "System.Collections.Generic",
+    "FullName": "System.Collections.Generic",
+    "Type": 3,
+    "Location": {
+      "Start": {
+        "Line": 3,
+        "Column": 0,
+        "Index": 17
+      },
+      "End": {
+        "Line": 3,
+        "Column": 33,
+        "Index": 50
+      }
+    },
+    "Children": null,
+    "Modifiers": null,
+    "Attributes": [
+      {
+        "Name": "UsingType",
+        "Arguments": [
+          "Local"
+        ]
+      }
+    ],
+    "Inheritance": null,
+    "ReturnType": null,
+    "Parameters": null,
+    "UsingStatementData": null
+  },
+  {
+    "SimpleName": "TestNamespace",
+    "FullName": "TestNamespace",
+    "Type": 7,
+    "Location": {
+      "Start": {
+        "Line": 5,
+        "Column": 10,
+        "Index": 64
+      },
+      "End": {
+        "Line": 5,
+        "Column": 23,
+        "Index": 77
+      }
+    },
+    "Children": [
+      {
+        "SimpleName": "BaseClass",
+        "FullName": "TestNamespace.BaseClass",
+        "Type": 0,
+        "Location": {
+          "Start": {
+            "Line": 7,
+            "Column": 17,
+            "Index": 99
+          },
+          "End": {
+            "Line": 7,
+            "Column": 26,
+            "Index": 108
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": "BaseProperty",
+            "FullName": "TestNamespace.BaseClass.BaseProperty",
+            "Type": 4,
+            "Location": {
+              "Start": {
+                "Line": 9,
+                "Column": 22,
+                "Index": 139
+              },
+              "End": {
+                "Line": 9,
+                "Column": 34,
+                "Index": 151
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "string",
+            "Parameters": null,
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "get_BaseProperty",
+            "FullName": "TestNamespace.BaseClass.BaseProperty.get",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 9,
+                "Column": 37,
+                "Index": 154
+              },
+              "End": {
+                "Line": 9,
+                "Column": 40,
+                "Index": 157
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "string",
+            "Parameters": [],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "set_BaseProperty",
+            "FullName": "TestNamespace.BaseClass.BaseProperty.set",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 9,
+                "Column": 42,
+                "Index": 159
+              },
+              "End": {
+                "Line": 9,
+                "Column": 45,
+                "Index": 162
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "void",
+            "Parameters": [
+              {
+                "Name": "value",
+                "FullTypeName": "string",
+                "Nullable": false,
+                "DefaultValue": null
+              }
+            ],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "BaseMethod",
+            "FullName": "TestNamespace.BaseClass.BaseMethod()",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 11,
+                "Column": 20,
+                "Index": 197
+              },
+              "End": {
+                "Line": 11,
+                "Column": 30,
+                "Index": 207
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "void",
+            "Parameters": [],
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "public",
+          "class"
+        ],
+        "Attributes": null,
+        "Inheritance": {
+          "DirectBaseClasses": null,
+          "DirectInterfaces": null,
+          "AllBaseClasses": [],
+          "AllInterfaces": []
+        },
+        "ReturnType": null,
+        "Parameters": null,
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "ITestInterface",
+        "FullName": "TestNamespace.ITestInterface",
+        "Type": 2,
+        "Location": {
+          "Start": {
+            "Line": 17,
+            "Column": 21,
+            "Index": 310
+          },
+          "End": {
+            "Line": 17,
+            "Column": 35,
+            "Index": 324
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": "InterfaceMethod",
+            "FullName": "TestNamespace.ITestInterface.InterfaceMethod()",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 19,
+                "Column": 13,
+                "Index": 346
+              },
+              "End": {
+                "Line": 19,
+                "Column": 28,
+                "Index": 361
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public",
+              "abstract"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "void",
+            "Parameters": [],
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "public",
+          "abstract",
+          "interface"
+        ],
+        "Attributes": null,
+        "Inheritance": {
+          "DirectBaseClasses": null,
+          "DirectInterfaces": null,
+          "AllBaseClasses": [],
+          "AllInterfaces": []
+        },
+        "ReturnType": null,
+        "Parameters": null,
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "DerivedClass",
+        "FullName": "TestNamespace.DerivedClass",
+        "Type": 0,
+        "Location": {
+          "Start": {
+            "Line": 22,
+            "Column": 17,
+            "Index": 392
+          },
+          "End": {
+            "Line": 22,
+            "Column": 29,
+            "Index": 404
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": "DerivedProperty",
+            "FullName": "TestNamespace.DerivedClass.DerivedProperty",
+            "Type": 4,
+            "Location": {
+              "Start": {
+                "Line": 24,
+                "Column": 22,
+                "Index": 463
+              },
+              "End": {
+                "Line": 24,
+                "Column": 37,
+                "Index": 478
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "string",
+            "Parameters": null,
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "get_DerivedProperty",
+            "FullName": "TestNamespace.DerivedClass.DerivedProperty.get",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 24,
+                "Column": 40,
+                "Index": 481
+              },
+              "End": {
+                "Line": 24,
+                "Column": 43,
+                "Index": 484
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "string",
+            "Parameters": [],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "set_DerivedProperty",
+            "FullName": "TestNamespace.DerivedClass.DerivedProperty.set",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 24,
+                "Column": 45,
+                "Index": 486
+              },
+              "End": {
+                "Line": 24,
+                "Column": 48,
+                "Index": 489
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "void",
+            "Parameters": [
+              {
+                "Name": "value",
+                "FullTypeName": "string",
+                "Nullable": false,
+                "DefaultValue": null
+              }
+            ],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "InterfaceMethod",
+            "FullName": "TestNamespace.DerivedClass.InterfaceMethod()",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 26,
+                "Column": 20,
+                "Index": 524
+              },
+              "End": {
+                "Line": 26,
+                "Column": 35,
+                "Index": 539
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "void",
+            "Parameters": [],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "DerivedMethod",
+            "FullName": "TestNamespace.DerivedClass.DerivedMethod()",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 31,
+                "Column": 20,
+                "Index": 662
+              },
+              "End": {
+                "Line": 31,
+                "Column": 33,
+                "Index": 675
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "void",
+            "Parameters": [],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "NestedClass",
+            "FullName": "TestNamespace.DerivedClass.NestedClass",
+            "Type": 0,
+            "Location": {
+              "Start": {
+                "Line": 36,
+                "Column": 21,
+                "Index": 782
+              },
+              "End": {
+                "Line": 36,
+                "Column": 32,
+                "Index": 793
+              }
+            },
+            "Children": [
+              {
+                "SimpleName": "NestedProperty",
+                "FullName": "TestNamespace.DerivedClass.NestedClass.NestedProperty",
+                "Type": 4,
+                "Location": {
+                  "Start": {
+                    "Line": 38,
+                    "Column": 26,
+                    "Index": 832
+                  },
+                  "End": {
+                    "Line": 38,
+                    "Column": 40,
+                    "Index": 846
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "string",
+                "Parameters": null,
+                "UsingStatementData": null
+              },
+              {
+                "SimpleName": "get_NestedProperty",
+                "FullName": "TestNamespace.DerivedClass.NestedClass.NestedProperty.get",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 38,
+                    "Column": 43,
+                    "Index": 849
+                  },
+                  "End": {
+                    "Line": 38,
+                    "Column": 46,
+                    "Index": 852
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "string",
+                "Parameters": [],
+                "UsingStatementData": null
+              },
+              {
+                "SimpleName": "set_NestedProperty",
+                "FullName": "TestNamespace.DerivedClass.NestedClass.NestedProperty.set",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 38,
+                    "Column": 48,
+                    "Index": 854
+                  },
+                  "End": {
+                    "Line": 38,
+                    "Column": 51,
+                    "Index": 857
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "void",
+                "Parameters": [
+                  {
+                    "Name": "value",
+                    "FullTypeName": "string",
+                    "Nullable": false,
+                    "DefaultValue": null
+                  }
+                ],
+                "UsingStatementData": null
+              },
+              {
+                "SimpleName": "DeepNestedClass",
+                "FullName": "TestNamespace.DerivedClass.NestedClass.DeepNestedClass",
+                "Type": 0,
+                "Location": {
+                  "Start": {
+                    "Line": 40,
+                    "Column": 25,
+                    "Index": 901
+                  },
+                  "End": {
+                    "Line": 40,
+                    "Column": 40,
+                    "Index": 916
+                  }
+                },
+                "Children": [
+                  {
+                    "SimpleName": "DeepNestedProperty",
+                    "FullName": "TestNamespace.DerivedClass.NestedClass.DeepNestedClass.DeepNestedProperty",
+                    "Type": 4,
+                    "Location": {
+                      "Start": {
+                        "Line": 42,
+                        "Column": 30,
+                        "Index": 963
+                      },
+                      "End": {
+                        "Line": 42,
+                        "Column": 48,
+                        "Index": 981
+                      }
+                    },
+                    "Children": null,
+                    "Modifiers": [
+                      "public"
+                    ],
+                    "Attributes": null,
+                    "Inheritance": null,
+                    "ReturnType": "string",
+                    "Parameters": null,
+                    "UsingStatementData": null
+                  },
+                  {
+                    "SimpleName": "get_DeepNestedProperty",
+                    "FullName": "TestNamespace.DerivedClass.NestedClass.DeepNestedClass.DeepNestedProperty.get",
+                    "Type": 1,
+                    "Location": {
+                      "Start": {
+                        "Line": 42,
+                        "Column": 51,
+                        "Index": 984
+                      },
+                      "End": {
+                        "Line": 42,
+                        "Column": 54,
+                        "Index": 987
+                      }
+                    },
+                    "Children": null,
+                    "Modifiers": [
+                      "public"
+                    ],
+                    "Attributes": null,
+                    "Inheritance": null,
+                    "ReturnType": "string",
+                    "Parameters": [],
+                    "UsingStatementData": null
+                  },
+                  {
+                    "SimpleName": "set_DeepNestedProperty",
+                    "FullName": "TestNamespace.DerivedClass.NestedClass.DeepNestedClass.DeepNestedProperty.set",
+                    "Type": 1,
+                    "Location": {
+                      "Start": {
+                        "Line": 42,
+                        "Column": 56,
+                        "Index": 989
+                      },
+                      "End": {
+                        "Line": 42,
+                        "Column": 59,
+                        "Index": 992
+                      }
+                    },
+                    "Children": null,
+                    "Modifiers": [
+                      "public"
+                    ],
+                    "Attributes": null,
+                    "Inheritance": null,
+                    "ReturnType": "void",
+                    "Parameters": [
+                      {
+                        "Name": "value",
+                        "FullTypeName": "string",
+                        "Nullable": false,
+                        "DefaultValue": null
+                      }
+                    ],
+                    "UsingStatementData": null
+                  }
+                ],
+                "Modifiers": [
+                  "public",
+                  "class"
+                ],
+                "Attributes": null,
+                "Inheritance": {
+                  "DirectBaseClasses": null,
+                  "DirectInterfaces": null,
+                  "AllBaseClasses": [],
+                  "AllInterfaces": []
+                },
+                "ReturnType": null,
+                "Parameters": null,
+                "UsingStatementData": null
+              }
+            ],
+            "Modifiers": [
+              "public",
+              "class"
+            ],
+            "Attributes": null,
+            "Inheritance": {
+              "DirectBaseClasses": null,
+              "DirectInterfaces": null,
+              "AllBaseClasses": [],
+              "AllInterfaces": []
+            },
+            "ReturnType": null,
+            "Parameters": null,
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "public",
+          "class"
+        ],
+        "Attributes": null,
+        "Inheritance": {
+          "DirectBaseClasses": [
+            "TestNamespace.BaseClass"
+          ],
+          "DirectInterfaces": [
+            "TestNamespace.ITestInterface"
+          ],
+          "AllBaseClasses": [
+            "TestNamespace.BaseClass"
+          ],
+          "AllInterfaces": [
+            "TestNamespace.ITestInterface"
+          ]
+        },
+        "ReturnType": null,
+        "Parameters": null,
+        "UsingStatementData": null
+      }
+    ],
+    "Modifiers": [
+      "public"
+    ],
+    "Attributes": null,
+    "Inheritance": null,
+    "ReturnType": null,
+    "Parameters": null,
+    "UsingStatementData": null
+  }
+]

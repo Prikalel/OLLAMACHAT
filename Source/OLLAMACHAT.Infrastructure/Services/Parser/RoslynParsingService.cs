@@ -23,7 +23,7 @@ public class RoslynParsingService(
 
         var contentHash = await documentService.GetContentHashAsync(document);
 
-        var entities = await entityService.ExtractEntitiesAsync(document);
+        var entities = await entityService.ExtractEntitiesAsync(document, options);
         logger.LogInformation("Extracted {EntityCount} entities from file: {FilePath}", entities.Count(), filePath);
 
         var relationships = await relationshipService.AnalyzeRelationshipsAsync(entities, document);

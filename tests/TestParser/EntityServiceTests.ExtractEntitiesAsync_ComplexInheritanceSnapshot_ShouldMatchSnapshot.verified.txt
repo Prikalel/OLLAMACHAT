@@ -1,0 +1,1308 @@
+﻿[
+  {
+    "SimpleName": "System",
+    "FullName": "System",
+    "Type": 3,
+    "Location": {
+      "Start": {
+        "Line": 2,
+        "Column": 0,
+        "Index": 2
+      },
+      "End": {
+        "Line": 2,
+        "Column": 13,
+        "Index": 15
+      }
+    },
+    "Children": null,
+    "Modifiers": null,
+    "Attributes": [
+      {
+        "Name": "UsingType",
+        "Arguments": [
+          "Local"
+        ]
+      }
+    ],
+    "Inheritance": null,
+    "ReturnType": null,
+    "Parameters": null,
+    "UsingStatementData": null
+  },
+  {
+    "SimpleName": "System.Collections.Generic",
+    "FullName": "System.Collections.Generic",
+    "Type": 3,
+    "Location": {
+      "Start": {
+        "Line": 3,
+        "Column": 0,
+        "Index": 17
+      },
+      "End": {
+        "Line": 3,
+        "Column": 33,
+        "Index": 50
+      }
+    },
+    "Children": null,
+    "Modifiers": null,
+    "Attributes": [
+      {
+        "Name": "UsingType",
+        "Arguments": [
+          "Local"
+        ]
+      }
+    ],
+    "Inheritance": null,
+    "ReturnType": null,
+    "Parameters": null,
+    "UsingStatementData": null
+  },
+  {
+    "SimpleName": "System.Threading.Tasks",
+    "FullName": "System.Threading.Tasks",
+    "Type": 3,
+    "Location": {
+      "Start": {
+        "Line": 4,
+        "Column": 0,
+        "Index": 52
+      },
+      "End": {
+        "Line": 4,
+        "Column": 29,
+        "Index": 81
+      }
+    },
+    "Children": null,
+    "Modifiers": null,
+    "Attributes": [
+      {
+        "Name": "UsingType",
+        "Arguments": [
+          "Local"
+        ]
+      }
+    ],
+    "Inheritance": null,
+    "ReturnType": null,
+    "Parameters": null,
+    "UsingStatementData": null
+  },
+  {
+    "SimpleName": "ComplexNamespace",
+    "FullName": "ComplexNamespace",
+    "Type": 7,
+    "Location": {
+      "Start": {
+        "Line": 6,
+        "Column": 10,
+        "Index": 95
+      },
+      "End": {
+        "Line": 6,
+        "Column": 26,
+        "Index": 111
+      }
+    },
+    "Children": [
+      {
+        "SimpleName": "IRepository",
+        "FullName": "ComplexNamespace.IRepository\u003CT\u003E",
+        "Type": 2,
+        "Location": {
+          "Start": {
+            "Line": 8,
+            "Column": 21,
+            "Index": 137
+          },
+          "End": {
+            "Line": 8,
+            "Column": 32,
+            "Index": 148
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": "GetByIdAsync",
+            "FullName": "ComplexNamespace.IRepository\u003CT\u003E.GetByIdAsync(int)",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 10,
+                "Column": 16,
+                "Index": 192
+              },
+              "End": {
+                "Line": 10,
+                "Column": 28,
+                "Index": 204
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public",
+              "abstract"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "Task\u003CT\u003E",
+            "Parameters": [
+              {
+                "Name": "id",
+                "FullTypeName": "int",
+                "Nullable": false,
+                "DefaultValue": null
+              }
+            ],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "GetAllAsync",
+            "FullName": "ComplexNamespace.IRepository\u003CT\u003E.GetAllAsync()",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 11,
+                "Column": 29,
+                "Index": 244
+              },
+              "End": {
+                "Line": 11,
+                "Column": 40,
+                "Index": 255
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public",
+              "abstract"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "Task\u003CIEnumerable\u003CT\u003E\u003E",
+            "Parameters": [],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "SaveAsync",
+            "FullName": "ComplexNamespace.IRepository\u003CT\u003E.SaveAsync(T)",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 12,
+                "Column": 13,
+                "Index": 273
+              },
+              "End": {
+                "Line": 12,
+                "Column": 22,
+                "Index": 282
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public",
+              "abstract"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "Task",
+            "Parameters": [
+              {
+                "Name": "entity",
+                "FullTypeName": "T where T : class",
+                "Nullable": false,
+                "DefaultValue": null
+              }
+            ],
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "public",
+          "abstract",
+          "interface"
+        ],
+        "Attributes": null,
+        "Inheritance": {
+          "DirectBaseClasses": null,
+          "DirectInterfaces": null,
+          "AllBaseClasses": [],
+          "AllInterfaces": []
+        },
+        "ReturnType": null,
+        "Parameters": null,
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "BaseEntity",
+        "FullName": "ComplexNamespace.BaseEntity",
+        "Type": 0,
+        "Location": {
+          "Start": {
+            "Line": 15,
+            "Column": 26,
+            "Index": 330
+          },
+          "End": {
+            "Line": 15,
+            "Column": 36,
+            "Index": 340
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": "Id",
+            "FullName": "ComplexNamespace.BaseEntity.Id",
+            "Type": 4,
+            "Location": {
+              "Start": {
+                "Line": 17,
+                "Column": 19,
+                "Index": 368
+              },
+              "End": {
+                "Line": 17,
+                "Column": 21,
+                "Index": 370
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "int",
+            "Parameters": null,
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "get_Id",
+            "FullName": "ComplexNamespace.BaseEntity.Id.get",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 17,
+                "Column": 24,
+                "Index": 373
+              },
+              "End": {
+                "Line": 17,
+                "Column": 27,
+                "Index": 376
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "int",
+            "Parameters": [],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "set_Id",
+            "FullName": "ComplexNamespace.BaseEntity.Id.set",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 17,
+                "Column": 29,
+                "Index": 378
+              },
+              "End": {
+                "Line": 17,
+                "Column": 32,
+                "Index": 381
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "void",
+            "Parameters": [
+              {
+                "Name": "value",
+                "FullTypeName": "int",
+                "Nullable": false,
+                "DefaultValue": null
+              }
+            ],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "CreatedAt",
+            "FullName": "ComplexNamespace.BaseEntity.CreatedAt",
+            "Type": 4,
+            "Location": {
+              "Start": {
+                "Line": 18,
+                "Column": 24,
+                "Index": 410
+              },
+              "End": {
+                "Line": 18,
+                "Column": 33,
+                "Index": 419
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "DateTime",
+            "Parameters": null,
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "get_CreatedAt",
+            "FullName": "ComplexNamespace.BaseEntity.CreatedAt.get",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 18,
+                "Column": 36,
+                "Index": 422
+              },
+              "End": {
+                "Line": 18,
+                "Column": 39,
+                "Index": 425
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "DateTime",
+            "Parameters": [],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "set_CreatedAt",
+            "FullName": "ComplexNamespace.BaseEntity.CreatedAt.set",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 18,
+                "Column": 41,
+                "Index": 427
+              },
+              "End": {
+                "Line": 18,
+                "Column": 44,
+                "Index": 430
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "void",
+            "Parameters": [
+              {
+                "Name": "value",
+                "FullTypeName": "DateTime",
+                "Nullable": false,
+                "DefaultValue": null
+              }
+            ],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "UpdatedAt",
+            "FullName": "ComplexNamespace.BaseEntity.UpdatedAt",
+            "Type": 4,
+            "Location": {
+              "Start": {
+                "Line": 19,
+                "Column": 24,
+                "Index": 459
+              },
+              "End": {
+                "Line": 19,
+                "Column": 33,
+                "Index": 468
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "DateTime",
+            "Parameters": null,
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "get_UpdatedAt",
+            "FullName": "ComplexNamespace.BaseEntity.UpdatedAt.get",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 19,
+                "Column": 36,
+                "Index": 471
+              },
+              "End": {
+                "Line": 19,
+                "Column": 39,
+                "Index": 474
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "DateTime",
+            "Parameters": [],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "set_UpdatedAt",
+            "FullName": "ComplexNamespace.BaseEntity.UpdatedAt.set",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 19,
+                "Column": 41,
+                "Index": 476
+              },
+              "End": {
+                "Line": 19,
+                "Column": 44,
+                "Index": 479
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "void",
+            "Parameters": [
+              {
+                "Name": "value",
+                "FullTypeName": "DateTime",
+                "Nullable": false,
+                "DefaultValue": null
+              }
+            ],
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "public",
+          "abstract",
+          "class"
+        ],
+        "Attributes": null,
+        "Inheritance": {
+          "DirectBaseClasses": null,
+          "DirectInterfaces": null,
+          "AllBaseClasses": [],
+          "AllInterfaces": []
+        },
+        "ReturnType": null,
+        "Parameters": null,
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "ServiceBase",
+        "FullName": "ComplexNamespace.ServiceBase\u003CT\u003E",
+        "Type": 0,
+        "Location": {
+          "Start": {
+            "Line": 22,
+            "Column": 26,
+            "Index": 519
+          },
+          "End": {
+            "Line": 22,
+            "Column": 37,
+            "Index": 530
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": "_repository",
+            "FullName": "ComplexNamespace.ServiceBase\u003CT\u003E._repository",
+            "Type": 4,
+            "Location": {
+              "Start": {
+                "Line": 24,
+                "Column": 42,
+                "Index": 605
+              },
+              "End": {
+                "Line": 24,
+                "Column": 53,
+                "Index": 616
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "protected",
+              "readonly"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "ComplexNamespace.IRepository\u003CT\u003E",
+            "Parameters": null,
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": ".ctor",
+            "FullName": "ComplexNamespace.ServiceBase\u003CT\u003E.ServiceBase(ComplexNamespace.IRepository\u003CT\u003E)",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 26,
+                "Column": 18,
+                "Index": 647
+              },
+              "End": {
+                "Line": 26,
+                "Column": 29,
+                "Index": 658
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "protected"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "void",
+            "Parameters": [
+              {
+                "Name": "repository",
+                "FullTypeName": "ComplexNamespace.IRepository\u003CT\u003E",
+                "Nullable": false,
+                "DefaultValue": null
+              }
+            ],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "GetByIdAsync",
+            "FullName": "ComplexNamespace.ServiceBase\u003CT\u003E.GetByIdAsync(int)",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 31,
+                "Column": 37,
+                "Index": 795
+              },
+              "End": {
+                "Line": 31,
+                "Column": 49,
+                "Index": 807
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public",
+              "virtual",
+              "async"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "Task\u003CT\u003E",
+            "Parameters": [
+              {
+                "Name": "id",
+                "FullTypeName": "int",
+                "Nullable": false,
+                "DefaultValue": null
+              }
+            ],
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "public",
+          "abstract",
+          "class"
+        ],
+        "Attributes": null,
+        "Inheritance": {
+          "DirectBaseClasses": null,
+          "DirectInterfaces": null,
+          "AllBaseClasses": [],
+          "AllInterfaces": []
+        },
+        "ReturnType": null,
+        "Parameters": null,
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "User",
+        "FullName": "ComplexNamespace.User",
+        "Type": 0,
+        "Location": {
+          "Start": {
+            "Line": 37,
+            "Column": 17,
+            "Index": 921
+          },
+          "End": {
+            "Line": 37,
+            "Column": 21,
+            "Index": 925
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": "Name",
+            "FullName": "ComplexNamespace.User.Name",
+            "Type": 4,
+            "Location": {
+              "Start": {
+                "Line": 39,
+                "Column": 22,
+                "Index": 969
+              },
+              "End": {
+                "Line": 39,
+                "Column": 26,
+                "Index": 973
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "string",
+            "Parameters": null,
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "get_Name",
+            "FullName": "ComplexNamespace.User.Name.get",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 39,
+                "Column": 29,
+                "Index": 976
+              },
+              "End": {
+                "Line": 39,
+                "Column": 32,
+                "Index": 979
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "string",
+            "Parameters": [],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "set_Name",
+            "FullName": "ComplexNamespace.User.Name.set",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 39,
+                "Column": 34,
+                "Index": 981
+              },
+              "End": {
+                "Line": 39,
+                "Column": 37,
+                "Index": 984
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "void",
+            "Parameters": [
+              {
+                "Name": "value",
+                "FullTypeName": "string",
+                "Nullable": false,
+                "DefaultValue": null
+              }
+            ],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "Email",
+            "FullName": "ComplexNamespace.User.Email",
+            "Type": 4,
+            "Location": {
+              "Start": {
+                "Line": 40,
+                "Column": 22,
+                "Index": 1011
+              },
+              "End": {
+                "Line": 40,
+                "Column": 27,
+                "Index": 1016
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "string",
+            "Parameters": null,
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "get_Email",
+            "FullName": "ComplexNamespace.User.Email.get",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 40,
+                "Column": 30,
+                "Index": 1019
+              },
+              "End": {
+                "Line": 40,
+                "Column": 33,
+                "Index": 1022
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "string",
+            "Parameters": [],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "set_Email",
+            "FullName": "ComplexNamespace.User.Email.set",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 40,
+                "Column": 35,
+                "Index": 1024
+              },
+              "End": {
+                "Line": 40,
+                "Column": 38,
+                "Index": 1027
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "void",
+            "Parameters": [
+              {
+                "Name": "value",
+                "FullTypeName": "string",
+                "Nullable": false,
+                "DefaultValue": null
+              }
+            ],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "UserSettings",
+            "FullName": "ComplexNamespace.User.UserSettings",
+            "Type": 0,
+            "Location": {
+              "Start": {
+                "Line": 42,
+                "Column": 21,
+                "Index": 1063
+              },
+              "End": {
+                "Line": 42,
+                "Column": 33,
+                "Index": 1075
+              }
+            },
+            "Children": [
+              {
+                "SimpleName": "Theme",
+                "FullName": "ComplexNamespace.User.UserSettings.Theme",
+                "Type": 4,
+                "Location": {
+                  "Start": {
+                    "Line": 44,
+                    "Column": 26,
+                    "Index": 1114
+                  },
+                  "End": {
+                    "Line": 44,
+                    "Column": 31,
+                    "Index": 1119
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "string",
+                "Parameters": null,
+                "UsingStatementData": null
+              },
+              {
+                "SimpleName": "get_Theme",
+                "FullName": "ComplexNamespace.User.UserSettings.Theme.get",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 44,
+                    "Column": 34,
+                    "Index": 1122
+                  },
+                  "End": {
+                    "Line": 44,
+                    "Column": 37,
+                    "Index": 1125
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "string",
+                "Parameters": [],
+                "UsingStatementData": null
+              },
+              {
+                "SimpleName": "set_Theme",
+                "FullName": "ComplexNamespace.User.UserSettings.Theme.set",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 44,
+                    "Column": 39,
+                    "Index": 1127
+                  },
+                  "End": {
+                    "Line": 44,
+                    "Column": 42,
+                    "Index": 1130
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "void",
+                "Parameters": [
+                  {
+                    "Name": "value",
+                    "FullTypeName": "string",
+                    "Nullable": false,
+                    "DefaultValue": null
+                  }
+                ],
+                "UsingStatementData": null
+              },
+              {
+                "SimpleName": "NotificationsEnabled",
+                "FullName": "ComplexNamespace.User.UserSettings.NotificationsEnabled",
+                "Type": 4,
+                "Location": {
+                  "Start": {
+                    "Line": 45,
+                    "Column": 24,
+                    "Index": 1159
+                  },
+                  "End": {
+                    "Line": 45,
+                    "Column": 44,
+                    "Index": 1179
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "bool",
+                "Parameters": null,
+                "UsingStatementData": null
+              },
+              {
+                "SimpleName": "get_NotificationsEnabled",
+                "FullName": "ComplexNamespace.User.UserSettings.NotificationsEnabled.get",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 45,
+                    "Column": 47,
+                    "Index": 1182
+                  },
+                  "End": {
+                    "Line": 45,
+                    "Column": 50,
+                    "Index": 1185
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "bool",
+                "Parameters": [],
+                "UsingStatementData": null
+              },
+              {
+                "SimpleName": "set_NotificationsEnabled",
+                "FullName": "ComplexNamespace.User.UserSettings.NotificationsEnabled.set",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 45,
+                    "Column": 52,
+                    "Index": 1187
+                  },
+                  "End": {
+                    "Line": 45,
+                    "Column": 55,
+                    "Index": 1190
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "void",
+                "Parameters": [
+                  {
+                    "Name": "value",
+                    "FullTypeName": "bool",
+                    "Nullable": false,
+                    "DefaultValue": null
+                  }
+                ],
+                "UsingStatementData": null
+              }
+            ],
+            "Modifiers": [
+              "public",
+              "class"
+            ],
+            "Attributes": null,
+            "Inheritance": {
+              "DirectBaseClasses": null,
+              "DirectInterfaces": null,
+              "AllBaseClasses": [],
+              "AllInterfaces": []
+            },
+            "ReturnType": null,
+            "Parameters": null,
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "public",
+          "class"
+        ],
+        "Attributes": null,
+        "Inheritance": {
+          "DirectBaseClasses": [
+            "ComplexNamespace.BaseEntity"
+          ],
+          "DirectInterfaces": null,
+          "AllBaseClasses": [
+            "ComplexNamespace.BaseEntity"
+          ],
+          "AllInterfaces": []
+        },
+        "ReturnType": null,
+        "Parameters": null,
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "UserRepository",
+        "FullName": "ComplexNamespace.UserRepository",
+        "Type": 0,
+        "Location": {
+          "Start": {
+            "Line": 49,
+            "Column": 17,
+            "Index": 1232
+          },
+          "End": {
+            "Line": 49,
+            "Column": 31,
+            "Index": 1246
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": "GetByIdAsync",
+            "FullName": "ComplexNamespace.UserRepository.GetByIdAsync(int)",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 51,
+                "Column": 32,
+                "Index": 1307
+              },
+              "End": {
+                "Line": 51,
+                "Column": 44,
+                "Index": 1319
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public",
+              "async"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "Task\u003CComplexNamespace.User\u003E",
+            "Parameters": [
+              {
+                "Name": "id",
+                "FullTypeName": "int",
+                "Nullable": false,
+                "DefaultValue": null
+              }
+            ],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "GetAllAsync",
+            "FullName": "ComplexNamespace.UserRepository.GetAllAsync()",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 57,
+                "Column": 45,
+                "Index": 1519
+              },
+              "End": {
+                "Line": 57,
+                "Column": 56,
+                "Index": 1530
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public",
+              "async"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "Task\u003CIEnumerable\u003CComplexNamespace.User\u003E\u003E",
+            "Parameters": [],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "SaveAsync",
+            "FullName": "ComplexNamespace.UserRepository.SaveAsync(ComplexNamespace.User)",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 62,
+                "Column": 26,
+                "Index": 1645
+              },
+              "End": {
+                "Line": 62,
+                "Column": 35,
+                "Index": 1654
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public",
+              "async"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "Task",
+            "Parameters": [
+              {
+                "Name": "entity",
+                "FullTypeName": "ComplexNamespace.User",
+                "Nullable": false,
+                "DefaultValue": null
+              }
+            ],
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "public",
+          "class"
+        ],
+        "Attributes": null,
+        "Inheritance": {
+          "DirectBaseClasses": null,
+          "DirectInterfaces": [
+            "ComplexNamespace.IRepository\u003CComplexNamespace.User\u003E"
+          ],
+          "AllBaseClasses": [],
+          "AllInterfaces": [
+            "ComplexNamespace.IRepository\u003CComplexNamespace.User\u003E"
+          ]
+        },
+        "ReturnType": null,
+        "Parameters": null,
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "UserService",
+        "FullName": "ComplexNamespace.UserService",
+        "Type": 0,
+        "Location": {
+          "Start": {
+            "Line": 69,
+            "Column": 17,
+            "Index": 1792
+          },
+          "End": {
+            "Line": 69,
+            "Column": 28,
+            "Index": 1803
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": ".ctor",
+            "FullName": "ComplexNamespace.UserService.UserService(ComplexNamespace.IRepository\u003CComplexNamespace.User\u003E)",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 71,
+                "Column": 15,
+                "Index": 1847
+              },
+              "End": {
+                "Line": 71,
+                "Column": 26,
+                "Index": 1858
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "void",
+            "Parameters": [
+              {
+                "Name": "repository",
+                "FullTypeName": "ComplexNamespace.IRepository\u003CComplexNamespace.User\u003E",
+                "Nullable": false,
+                "DefaultValue": null
+              }
+            ],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "GetActiveUsersAsync",
+            "FullName": "ComplexNamespace.UserService.GetActiveUsersAsync()",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 75,
+                "Column": 45,
+                "Index": 1986
+              },
+              "End": {
+                "Line": 75,
+                "Column": 64,
+                "Index": 2005
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public",
+              "async"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "Task\u003CIEnumerable\u003CComplexNamespace.User\u003E\u003E",
+            "Parameters": [],
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "public",
+          "class"
+        ],
+        "Attributes": null,
+        "Inheritance": {
+          "DirectBaseClasses": [
+            "ComplexNamespace.ServiceBase\u003CComplexNamespace.User\u003E"
+          ],
+          "DirectInterfaces": null,
+          "AllBaseClasses": [
+            "ComplexNamespace.ServiceBase\u003CComplexNamespace.User\u003E"
+          ],
+          "AllInterfaces": []
+        },
+        "ReturnType": null,
+        "Parameters": null,
+        "UsingStatementData": null
+      }
+    ],
+    "Modifiers": [
+      "public"
+    ],
+    "Attributes": null,
+    "Inheritance": null,
+    "ReturnType": null,
+    "Parameters": null,
+    "UsingStatementData": null
+  }
+]

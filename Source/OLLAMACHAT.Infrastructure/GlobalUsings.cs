@@ -1,4 +1,5 @@
 ﻿global using System;
+global using System.Collections.Concurrent;
 global using System.Diagnostics;
 global using System.Security.Cryptography;
 global using System.Text;

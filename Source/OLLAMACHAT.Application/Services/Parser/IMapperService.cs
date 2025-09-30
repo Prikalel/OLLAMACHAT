@@ -8,10 +8,9 @@ public interface IMapperService
 {
     LocationApplication MapLocation(Location location);
     IEnumerable<string> MapModifiers(ISymbol symbol);
-    ParsedEntityInheritance MapInheritance(INamedTypeSymbol typeSymbol);
+    ParsedEntityInheritance MapInheritance(INamedTypeSymbol typeSymbol, ParserOptions? options = null);
     string? MapReturnType(ISymbol symbol);
     List<ModelParameter> MapParameters(IMethodSymbol methodSymbol);
-    UsingStatementData MapImportData(ISymbol symbol);
     List<Attribute> MapAttributes(ISymbol symbol);
     ParseErrorSeverity MapSeverity(DiagnosticSeverity diagnosticSeverity);
     LocationApplication MapErrorLocation(Location location);

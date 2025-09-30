@@ -34,7 +34,7 @@ public class ParsedEntityDto : IEquatable<ParsedEntityDto>
         /// <summary>
         /// Enum UsingStatementEnum for import
         /// </summary>
-        [EnumMember(Value = "import")]
+        [EnumMember(Value = "usingStatement")]
         UsingStatementEnum = 3,
 
         /// <summary>
@@ -83,7 +83,7 @@ public class ParsedEntityDto : IEquatable<ParsedEntityDto>
     /// <summary>
     /// Gets or Sets UsingStatementData
     /// </summary>
-    [DataMember(Name = "importData")]
+    [DataMember(Name = "usingData")]
     public UsingStatementDataDto UsingStatementData { get; set; }
 
     /// <summary>
