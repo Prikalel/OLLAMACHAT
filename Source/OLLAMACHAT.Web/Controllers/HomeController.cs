@@ -1,4 +1,4 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Web.Controllers;
+namespace VelikiyPrikalel.OLLAMACHAT.Web.Controllers;
 
 using Index = VelikiyPrikalel.OLLAMACHAT.Web.Views.Home.Index;
 

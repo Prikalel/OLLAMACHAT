@@ -1,4 +1,4 @@
-﻿using ChatMessage = OpenAI.Chat.ChatMessage;
+using ChatMessage = OpenAI.Chat.ChatMessage;
 
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Llm;
 

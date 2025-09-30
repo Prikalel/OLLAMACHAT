@@ -1,4 +1,4 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Application.Mediator;
+namespace VelikiyPrikalel.OLLAMACHAT.Application.Mediator;
 
 /// <summary>
 /// Получить доступные модели.

@@ -1,4 +1,4 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Data.StatelessEnums;
+namespace VelikiyPrikalel.OLLAMACHAT.Data.StatelessEnums;
 
 /// <summary>
 /// Состояния чата.

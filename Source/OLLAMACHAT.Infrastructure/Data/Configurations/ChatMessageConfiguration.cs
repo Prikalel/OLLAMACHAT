@@ -1,4 +1,4 @@
-﻿using ChatMessage = VelikiyPrikalel.OLLAMACHAT.Data.ChatMessage;
+using ChatMessage = VelikiyPrikalel.OLLAMACHAT.Data.ChatMessage;
 
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data.Configurations;
 

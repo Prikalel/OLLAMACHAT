@@ -1,4 +1,4 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Web.Settings;
+namespace VelikiyPrikalel.OLLAMACHAT.Web.Settings;
 
 /// <summary>
 /// Настройка регистрации сервисов.

@@ -1,4 +1,4 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Application.Models;
+namespace VelikiyPrikalel.OLLAMACHAT.Application.Models;
 
 /// <summary>
 /// Позиция в файле.

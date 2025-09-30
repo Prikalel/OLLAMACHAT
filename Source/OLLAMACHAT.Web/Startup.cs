@@ -1,4 +1,4 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Web;
+namespace VelikiyPrikalel.OLLAMACHAT.Web;
 
 /// <summary>
 /// Класс конфигурации веб-приложения.

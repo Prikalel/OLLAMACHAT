@@ -1,4 +1,4 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data.Configurations;
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data.Configurations;
 
 /// <inheritdoc />
 internal sealed class UserConfiguration : IEntityTypeConfiguration<User>

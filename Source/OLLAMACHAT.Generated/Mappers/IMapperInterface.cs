@@ -1,4 +1,4 @@
-﻿namespace OLLAMACHAT.Generated.Mappers;
+namespace OLLAMACHAT.Generated.Mappers;
 
 [Mapper]
 public interface IMapperInterface

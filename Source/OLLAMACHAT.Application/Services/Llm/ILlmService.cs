@@ -1,4 +1,4 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Application.Services.Llm;
+namespace VelikiyPrikalel.OLLAMACHAT.Application.Services.Llm;
 
 /// <summary>
 /// Сервис llm.

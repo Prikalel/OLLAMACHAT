@@ -1,4 +1,4 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Repositories;
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Repositories;
 
 /// <inheritdoc />
 public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, IEntity

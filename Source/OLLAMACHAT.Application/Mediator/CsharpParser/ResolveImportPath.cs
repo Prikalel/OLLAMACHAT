@@ -1,4 +1,4 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Application.Mediator.CsharpParser;
+namespace VelikiyPrikalel.OLLAMACHAT.Application.Mediator.CsharpParser;
 
 using ResolveImportResponse = (List<string> result, ErrorResponse? error);
 

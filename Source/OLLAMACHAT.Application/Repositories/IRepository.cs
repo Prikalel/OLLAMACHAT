@@ -1,4 +1,4 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Application.Repositories;
+namespace VelikiyPrikalel.OLLAMACHAT.Application.Repositories;
 
 /// <summary>
 /// Общий интерфейс репозитория для сущностей IEntity.

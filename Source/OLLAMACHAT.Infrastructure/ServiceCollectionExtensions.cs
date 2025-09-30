@@ -1,4 +1,4 @@
-﻿namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure;
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure;
 
 /// <summary>
 /// Extension методы <see cref="IServiceCollection"/>.
