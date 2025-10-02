@@ -1,0 +1,1473 @@
+﻿[
+  {
+    "SimpleName": "System",
+    "FullName": "System",
+    "Type": 3,
+    "Location": {
+      "Start": {
+        "Line": 2,
+        "Column": 0,
+        "Index": 2
+      },
+      "End": {
+        "Line": 2,
+        "Column": 13,
+        "Index": 15
+      }
+    },
+    "Children": null,
+    "Modifiers": null,
+    "Attributes": null,
+    "Inheritance": null,
+    "ReturnType": null,
+    "Parameters": null,
+    "UsingStatementData": null
+  },
+  {
+    "SimpleName": "DeepInheritanceChainNamespace",
+    "FullName": "DeepInheritanceChainNamespace",
+    "Type": 7,
+    "Location": {
+      "Start": {
+        "Line": 4,
+        "Column": 10,
+        "Index": 29
+      },
+      "End": {
+        "Line": 4,
+        "Column": 39,
+        "Index": 58
+      }
+    },
+    "Children": [
+      {
+        "SimpleName": "Level0",
+        "FullName": "DeepInheritanceChainNamespace.Level0",
+        "Type": 0,
+        "Location": {
+          "Start": {
+            "Line": 6,
+            "Column": 13,
+            "Index": 76
+          },
+          "End": {
+            "Line": 6,
+            "Column": 19,
+            "Index": 82
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": "Property0",
+            "FullName": "DeepInheritanceChainNamespace.Level0.Property0",
+            "Type": 4,
+            "Location": {
+              "Start": {
+                "Line": 8,
+                "Column": 18,
+                "Index": 105
+              },
+              "End": {
+                "Line": 8,
+                "Column": 27,
+                "Index": 114
+              }
+            },
+            "Children": [
+              {
+                "SimpleName": "get_Property0",
+                "FullName": "DeepInheritanceChainNamespace.Level0.Property0.get",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 8,
+                    "Column": 30,
+                    "Index": 117
+                  },
+                  "End": {
+                    "Line": 8,
+                    "Column": 33,
+                    "Index": 120
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "string",
+                "Parameters": [],
+                "UsingStatementData": null
+              },
+              {
+                "SimpleName": "set_Property0",
+                "FullName": "DeepInheritanceChainNamespace.Level0.Property0.set",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 8,
+                    "Column": 35,
+                    "Index": 122
+                  },
+                  "End": {
+                    "Line": 8,
+                    "Column": 38,
+                    "Index": 125
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "void",
+                "Parameters": [
+                  {
+                    "Name": "value",
+                    "FullTypeName": "string",
+                    "Nullable": false,
+                    "DefaultValue": null
+                  }
+                ],
+                "UsingStatementData": null
+              }
+            ],
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "string",
+            "Parameters": null,
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "public",
+          "class"
+        ],
+        "Attributes": null,
+        "Inheritance": {
+          "DirectBaseClasses": null,
+          "DirectInterfaces": null,
+          "AllBaseClasses": [],
+          "AllInterfaces": []
+        },
+        "ReturnType": null,
+        "Parameters": null,
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "Level1",
+        "FullName": "DeepInheritanceChainNamespace.Level1",
+        "Type": 0,
+        "Location": {
+          "Start": {
+            "Line": 11,
+            "Column": 13,
+            "Index": 148
+          },
+          "End": {
+            "Line": 11,
+            "Column": 19,
+            "Index": 154
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": "Property1",
+            "FullName": "DeepInheritanceChainNamespace.Level1.Property1",
+            "Type": 4,
+            "Location": {
+              "Start": {
+                "Line": 13,
+                "Column": 18,
+                "Index": 186
+              },
+              "End": {
+                "Line": 13,
+                "Column": 27,
+                "Index": 195
+              }
+            },
+            "Children": [
+              {
+                "SimpleName": "get_Property1",
+                "FullName": "DeepInheritanceChainNamespace.Level1.Property1.get",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 13,
+                    "Column": 30,
+                    "Index": 198
+                  },
+                  "End": {
+                    "Line": 13,
+                    "Column": 33,
+                    "Index": 201
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "string",
+                "Parameters": [],
+                "UsingStatementData": null
+              },
+              {
+                "SimpleName": "set_Property1",
+                "FullName": "DeepInheritanceChainNamespace.Level1.Property1.set",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 13,
+                    "Column": 35,
+                    "Index": 203
+                  },
+                  "End": {
+                    "Line": 13,
+                    "Column": 38,
+                    "Index": 206
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "void",
+                "Parameters": [
+                  {
+                    "Name": "value",
+                    "FullTypeName": "string",
+                    "Nullable": false,
+                    "DefaultValue": null
+                  }
+                ],
+                "UsingStatementData": null
+              }
+            ],
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "string",
+            "Parameters": null,
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "public",
+          "class"
+        ],
+        "Attributes": null,
+        "Inheritance": {
+          "DirectBaseClasses": [
+            "DeepInheritanceChainNamespace.Level0"
+          ],
+          "DirectInterfaces": null,
+          "AllBaseClasses": [
+            "DeepInheritanceChainNamespace.Level0"
+          ],
+          "AllInterfaces": []
+        },
+        "ReturnType": null,
+        "Parameters": null,
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "Level2",
+        "FullName": "DeepInheritanceChainNamespace.Level2",
+        "Type": 0,
+        "Location": {
+          "Start": {
+            "Line": 16,
+            "Column": 13,
+            "Index": 229
+          },
+          "End": {
+            "Line": 16,
+            "Column": 19,
+            "Index": 235
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": "Property2",
+            "FullName": "DeepInheritanceChainNamespace.Level2.Property2",
+            "Type": 4,
+            "Location": {
+              "Start": {
+                "Line": 18,
+                "Column": 18,
+                "Index": 267
+              },
+              "End": {
+                "Line": 18,
+                "Column": 27,
+                "Index": 276
+              }
+            },
+            "Children": [
+              {
+                "SimpleName": "get_Property2",
+                "FullName": "DeepInheritanceChainNamespace.Level2.Property2.get",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 18,
+                    "Column": 30,
+                    "Index": 279
+                  },
+                  "End": {
+                    "Line": 18,
+                    "Column": 33,
+                    "Index": 282
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "string",
+                "Parameters": [],
+                "UsingStatementData": null
+              },
+              {
+                "SimpleName": "set_Property2",
+                "FullName": "DeepInheritanceChainNamespace.Level2.Property2.set",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 18,
+                    "Column": 35,
+                    "Index": 284
+                  },
+                  "End": {
+                    "Line": 18,
+                    "Column": 38,
+                    "Index": 287
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "void",
+                "Parameters": [
+                  {
+                    "Name": "value",
+                    "FullTypeName": "string",
+                    "Nullable": false,
+                    "DefaultValue": null
+                  }
+                ],
+                "UsingStatementData": null
+              }
+            ],
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "string",
+            "Parameters": null,
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "public",
+          "class"
+        ],
+        "Attributes": null,
+        "Inheritance": {
+          "DirectBaseClasses": [
+            "DeepInheritanceChainNamespace.Level1"
+          ],
+          "DirectInterfaces": null,
+          "AllBaseClasses": [
+            "DeepInheritanceChainNamespace.Level1",
+            "DeepInheritanceChainNamespace.Level0"
+          ],
+          "AllInterfaces": []
+        },
+        "ReturnType": null,
+        "Parameters": null,
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "Level3",
+        "FullName": "DeepInheritanceChainNamespace.Level3",
+        "Type": 0,
+        "Location": {
+          "Start": {
+            "Line": 21,
+            "Column": 13,
+            "Index": 310
+          },
+          "End": {
+            "Line": 21,
+            "Column": 19,
+            "Index": 316
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": "Property3",
+            "FullName": "DeepInheritanceChainNamespace.Level3.Property3",
+            "Type": 4,
+            "Location": {
+              "Start": {
+                "Line": 23,
+                "Column": 18,
+                "Index": 348
+              },
+              "End": {
+                "Line": 23,
+                "Column": 27,
+                "Index": 357
+              }
+            },
+            "Children": [
+              {
+                "SimpleName": "get_Property3",
+                "FullName": "DeepInheritanceChainNamespace.Level3.Property3.get",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 23,
+                    "Column": 30,
+                    "Index": 360
+                  },
+                  "End": {
+                    "Line": 23,
+                    "Column": 33,
+                    "Index": 363
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "string",
+                "Parameters": [],
+                "UsingStatementData": null
+              },
+              {
+                "SimpleName": "set_Property3",
+                "FullName": "DeepInheritanceChainNamespace.Level3.Property3.set",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 23,
+                    "Column": 35,
+                    "Index": 365
+                  },
+                  "End": {
+                    "Line": 23,
+                    "Column": 38,
+                    "Index": 368
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "void",
+                "Parameters": [
+                  {
+                    "Name": "value",
+                    "FullTypeName": "string",
+                    "Nullable": false,
+                    "DefaultValue": null
+                  }
+                ],
+                "UsingStatementData": null
+              }
+            ],
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "string",
+            "Parameters": null,
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "public",
+          "class"
+        ],
+        "Attributes": null,
+        "Inheritance": {
+          "DirectBaseClasses": [
+            "DeepInheritanceChainNamespace.Level2"
+          ],
+          "DirectInterfaces": null,
+          "AllBaseClasses": [
+            "DeepInheritanceChainNamespace.Level2",
+            "DeepInheritanceChainNamespace.Level1",
+            "DeepInheritanceChainNamespace.Level0"
+          ],
+          "AllInterfaces": []
+        },
+        "ReturnType": null,
+        "Parameters": null,
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "Level4",
+        "FullName": "DeepInheritanceChainNamespace.Level4",
+        "Type": 0,
+        "Location": {
+          "Start": {
+            "Line": 26,
+            "Column": 13,
+            "Index": 391
+          },
+          "End": {
+            "Line": 26,
+            "Column": 19,
+            "Index": 397
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": "Property4",
+            "FullName": "DeepInheritanceChainNamespace.Level4.Property4",
+            "Type": 4,
+            "Location": {
+              "Start": {
+                "Line": 28,
+                "Column": 18,
+                "Index": 429
+              },
+              "End": {
+                "Line": 28,
+                "Column": 27,
+                "Index": 438
+              }
+            },
+            "Children": [
+              {
+                "SimpleName": "get_Property4",
+                "FullName": "DeepInheritanceChainNamespace.Level4.Property4.get",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 28,
+                    "Column": 30,
+                    "Index": 441
+                  },
+                  "End": {
+                    "Line": 28,
+                    "Column": 33,
+                    "Index": 444
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "string",
+                "Parameters": [],
+                "UsingStatementData": null
+              },
+              {
+                "SimpleName": "set_Property4",
+                "FullName": "DeepInheritanceChainNamespace.Level4.Property4.set",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 28,
+                    "Column": 35,
+                    "Index": 446
+                  },
+                  "End": {
+                    "Line": 28,
+                    "Column": 38,
+                    "Index": 449
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "void",
+                "Parameters": [
+                  {
+                    "Name": "value",
+                    "FullTypeName": "string",
+                    "Nullable": false,
+                    "DefaultValue": null
+                  }
+                ],
+                "UsingStatementData": null
+              }
+            ],
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "string",
+            "Parameters": null,
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "public",
+          "class"
+        ],
+        "Attributes": null,
+        "Inheritance": {
+          "DirectBaseClasses": [
+            "DeepInheritanceChainNamespace.Level3"
+          ],
+          "DirectInterfaces": null,
+          "AllBaseClasses": [
+            "DeepInheritanceChainNamespace.Level3",
+            "DeepInheritanceChainNamespace.Level2",
+            "DeepInheritanceChainNamespace.Level1",
+            "DeepInheritanceChainNamespace.Level0"
+          ],
+          "AllInterfaces": []
+        },
+        "ReturnType": null,
+        "Parameters": null,
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "Level5",
+        "FullName": "DeepInheritanceChainNamespace.Level5",
+        "Type": 0,
+        "Location": {
+          "Start": {
+            "Line": 31,
+            "Column": 13,
+            "Index": 472
+          },
+          "End": {
+            "Line": 31,
+            "Column": 19,
+            "Index": 478
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": "Property5",
+            "FullName": "DeepInheritanceChainNamespace.Level5.Property5",
+            "Type": 4,
+            "Location": {
+              "Start": {
+                "Line": 33,
+                "Column": 18,
+                "Index": 510
+              },
+              "End": {
+                "Line": 33,
+                "Column": 27,
+                "Index": 519
+              }
+            },
+            "Children": [
+              {
+                "SimpleName": "get_Property5",
+                "FullName": "DeepInheritanceChainNamespace.Level5.Property5.get",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 33,
+                    "Column": 30,
+                    "Index": 522
+                  },
+                  "End": {
+                    "Line": 33,
+                    "Column": 33,
+                    "Index": 525
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "string",
+                "Parameters": [],
+                "UsingStatementData": null
+              },
+              {
+                "SimpleName": "set_Property5",
+                "FullName": "DeepInheritanceChainNamespace.Level5.Property5.set",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 33,
+                    "Column": 35,
+                    "Index": 527
+                  },
+                  "End": {
+                    "Line": 33,
+                    "Column": 38,
+                    "Index": 530
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "void",
+                "Parameters": [
+                  {
+                    "Name": "value",
+                    "FullTypeName": "string",
+                    "Nullable": false,
+                    "DefaultValue": null
+                  }
+                ],
+                "UsingStatementData": null
+              }
+            ],
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "string",
+            "Parameters": null,
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "public",
+          "class"
+        ],
+        "Attributes": null,
+        "Inheritance": {
+          "DirectBaseClasses": [
+            "DeepInheritanceChainNamespace.Level4"
+          ],
+          "DirectInterfaces": null,
+          "AllBaseClasses": [
+            "DeepInheritanceChainNamespace.Level4",
+            "DeepInheritanceChainNamespace.Level3",
+            "DeepInheritanceChainNamespace.Level2",
+            "DeepInheritanceChainNamespace.Level1",
+            "DeepInheritanceChainNamespace.Level0"
+          ],
+          "AllInterfaces": []
+        },
+        "ReturnType": null,
+        "Parameters": null,
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "Level6",
+        "FullName": "DeepInheritanceChainNamespace.Level6",
+        "Type": 0,
+        "Location": {
+          "Start": {
+            "Line": 36,
+            "Column": 13,
+            "Index": 553
+          },
+          "End": {
+            "Line": 36,
+            "Column": 19,
+            "Index": 559
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": "Property6",
+            "FullName": "DeepInheritanceChainNamespace.Level6.Property6",
+            "Type": 4,
+            "Location": {
+              "Start": {
+                "Line": 38,
+                "Column": 18,
+                "Index": 591
+              },
+              "End": {
+                "Line": 38,
+                "Column": 27,
+                "Index": 600
+              }
+            },
+            "Children": [
+              {
+                "SimpleName": "get_Property6",
+                "FullName": "DeepInheritanceChainNamespace.Level6.Property6.get",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 38,
+                    "Column": 30,
+                    "Index": 603
+                  },
+                  "End": {
+                    "Line": 38,
+                    "Column": 33,
+                    "Index": 606
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "string",
+                "Parameters": [],
+                "UsingStatementData": null
+              },
+              {
+                "SimpleName": "set_Property6",
+                "FullName": "DeepInheritanceChainNamespace.Level6.Property6.set",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 38,
+                    "Column": 35,
+                    "Index": 608
+                  },
+                  "End": {
+                    "Line": 38,
+                    "Column": 38,
+                    "Index": 611
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "void",
+                "Parameters": [
+                  {
+                    "Name": "value",
+                    "FullTypeName": "string",
+                    "Nullable": false,
+                    "DefaultValue": null
+                  }
+                ],
+                "UsingStatementData": null
+              }
+            ],
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "string",
+            "Parameters": null,
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "public",
+          "class"
+        ],
+        "Attributes": null,
+        "Inheritance": {
+          "DirectBaseClasses": [
+            "DeepInheritanceChainNamespace.Level5"
+          ],
+          "DirectInterfaces": null,
+          "AllBaseClasses": [
+            "DeepInheritanceChainNamespace.Level5",
+            "DeepInheritanceChainNamespace.Level4",
+            "DeepInheritanceChainNamespace.Level3",
+            "DeepInheritanceChainNamespace.Level2",
+            "DeepInheritanceChainNamespace.Level1",
+            "DeepInheritanceChainNamespace.Level0"
+          ],
+          "AllInterfaces": []
+        },
+        "ReturnType": null,
+        "Parameters": null,
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "Level7",
+        "FullName": "DeepInheritanceChainNamespace.Level7",
+        "Type": 0,
+        "Location": {
+          "Start": {
+            "Line": 41,
+            "Column": 13,
+            "Index": 634
+          },
+          "End": {
+            "Line": 41,
+            "Column": 19,
+            "Index": 640
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": "Property7",
+            "FullName": "DeepInheritanceChainNamespace.Level7.Property7",
+            "Type": 4,
+            "Location": {
+              "Start": {
+                "Line": 43,
+                "Column": 18,
+                "Index": 672
+              },
+              "End": {
+                "Line": 43,
+                "Column": 27,
+                "Index": 681
+              }
+            },
+            "Children": [
+              {
+                "SimpleName": "get_Property7",
+                "FullName": "DeepInheritanceChainNamespace.Level7.Property7.get",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 43,
+                    "Column": 30,
+                    "Index": 684
+                  },
+                  "End": {
+                    "Line": 43,
+                    "Column": 33,
+                    "Index": 687
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "string",
+                "Parameters": [],
+                "UsingStatementData": null
+              },
+              {
+                "SimpleName": "set_Property7",
+                "FullName": "DeepInheritanceChainNamespace.Level7.Property7.set",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 43,
+                    "Column": 35,
+                    "Index": 689
+                  },
+                  "End": {
+                    "Line": 43,
+                    "Column": 38,
+                    "Index": 692
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "void",
+                "Parameters": [
+                  {
+                    "Name": "value",
+                    "FullTypeName": "string",
+                    "Nullable": false,
+                    "DefaultValue": null
+                  }
+                ],
+                "UsingStatementData": null
+              }
+            ],
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "string",
+            "Parameters": null,
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "public",
+          "class"
+        ],
+        "Attributes": null,
+        "Inheritance": {
+          "DirectBaseClasses": [
+            "DeepInheritanceChainNamespace.Level6"
+          ],
+          "DirectInterfaces": null,
+          "AllBaseClasses": [
+            "DeepInheritanceChainNamespace.Level6",
+            "DeepInheritanceChainNamespace.Level5",
+            "DeepInheritanceChainNamespace.Level4",
+            "DeepInheritanceChainNamespace.Level3",
+            "DeepInheritanceChainNamespace.Level2",
+            "DeepInheritanceChainNamespace.Level1",
+            "DeepInheritanceChainNamespace.Level0"
+          ],
+          "AllInterfaces": []
+        },
+        "ReturnType": null,
+        "Parameters": null,
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "Level8",
+        "FullName": "DeepInheritanceChainNamespace.Level8",
+        "Type": 0,
+        "Location": {
+          "Start": {
+            "Line": 46,
+            "Column": 13,
+            "Index": 715
+          },
+          "End": {
+            "Line": 46,
+            "Column": 19,
+            "Index": 721
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": "Property8",
+            "FullName": "DeepInheritanceChainNamespace.Level8.Property8",
+            "Type": 4,
+            "Location": {
+              "Start": {
+                "Line": 48,
+                "Column": 18,
+                "Index": 753
+              },
+              "End": {
+                "Line": 48,
+                "Column": 27,
+                "Index": 762
+              }
+            },
+            "Children": [
+              {
+                "SimpleName": "get_Property8",
+                "FullName": "DeepInheritanceChainNamespace.Level8.Property8.get",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 48,
+                    "Column": 30,
+                    "Index": 765
+                  },
+                  "End": {
+                    "Line": 48,
+                    "Column": 33,
+                    "Index": 768
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "string",
+                "Parameters": [],
+                "UsingStatementData": null
+              },
+              {
+                "SimpleName": "set_Property8",
+                "FullName": "DeepInheritanceChainNamespace.Level8.Property8.set",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 48,
+                    "Column": 35,
+                    "Index": 770
+                  },
+                  "End": {
+                    "Line": 48,
+                    "Column": 38,
+                    "Index": 773
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "void",
+                "Parameters": [
+                  {
+                    "Name": "value",
+                    "FullTypeName": "string",
+                    "Nullable": false,
+                    "DefaultValue": null
+                  }
+                ],
+                "UsingStatementData": null
+              }
+            ],
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "string",
+            "Parameters": null,
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "public",
+          "class"
+        ],
+        "Attributes": null,
+        "Inheritance": {
+          "DirectBaseClasses": [
+            "DeepInheritanceChainNamespace.Level7"
+          ],
+          "DirectInterfaces": null,
+          "AllBaseClasses": [
+            "DeepInheritanceChainNamespace.Level7",
+            "DeepInheritanceChainNamespace.Level6",
+            "DeepInheritanceChainNamespace.Level5",
+            "DeepInheritanceChainNamespace.Level4",
+            "DeepInheritanceChainNamespace.Level3",
+            "DeepInheritanceChainNamespace.Level2",
+            "DeepInheritanceChainNamespace.Level1",
+            "DeepInheritanceChainNamespace.Level0"
+          ],
+          "AllInterfaces": []
+        },
+        "ReturnType": null,
+        "Parameters": null,
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "Level9",
+        "FullName": "DeepInheritanceChainNamespace.Level9",
+        "Type": 0,
+        "Location": {
+          "Start": {
+            "Line": 51,
+            "Column": 13,
+            "Index": 796
+          },
+          "End": {
+            "Line": 51,
+            "Column": 19,
+            "Index": 802
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": "Property9",
+            "FullName": "DeepInheritanceChainNamespace.Level9.Property9",
+            "Type": 4,
+            "Location": {
+              "Start": {
+                "Line": 53,
+                "Column": 18,
+                "Index": 834
+              },
+              "End": {
+                "Line": 53,
+                "Column": 27,
+                "Index": 843
+              }
+            },
+            "Children": [
+              {
+                "SimpleName": "get_Property9",
+                "FullName": "DeepInheritanceChainNamespace.Level9.Property9.get",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 53,
+                    "Column": 30,
+                    "Index": 846
+                  },
+                  "End": {
+                    "Line": 53,
+                    "Column": 33,
+                    "Index": 849
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "string",
+                "Parameters": [],
+                "UsingStatementData": null
+              },
+              {
+                "SimpleName": "set_Property9",
+                "FullName": "DeepInheritanceChainNamespace.Level9.Property9.set",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 53,
+                    "Column": 35,
+                    "Index": 851
+                  },
+                  "End": {
+                    "Line": 53,
+                    "Column": 38,
+                    "Index": 854
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "void",
+                "Parameters": [
+                  {
+                    "Name": "value",
+                    "FullTypeName": "string",
+                    "Nullable": false,
+                    "DefaultValue": null
+                  }
+                ],
+                "UsingStatementData": null
+              }
+            ],
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "string",
+            "Parameters": null,
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "public",
+          "class"
+        ],
+        "Attributes": null,
+        "Inheritance": {
+          "DirectBaseClasses": [
+            "DeepInheritanceChainNamespace.Level8"
+          ],
+          "DirectInterfaces": null,
+          "AllBaseClasses": [
+            "DeepInheritanceChainNamespace.Level8",
+            "DeepInheritanceChainNamespace.Level7",
+            "DeepInheritanceChainNamespace.Level6",
+            "DeepInheritanceChainNamespace.Level5",
+            "DeepInheritanceChainNamespace.Level4",
+            "DeepInheritanceChainNamespace.Level3",
+            "DeepInheritanceChainNamespace.Level2",
+            "DeepInheritanceChainNamespace.Level1",
+            "DeepInheritanceChainNamespace.Level0"
+          ],
+          "AllInterfaces": []
+        },
+        "ReturnType": null,
+        "Parameters": null,
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "Level10",
+        "FullName": "DeepInheritanceChainNamespace.Level10",
+        "Type": 0,
+        "Location": {
+          "Start": {
+            "Line": 56,
+            "Column": 13,
+            "Index": 877
+          },
+          "End": {
+            "Line": 56,
+            "Column": 20,
+            "Index": 884
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": "Property10",
+            "FullName": "DeepInheritanceChainNamespace.Level10.Property10",
+            "Type": 4,
+            "Location": {
+              "Start": {
+                "Line": 58,
+                "Column": 18,
+                "Index": 916
+              },
+              "End": {
+                "Line": 58,
+                "Column": 28,
+                "Index": 926
+              }
+            },
+            "Children": [
+              {
+                "SimpleName": "get_Property10",
+                "FullName": "DeepInheritanceChainNamespace.Level10.Property10.get",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 58,
+                    "Column": 31,
+                    "Index": 929
+                  },
+                  "End": {
+                    "Line": 58,
+                    "Column": 34,
+                    "Index": 932
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "string",
+                "Parameters": [],
+                "UsingStatementData": null
+              },
+              {
+                "SimpleName": "set_Property10",
+                "FullName": "DeepInheritanceChainNamespace.Level10.Property10.set",
+                "Type": 1,
+                "Location": {
+                  "Start": {
+                    "Line": 58,
+                    "Column": 36,
+                    "Index": 934
+                  },
+                  "End": {
+                    "Line": 58,
+                    "Column": 39,
+                    "Index": 937
+                  }
+                },
+                "Children": null,
+                "Modifiers": [
+                  "public"
+                ],
+                "Attributes": null,
+                "Inheritance": null,
+                "ReturnType": "void",
+                "Parameters": [
+                  {
+                    "Name": "value",
+                    "FullTypeName": "string",
+                    "Nullable": false,
+                    "DefaultValue": null
+                  }
+                ],
+                "UsingStatementData": null
+              }
+            ],
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "string",
+            "Parameters": null,
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "FinalMethod",
+            "FullName": "DeepInheritanceChainNamespace.Level10.FinalMethod()",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 60,
+                "Column": 16,
+                "Index": 960
+              },
+              "End": {
+                "Line": 60,
+                "Column": 27,
+                "Index": 971
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "public"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "void",
+            "Parameters": [],
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "public",
+          "class"
+        ],
+        "Attributes": null,
+        "Inheritance": {
+          "DirectBaseClasses": [
+            "DeepInheritanceChainNamespace.Level9"
+          ],
+          "DirectInterfaces": null,
+          "AllBaseClasses": [
+            "DeepInheritanceChainNamespace.Level9",
+            "DeepInheritanceChainNamespace.Level8",
+            "DeepInheritanceChainNamespace.Level7",
+            "DeepInheritanceChainNamespace.Level6",
+            "DeepInheritanceChainNamespace.Level5",
+            "DeepInheritanceChainNamespace.Level4",
+            "DeepInheritanceChainNamespace.Level3",
+            "DeepInheritanceChainNamespace.Level2",
+            "DeepInheritanceChainNamespace.Level1",
+            "DeepInheritanceChainNamespace.Level0"
+          ],
+          "AllInterfaces": []
+        },
+        "ReturnType": null,
+        "Parameters": null,
+        "UsingStatementData": null
+      }
+    ],
+    "Modifiers": [
+      "public"
+    ],
+    "Attributes": null,
+    "Inheritance": null,
+    "ReturnType": null,
+    "Parameters": null,
+    "UsingStatementData": null
+  }
+]

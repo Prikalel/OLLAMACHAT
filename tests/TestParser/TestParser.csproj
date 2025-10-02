@@ -45,5 +45,11 @@
     <None Update="EntityServiceTests.ExtractEntitiesAsync_ComplexInheritanceSnapshot_ShouldMatchSnapshot.verified.txt">
       <DependentUpon>EntityServiceTests.cs</DependentUpon>
     </None>
+    <None Update="EntityServiceTests.ExtractEntitiesAsync_UnitySnapshot_ShouldMatchSnapshot.verified.txt">
+      <DependentUpon>EntityServiceTests.cs</DependentUpon>
+    </None>
+    <None Update="EntityServiceTests.ExtractEntitiesAsync_DeepInheritanceChain_ShouldMatchSnapshot.verified.txt">
+      <DependentUpon>EntityServiceTests.cs</DependentUpon>
+    </None>
   </ItemGroup>
 </Project>

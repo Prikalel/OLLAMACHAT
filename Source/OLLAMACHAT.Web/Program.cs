@@ -62,6 +62,7 @@ public class Program
 
                 var loader = scope.ServiceProvider.GetRequiredService<ISolutionLoaderService>();
                 await loader.LoadSolutionAsync();
+                loader.SolutionReloaded += (_, _) => EntityService.ClearCache();
             }
 
             await build

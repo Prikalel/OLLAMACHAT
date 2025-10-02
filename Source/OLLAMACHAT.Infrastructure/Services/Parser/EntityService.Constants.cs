@@ -5,24 +5,9 @@ namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 /// </summary>
 public partial class EntityService
 {
-    /// <summary>
-    /// Максимальный размер файла в байтах для предупреждения о большом файле
-    /// </summary>
+    private static readonly Regex unityEventRegex = new(@"UnityEvent<.*>", RegexOptions.Compiled);
+    private static readonly string[] unityEventNames = { "UnityEvent", "UnityEvent<T>", "UnityEvent<T0, T1>", "UnityEvent<T0, T1, T2>", "UnityEvent<T0, T1, T2, T3>" };
     private const int MaxFileSizeWarningBytes = 100_000;
-
-    /// <summary>
-    /// Максимальная длина имени using директивы для предупреждения
-    /// </summary>
-    private const int MaxUsingNameLength = 200;
-
-    /// <summary>
-    /// Максимальное количество синтаксических ошибок для логирования
-    /// </summary>
-    private const int MaxSyntaxErrorsToLog = 5;
-
-    /// <summary>
-    /// Важные методы для включения при переопределении
-    /// </summary>
     private static readonly string[] ImportantOverrideMethods =
     {
         "ToString", "Equals", "GetHashCode", "Finalize"
@@ -37,9 +22,8 @@ public partial class EntityService
     {
         if (string.IsNullOrEmpty(name))
             return false;
-
-        return name.Any(c => !char.IsLetterOrDigit(c) && c != '_' && c != '`' && c != '.' &&
-                            c != '[' && c != ']' && c != '<' && c != '>' && c != ',');
+        const string AllowedSymbols = "_`.[]<>,";
+        return name.Any(c => !char.IsLetterOrDigit(c) && !AllowedSymbols.Contains(c));
     }
 
     /// <summary>

@@ -1,12 +1,7 @@
-using System;
-using System.Text.Json;
-using VelikiyPrikalel.OLLAMACHAT.Application.Models;
-using Xunit.Abstractions;
-
 namespace TestParser;
 
 /// <summary>
-/// Основной класс тестов для EntityService
+/// Основной класс тестов для <see cref="EntityService"/>.
 /// </summary>
 public class EntityServiceTests : TestBase, IDisposable
 {
@@ -33,14 +28,11 @@ public class EntityServiceTests : TestBase, IDisposable
     [Fact]
     public async Task SealedClassInheritance_Test_ShouldExtractSealedClassInheritance()
     {
-        // Arrange
         var document = await CreateTestDocumentAsync(TestDataHelper.SealedClassInheritanceTestCode);
         var options = CreateParserOptions(extractFullInheritance: true);
 
-        // Act
         var result = await EntityService.ExtractEntitiesAsync(document, options);
 
-        // Assert
         Assert.NotNull(result);
         var entities = result.ToList();
 
@@ -63,14 +55,11 @@ public class EntityServiceTests : TestBase, IDisposable
     [Fact]
     public async Task AbstractClassInheritance_Test_ShouldExtractAbstractClassInheritance()
     {
-        // Arrange
         var document = await CreateTestDocumentAsync(TestDataHelper.AbstractClassInheritanceTestCode);
         var options = CreateParserOptions(extractFullInheritance: true);
 
-        // Act
         var result = await EntityService.ExtractEntitiesAsync(document, options);
 
-        // Assert
         Assert.NotNull(result);
         var entities = result.ToList();
 
@@ -110,14 +99,11 @@ public class EntityServiceTests : TestBase, IDisposable
     [InlineData(15)]
     public async Task ComplexInheritance_WithMaxDepth_ShouldRespectDepthLimit(int maxDepth)
     {
-        // Arrange
         var document = await CreateTestDocumentAsync(TestDataHelper.DeepInheritanceChainTestCode);
         var options = CreateParserOptions(extractFullInheritance: true, maxDepth: maxDepth);
 
-        // Act
         var result = await EntityService.ExtractEntitiesAsync(document, options);
 
-        // Assert
         Assert.NotNull(result);
         var entities = result.ToList();
 
@@ -165,17 +151,14 @@ public class EntityServiceTests : TestBase, IDisposable
     [Fact]
     public async Task ExtractEntitiesAsync_PerformanceTestWithManyEntities_ShouldCompleteInReasonableTime()
     {
-        // Arrange
         var document = await CreateTestDocumentAsync(TestDataHelper.PerformanceTestCode);
         var options = CreateParserOptions(extractFullInheritance: true);
 
-        // Act
         var startTime = DateTime.UtcNow;
         var result = await EntityService.ExtractEntitiesAsync(document, options);
         var endTime = DateTime.UtcNow;
         var duration = endTime - startTime;
 
-        // Assert
         Assert.NotNull(result);
         var entities = result.ToList();
         Assert.True(entities.Count > 0);
@@ -192,11 +175,9 @@ public class EntityServiceTests : TestBase, IDisposable
     [Fact]
     public async Task ExtractEntitiesAsync_CachingTest_ShouldBeFasterOnSecondCall()
     {
-        // Arrange
         var document = await CreateTestDocumentAsync(TestDataHelper.BasicInheritanceTestCode);
         var options = CreateParserOptions(extractFullInheritance: true);
 
-        // Act
         var startTime1 = DateTime.UtcNow;
         var result1 = await EntityService.ExtractEntitiesAsync(document, options);
         var endTime1 = DateTime.UtcNow;
@@ -207,7 +188,6 @@ public class EntityServiceTests : TestBase, IDisposable
         var endTime2 = DateTime.UtcNow;
         var duration2 = endTime2 - startTime2;
 
-        // Assert
         Assert.NotNull(result1);
         Assert.NotNull(result2);
 
@@ -231,14 +211,11 @@ public class EntityServiceTests : TestBase, IDisposable
     [Fact]
     public async Task ExtractEntitiesAsync_EmptyDocument_ShouldReturnEmptyResult()
     {
-        // Arrange
         var document = await CreateTestDocumentAsync("");
         var options = CreateParserOptions();
 
-        // Act
         var result = await EntityService.ExtractEntitiesAsync(document, options);
 
-        // Assert
         Assert.NotNull(result);
         var entities = result.ToList();
         Assert.Empty(entities);
@@ -250,15 +227,12 @@ public class EntityServiceTests : TestBase, IDisposable
     [Fact]
     public async Task ExtractEntitiesAsync_WithErrorHandling_ShouldContinueProcessing()
     {
-        // Arrange
         var document = await CreateTestDocumentAsync(TestDataHelper.ErrorHandlingTestCode);
         var options = CreateParserOptions();
 
-        // Act
         var message = Assert.ThrowsAsync<Exception>(async () => await EntityService.ExtractEntitiesAsync(document, options))
             .Result.Message;
 
-        // Assert
         Assert.Equal("Syntax error at line 10: Требуется \")\"", message);
     }
 
@@ -272,14 +246,11 @@ public class EntityServiceTests : TestBase, IDisposable
     [Fact]
     public async Task ExtractEntitiesAsync_BasicInheritanceSnapshot_ShouldMatchSnapshot()
     {
-        // Arrange
         var document = await CreateTestDocumentAsync(TestDataHelper.BasicInheritanceTestCode);
         var options = CreateParserOptions(extractFullInheritance: true);
 
-        // Act
         var result = await EntityService.ExtractEntitiesAsync(document, options);
 
-        // Assert
         await Verify(JsonSerializer.Serialize(result, new JsonSerializerOptions()
         {
             WriteIndented = true
@@ -292,14 +263,46 @@ public class EntityServiceTests : TestBase, IDisposable
     [Fact]
     public async Task ExtractEntitiesAsync_ComplexInheritanceSnapshot_ShouldMatchSnapshot()
     {
-        // Arrange
         var document = await CreateTestDocumentAsync(TestDataHelper.ComplexInheritanceTestCode);
         var options = CreateParserOptions(extractFullInheritance: true);
 
-        // Act
         var result = await EntityService.ExtractEntitiesAsync(document, options);
 
-        // Assert
+        await Verify(JsonSerializer.Serialize(result, new JsonSerializerOptions()
+        {
+            WriteIndented = true
+        }));
+    }
+
+    /// <summary>
+    /// Снапшот-тест для unity файла.
+    /// </summary>
+    [Fact]
+    public async Task ExtractEntitiesAsync_UnitySnapshot_ShouldMatchSnapshot()
+    {
+        var document = await CreateTestDocumentAsync(TestDataHelper.ExampleUnityScriptTestCode);
+        var options = CreateParserOptions(extractFullInheritance: true);
+
+        var result = await EntityService.ExtractEntitiesAsync(document, options);
+
+        Assert.Contains(result, x => x.FullName.Contains("IStateMachineControllable"));
+        await Verify(JsonSerializer.Serialize(result, new JsonSerializerOptions()
+        {
+            WriteIndented = true
+        }));
+    }
+
+    /// <summary>
+    /// Снапшот-тест для DeepInheritanceChain.
+    /// </summary>
+    [Fact]
+    public async Task ExtractEntitiesAsync_DeepInheritanceChain_ShouldMatchSnapshot()
+    {
+        var document = await CreateTestDocumentAsync(TestDataHelper.DeepInheritanceChainTestCode);
+        var options = CreateParserOptions(extractFullInheritance: true);
+
+        var result = await EntityService.ExtractEntitiesAsync(document, options);
+
         await Verify(JsonSerializer.Serialize(result, new JsonSerializerOptions()
         {
             WriteIndented = true
@@ -316,23 +319,16 @@ public class EntityServiceTests : TestBase, IDisposable
     [Fact]
     public async Task CircularReference_Class_Test_ShouldHandleCircularClassReferencesGracefully()
     {
-        // Arrange
         var document = await CreateTestDocumentAsync(TestDataHelper.CircularReferenceClassTestCode);
         var options = CreateParserOptions(extractFullInheritance: true);
 
-        // Act
         var result = await EntityService.ExtractEntitiesAsync(document, options);
 
-        // Assert
         Assert.NotNull(result);
         var entities = result.ToList();
 
         // Проверяем, что нет бесконечной рекурсии
         Assert.True(entities.Count < 100, "Слишком много сущностей, возможна бесконечная рекурсия");
-
-        // Проверяем наличие классов (если они были обработаны до ошибки)
-        var classA = entities.FirstOrDefault(e => e.SimpleName == "A");
-        var classB = entities.FirstOrDefault(e => e.SimpleName == "B");
 
         // Из-за синтаксической ошибки классы могут не быть обработаны
         // Главное - чтобы не было бесконечной рекурсии
@@ -356,14 +352,11 @@ public class EntityServiceTests : TestBase, IDisposable
     [Fact]
     public async Task EmptyFile_Test_ShouldHandleEmptyFileGracefully()
     {
-        // Arrange
         var document = await CreateTestDocumentAsync(TestDataHelper.EmptyFileTestCode);
         var options = CreateParserOptions();
 
-        // Act
         var result = await EntityService.ExtractEntitiesAsync(document, options);
 
-        // Assert
         Assert.NotNull(result);
         var entities = result.ToList();
         Assert.Empty(entities);
@@ -377,7 +370,6 @@ public class EntityServiceTests : TestBase, IDisposable
     [Fact]
     public async Task CommentsOnlyFile_Test_ShouldHandleCommentsOnlyFile()
     {
-        // Arrange
         var commentsOnlyCode = @"
 // Это файл с только комментариями
 using System;
@@ -398,10 +390,8 @@ using System;
         var document = await CreateTestDocumentAsync(commentsOnlyCode);
         var options = CreateParserOptions();
 
-        // Act
         var result = await EntityService.ExtractEntitiesAsync(document, options);
 
-        // Assert
         Assert.NotNull(result);
         var entities = result.ToList();
         Assert.Equal(entities.Select(x => x.Type), [ParsedEntityType.UsingStatement]);
@@ -415,7 +405,6 @@ using System;
     [Fact]
     public async Task UsingOnlyFile_Test_ShouldHandleUsingOnlyFile()
     {
-        // Arrange
         var usingOnlyCode = @"
 global using System;
 global using System.Collections.Generic;
@@ -427,10 +416,8 @@ global using Microsoft.CodeAnalysis;
         var document = await CreateTestDocumentAsync(usingOnlyCode);
         var options = CreateParserOptions(extractUsingStatements: true);
 
-        // Act
         var result = await EntityService.ExtractEntitiesAsync(document, options);
 
-        // Assert
         Assert.NotNull(result);
         var entities = result.Where(x => x.Type is not ParsedEntityType.UsingStatement).ToList();
         Assert.Empty(entities);
@@ -444,7 +431,6 @@ global using Microsoft.CodeAnalysis;
     [Fact]
     public async Task NamespaceOnlyFile_Test_ShouldHandleNamespaceOnlyFile()
     {
-        // Arrange
         var namespaceOnlyCode = @"
 using System;
 
@@ -462,10 +448,8 @@ namespace TestNamespace2.SubNamespace
         var document = await CreateTestDocumentAsync(namespaceOnlyCode);
         var options = CreateParserOptions();
 
-        // Act
         var result = await EntityService.ExtractEntitiesAsync(document, options);
 
-        // Assert
         Assert.NotNull(result);
         var nonNamespaceEntities = result.Where(x => x.Type is not ParsedEntityType.Namespace && x.Type is not ParsedEntityType.UsingStatement).ToList();
         Assert.Empty(nonNamespaceEntities);

@@ -1,0 +1,362 @@
+﻿[
+  {
+    "SimpleName": "System",
+    "FullName": "System",
+    "Type": 3,
+    "Location": {
+      "Start": {
+        "Line": 2,
+        "Column": 0,
+        "Index": 2
+      },
+      "End": {
+        "Line": 2,
+        "Column": 13,
+        "Index": 15
+      }
+    },
+    "Children": null,
+    "Modifiers": null,
+    "Attributes": null,
+    "Inheritance": null,
+    "ReturnType": null,
+    "Parameters": null,
+    "UsingStatementData": null
+  },
+  {
+    "SimpleName": "System.Linq",
+    "FullName": "System.Linq",
+    "Type": 3,
+    "Location": {
+      "Start": {
+        "Line": 3,
+        "Column": 0,
+        "Index": 17
+      },
+      "End": {
+        "Line": 3,
+        "Column": 18,
+        "Index": 35
+      }
+    },
+    "Children": null,
+    "Modifiers": null,
+    "Attributes": null,
+    "Inheritance": null,
+    "ReturnType": null,
+    "Parameters": null,
+    "UsingStatementData": null
+  },
+  {
+    "SimpleName": "Stateless",
+    "FullName": "Stateless",
+    "Type": 3,
+    "Location": {
+      "Start": {
+        "Line": 4,
+        "Column": 0,
+        "Index": 37
+      },
+      "End": {
+        "Line": 4,
+        "Column": 16,
+        "Index": 53
+      }
+    },
+    "Children": null,
+    "Modifiers": null,
+    "Attributes": null,
+    "Inheritance": null,
+    "ReturnType": null,
+    "Parameters": null,
+    "UsingStatementData": null
+  },
+  {
+    "SimpleName": "UnityEngine",
+    "FullName": "UnityEngine",
+    "Type": 3,
+    "Location": {
+      "Start": {
+        "Line": 5,
+        "Column": 0,
+        "Index": 55
+      },
+      "End": {
+        "Line": 5,
+        "Column": 18,
+        "Index": 73
+      }
+    },
+    "Children": null,
+    "Modifiers": null,
+    "Attributes": null,
+    "Inheritance": null,
+    "ReturnType": null,
+    "Parameters": null,
+    "UsingStatementData": null
+  },
+  {
+    "SimpleName": "UnityEngine.Events",
+    "FullName": "UnityEngine.Events",
+    "Type": 3,
+    "Location": {
+      "Start": {
+        "Line": 6,
+        "Column": 0,
+        "Index": 75
+      },
+      "End": {
+        "Line": 6,
+        "Column": 25,
+        "Index": 100
+      }
+    },
+    "Children": null,
+    "Modifiers": null,
+    "Attributes": null,
+    "Inheritance": null,
+    "ReturnType": null,
+    "Parameters": null,
+    "UsingStatementData": null
+  },
+  {
+    "SimpleName": "IStateMachineControllable",
+    "FullName": "IStateMachineControllable\u003CTState, TTrigger\u003E",
+    "Type": 0,
+    "Location": {
+      "Start": {
+        "Line": 14,
+        "Column": 22,
+        "Index": 348
+      },
+      "End": {
+        "Line": 14,
+        "Column": 47,
+        "Index": 373
+      }
+    },
+    "Children": [
+      {
+        "SimpleName": "OnStateChanged",
+        "FullName": "IStateMachineControllable\u003CTState, TTrigger\u003E.OnStateChanged",
+        "Type": 8,
+        "Location": {
+          "Start": {
+            "Line": 18,
+            "Column": 65,
+            "Index": 553
+          },
+          "End": {
+            "Line": 18,
+            "Column": 79,
+            "Index": 567
+          }
+        },
+        "Children": null,
+        "Modifiers": [
+          "public"
+        ],
+        "Attributes": null,
+        "Inheritance": null,
+        "ReturnType": "UnityEvent\u003CStateMachine\u003CTState, TTrigger\u003E.Transition\u003E",
+        "Parameters": null,
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "StateMachine",
+        "FullName": "IStateMachineControllable\u003CTState, TTrigger\u003E.StateMachine",
+        "Type": 4,
+        "Location": {
+          "Start": {
+            "Line": 23,
+            "Column": 45,
+            "Index": 700
+          },
+          "End": {
+            "Line": 23,
+            "Column": 57,
+            "Index": 712
+          }
+        },
+        "Children": [
+          {
+            "SimpleName": "get_StateMachine",
+            "FullName": "IStateMachineControllable\u003CTState, TTrigger\u003E.StateMachine.get",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 23,
+                "Column": 60,
+                "Index": 715
+              },
+              "End": {
+                "Line": 23,
+                "Column": 63,
+                "Index": 718
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "protected"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "StateMachine\u003CTState, TTrigger\u003E",
+            "Parameters": [],
+            "UsingStatementData": null
+          },
+          {
+            "SimpleName": "set_StateMachine",
+            "FullName": "IStateMachineControllable\u003CTState, TTrigger\u003E.StateMachine.set",
+            "Type": 1,
+            "Location": {
+              "Start": {
+                "Line": 23,
+                "Column": 65,
+                "Index": 720
+              },
+              "End": {
+                "Line": 23,
+                "Column": 68,
+                "Index": 723
+              }
+            },
+            "Children": null,
+            "Modifiers": [
+              "protected"
+            ],
+            "Attributes": null,
+            "Inheritance": null,
+            "ReturnType": "void",
+            "Parameters": [
+              {
+                "Name": "value",
+                "FullTypeName": "StateMachine\u003CTState, TTrigger\u003E",
+                "Nullable": false,
+                "DefaultValue": null
+              }
+            ],
+            "UsingStatementData": null
+          }
+        ],
+        "Modifiers": [
+          "protected"
+        ],
+        "Attributes": null,
+        "Inheritance": null,
+        "ReturnType": "StateMachine\u003CTState, TTrigger\u003E",
+        "Parameters": null,
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "ConfigureStateEntries",
+        "FullName": "IStateMachineControllable\u003CTState, TTrigger\u003E.ConfigureStateEntries()",
+        "Type": 1,
+        "Location": {
+          "Start": {
+            "Line": 28,
+            "Column": 19,
+            "Index": 848
+          },
+          "End": {
+            "Line": 28,
+            "Column": 40,
+            "Index": 869
+          }
+        },
+        "Children": null,
+        "Modifiers": [
+          "protected"
+        ],
+        "Attributes": null,
+        "Inheritance": null,
+        "ReturnType": "void",
+        "Parameters": [],
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "FireIfCan",
+        "FullName": "IStateMachineControllable\u003CTState, TTrigger\u003E.FireIfCan(TTrigger)",
+        "Type": 1,
+        "Location": {
+          "Start": {
+            "Line": 42,
+            "Column": 16,
+            "Index": 1298
+          },
+          "End": {
+            "Line": 42,
+            "Column": 25,
+            "Index": 1307
+          }
+        },
+        "Children": null,
+        "Modifiers": [
+          "public"
+        ],
+        "Attributes": null,
+        "Inheritance": null,
+        "ReturnType": "bool",
+        "Parameters": [
+          {
+            "Name": "trigger",
+            "FullTypeName": "TTrigger",
+            "Nullable": false,
+            "DefaultValue": null
+          }
+        ],
+        "UsingStatementData": null
+      },
+      {
+        "SimpleName": "GetState",
+        "FullName": "IStateMachineControllable\u003CTState, TTrigger\u003E.GetState()",
+        "Type": 1,
+        "Location": {
+          "Start": {
+            "Line": 47,
+            "Column": 18,
+            "Index": 1466
+          },
+          "End": {
+            "Line": 47,
+            "Column": 26,
+            "Index": 1474
+          }
+        },
+        "Children": null,
+        "Modifiers": [
+          "public"
+        ],
+        "Attributes": null,
+        "Inheritance": null,
+        "ReturnType": "TState",
+        "Parameters": [],
+        "UsingStatementData": null
+      }
+    ],
+    "Modifiers": [
+      "public",
+      "abstract",
+      "class"
+    ],
+    "Attributes": [
+      {
+        "Name": "DisallowMultipleComponent",
+        "Arguments": []
+      }
+    ],
+    "Inheritance": {
+      "DirectBaseClasses": [
+        "MonoBehaviour"
+      ],
+      "DirectInterfaces": null,
+      "AllBaseClasses": [
+        "MonoBehaviour"
+      ],
+      "AllInterfaces": []
+    },
+    "ReturnType": null,
+    "Parameters": null,
+    "UsingStatementData": null
+  }
+]

@@ -17,7 +17,7 @@ namespace TestNamespace
     public class BaseClass
     {
         public string BaseProperty { get; set; }
-        
+
         public void BaseMethod()
         {
             Console.WriteLine(""Base method"");
@@ -32,21 +32,21 @@ namespace TestNamespace
     public class DerivedClass : BaseClass, ITestInterface
     {
         public string DerivedProperty { get; set; }
-        
+
         public void InterfaceMethod()
         {
             Console.WriteLine(""Interface method implementation"");
         }
-        
+
         public void DerivedMethod()
         {
             Console.WriteLine(""Derived method"");
         }
-        
+
         public class NestedClass
         {
             public string NestedProperty { get; set; }
-            
+
             public class DeepNestedClass
             {
                 public string DeepNestedProperty { get; set; }
@@ -82,12 +82,12 @@ namespace ComplexNamespace
     public abstract class ServiceBase<T> where T : BaseEntity
     {
         protected readonly IRepository<T> _repository;
-        
+
         protected ServiceBase(IRepository<T> repository)
         {
             _repository = repository;
         }
-        
+
         public virtual async Task<T> GetByIdAsync(int id)
         {
             return await _repository.GetByIdAsync(id);
@@ -98,7 +98,7 @@ namespace ComplexNamespace
     {
         public string Name { get; set; }
         public string Email { get; set; }
-        
+
         public class UserSettings
         {
             public string Theme { get; set; }
@@ -131,7 +131,7 @@ namespace ComplexNamespace
         public UserService(IRepository<User> repository) : base(repository)
         {
         }
-        
+
         public async Task<IEnumerable<User>> GetActiveUsersAsync()
         {
             var allUsers = await _repository.GetAllAsync();
@@ -159,7 +159,7 @@ namespace ErrorNamespace
     public class ValidClass
     {
         public string ValidProperty { get; set; }
-        
+
         public void ValidMethod()
         {
             Console.WriteLine(""Valid method"");
@@ -193,7 +193,7 @@ namespace PerformanceNamespace
         public string Name { get; set; }
         public string Email { get; set; }
         public Address Address { get; set; }
-        
+
         public class Address
         {
             public string Street { get; set; }
@@ -207,7 +207,7 @@ namespace PerformanceNamespace
         public string Name { get; set; }
         public decimal Price { get; set; }
         public Category Category { get; set; }
-        
+
         public class Category
         {
             public string Name { get; set; }
@@ -221,7 +221,7 @@ namespace PerformanceNamespace
         public List<OrderItem> Items { get; set; }
         public DateTime OrderDate { get; set; }
         public decimal TotalAmount { get; set; }
-        
+
         public class OrderItem
         {
             public Product Product { get; set; }
@@ -241,10 +241,10 @@ namespace PerformanceNamespace
                 OrderDate = DateTime.Now,
                 TotalAmount = CalculateTotal(items)
             };
-            
+
             return await Task.FromResult(order);
         }
-        
+
         private decimal CalculateTotal(List<OrderItem> items)
         {
             decimal total = 0;
@@ -268,7 +268,7 @@ namespace SealedClassInheritanceNamespace
     public class B
     {
         public string BaseProperty { get; set; }
-        
+
         public virtual void BaseMethod()
         {
             Console.WriteLine(""Base method"");
@@ -278,12 +278,12 @@ namespace SealedClassInheritanceNamespace
     public sealed class A : B
     {
         public string SealedProperty { get; set; }
-        
+
         public override void BaseMethod()
         {
             Console.WriteLine(""Sealed override base method"");
         }
-        
+
         public void SealedMethod()
         {
             Console.WriteLine(""Sealed method"");
@@ -302,7 +302,7 @@ namespace AbstractClassInheritanceNamespace
     public class B
     {
         public string BaseProperty { get; set; }
-        
+
         public void BaseMethod()
         {
             Console.WriteLine(""Base method"");
@@ -312,9 +312,9 @@ namespace AbstractClassInheritanceNamespace
     public abstract class A : B
     {
         public string AbstractProperty { get; set; }
-        
+
         public abstract void AbstractMethod();
-        
+
         public virtual void VirtualMethod()
         {
             Console.WriteLine(""Virtual method"");
@@ -324,12 +324,12 @@ namespace AbstractClassInheritanceNamespace
     public class C : A
     {
         public string ConcreteProperty { get; set; }
-        
+
         public override void AbstractMethod()
         {
             Console.WriteLine(""Abstract method implementation"");
         }
-        
+
         public override void VirtualMethod()
         {
             Console.WriteLine(""Override virtual method"");
@@ -343,68 +343,68 @@ namespace AbstractClassInheritanceNamespace
     public const string DeepInheritanceChainTestCode = @"
 using System;
 
-namespace DeepInheritanceChainNamespace
+namespace DeepInheritanceChainNamespace;
+
+public class Level0
 {
-    public class Level0
-    {
-        public string Property0 { get; set; }
-    }
+    public string Property0 { get; set; }
+}
 
-    public class Level1 : Level0
-    {
-        public string Property1 { get; set; }
-    }
+public class Level1 : Level0
+{
+    public string Property1 { get; set; }
+}
 
-    public class Level2 : Level1
-    {
-        public string Property2 { get; set; }
-    }
+public class Level2 : Level1
+{
+    public string Property2 { get; set; }
+}
 
-    public class Level3 : Level2
-    {
-        public string Property3 { get; set; }
-    }
+public class Level3 : Level2
+{
+    public string Property3 { get; set; }
+}
 
-    public class Level4 : Level3
-    {
-        public string Property4 { get; set; }
-    }
+public class Level4 : Level3
+{
+    public string Property4 { get; set; }
+}
 
-    public class Level5 : Level4
-    {
-        public string Property5 { get; set; }
-    }
+public class Level5 : Level4
+{
+    public string Property5 { get; set; }
+}
 
-    public class Level6 : Level5
-    {
-        public string Property6 { get; set; }
-    }
+public class Level6 : Level5
+{
+    public string Property6 { get; set; }
+}
 
-    public class Level7 : Level6
-    {
-        public string Property7 { get; set; }
-    }
+public class Level7 : Level6
+{
+    public string Property7 { get; set; }
+}
 
-    public class Level8 : Level7
-    {
-        public string Property8 { get; set; }
-    }
+public class Level8 : Level7
+{
+    public string Property8 { get; set; }
+}
 
-    public class Level9 : Level8
-    {
-        public string Property9 { get; set; }
-    }
+public class Level9 : Level8
+{
+    public string Property9 { get; set; }
+}
 
-    public class Level10 : Level9
+public class Level10 : Level9
+{
+    public string Property10 { get; set; }
+
+    public void FinalMethod()
     {
-        public string Property10 { get; set; }
-        
-        public void FinalMethod()
-        {
-            Console.WriteLine(""Final method at level 10"");
-        }
+        Console.WriteLine(""Final method at level 10"");
     }
-}";
+}
+";
 
     /// <summary>
     /// Тестовый код для проверки циклических ссылок в классах (некорректный код)
@@ -416,11 +416,11 @@ namespace CircularReferenceClassNamespace
 {
     // Этот код содержит синтаксическую ошибку - циклическое наследование классов
     // В реальном C# это не скомпилируется, но мы можем проверить обработку таких случаев
-    
+
     public class A : B
     {
         public string PropertyA { get; set; }
-        
+
         public void MethodA()
         {
             Console.WriteLine(""Method A"");
@@ -430,7 +430,7 @@ namespace CircularReferenceClassNamespace
     public class B : A
     {
         public string PropertyB { get; set; }
-        
+
         public void MethodB()
         {
             Console.WriteLine(""Method B"");
@@ -442,5 +442,58 @@ namespace CircularReferenceClassNamespace
     /// Тестовый код для проверки обработки пустого файла
     /// </summary>
     public const string EmptyFileTestCode = @"";
+
+    /// <summary>
+    /// Тестовый код для проверки обработки скриптов в unity-игре.
+    /// </summary>
+    public const string ExampleUnityScriptTestCode = @"
+using System;
+using System.Linq;
+using Stateless;
+using UnityEngine;
+using UnityEngine.Events;
+
+/// <summary>
+/// Абстрактный класс поддерживающий машину состояний.
+/// </summary>
+/// <typeparam name=""TState"">Состояния.</typeparam>
+/// <typeparam name=""TTrigger"">Триггер.</typeparam>
+[DisallowMultipleComponent]
+public abstract class IStateMachineControllable<TState, TTrigger> : MonoBehaviour {
+    /// <summary>
+    /// Событие изменения состояния.
+    /// </summary>
+    public UnityEvent<StateMachine<TState, TTrigger>.Transition> OnStateChanged;
+
+    /// <summary>
+    /// Получить машину состояний объекта.
+    /// </summary>
+    protected StateMachine<TState, TTrigger> StateMachine { get; set; }
+
+    /// <summary>
+    /// Настроить вызов события, когда меняется состояние.
+    /// </summary>
+    protected void ConfigureStateEntries()
+    {
+        foreach (var state in Enum.GetValues(typeof(TState)).OfType<TState>())
+        {
+            StateMachine.Configure(state)
+                .OnEntry(t => OnStateChanged.Invoke(t));
+        }
+    }
+
+    /// <summary>
+    /// Выполнить переход если это возможно.
+    /// </summary>
+    /// <param name=""trigger"">Переход состояния.</param>
+    /// <returns>true если удалось.</returns>
+    public bool FireIfCan(TTrigger trigger) => StateMachine.FireIfCan(trigger);
+
+    /// <summary>
+    /// Получить текущее состояние машины.
+    /// </summary>
+    public TState GetState() => StateMachine.State;
+}
+";
 
 }

@@ -7,207 +7,300 @@ public partial class EntityService(
     IOptions<SolutionSettings> solutionSettings,
     ISolutionLoaderService solutionLoaderService) : IEntityService
 {
-    private static readonly Regex UnityEventRegex = new(@"UnityEvent<.*>", RegexOptions.Compiled);
-    private static readonly string[] UnityEventNames = { "UnityEvent", "UnityEvent<T>", "UnityEvent<T0, T1>", "UnityEvent<T0, T1, T2>", "UnityEvent<T0, T1, T2, T3>" };
-
-    // Кэш для повышения производительности при анализе больших кодовых баз
     private static readonly ConcurrentDictionary<string, List<ParsedEntity>> entityCache = new();
 
-    private async Task<List<ParsedEntity>> ExtractChildEntitiesAsync(ISymbol symbol, SemanticModel semanticModel, int currentDepth, ParserOptions? options = null)
+    /// <summary>
+    /// Очистить кеш.
+    /// </summary>
+    public static void ClearCache() => entityCache.Clear();
+
+    /// <inheritdoc />
+    public async Task<IEnumerable<ParsedEntity>> ExtractEntitiesAsync(Document document, ParserOptions? options = null)
     {
-        // Проверка на null символ
-        if (symbol == null)
+        if (document == null)
         {
-            logger.LogWarning("Symbol is null in ExtractChildEntitiesAsync");
-            return new List<ParsedEntity>();
+            logger.LogError("Document is null, returning empty collection");
+            return Enumerable.Empty<ParsedEntity>();
         }
 
-        // Проверка на null семантическую модель
-        if (semanticModel == null)
+        if (string.IsNullOrEmpty(document.FilePath))
         {
-            logger.LogWarning("Semantic model is null in ExtractChildEntitiesAsync for symbol: {SymbolName}", symbol.Name);
-            return new List<ParsedEntity>();
+            logger.LogError("Document file path is null or empty, returning empty collection");
+            return Enumerable.Empty<ParsedEntity>();
         }
 
-        // Проверка на специальные символы в имени
-        if (symbol.Name != null && symbol.Name.Any(c => !char.IsLetterOrDigit(c) && c != '_' && c != '`'))
-        {
-            logger.LogWarning("Symbol contains special characters: {SymbolName}", symbol.Name);
-        }
-
-        logger.LogInformation("Extracting child entities for symbol: {SymbolName}", symbol.Name);
-
-        // Проверка на превышение максимальной глубины
-        if (options?.MaxDepth != null && currentDepth >= options.MaxDepth.Value)
-        {
-            logger.LogWarning("Maximum depth ({MaxDepth}) reached for symbol: {SymbolName} at depth {CurrentDepth}",
-                options.MaxDepth.Value, symbol.Name, currentDepth);
-            return new List<ParsedEntity>();
-        }
+        var startTime = DateTime.UtcNow;
+        logger.LogTrace("Starting entity extraction from document: {DocumentPath} at {StartTime}", document.FilePath, startTime);
 
         try
         {
-            // Оптимизация: предвычисляем примерное количество дочерних сущностей
-            var estimatedChildCount = symbol is INamedTypeSymbol namedTypeSymbol ?
-                namedTypeSymbol.GetMembers().Count(m => !m.IsImplicitlyDeclared || ShouldIncludeImplicitMember(m)) : 0;
+            var optionsKey = options != null
+                ? $"inh:{options.ExtractFullExtractInheritance ?? true}_depth:{options.MaxDepth ?? int.MaxValue}_using:{options.ExtractUsingStatementData ?? true}"
+                : "inh:true_depth:int.MaxValue_using:true";
+            var cacheKey = $"{document.FilePath}_{document.Id}_{optionsKey}";
 
-            var childEntities = new List<ParsedEntity>(estimatedChildCount);
-            var processedSymbols = new HashSet<string>(); // Защита от рекурсивных зависимостей
-            var childEntityTasks = new List<Task<ParsedEntity>>();
-
-            if (symbol is INamedTypeSymbol || symbol is INamespaceSymbol)
+            if (entityCache.TryGetValue(cacheKey, out var cachedEntity))
             {
-                // Оптимизация: получаем все члены сразу и фильтруем их
-                List<ISymbol> allMembers = symbol is INamedTypeSymbol typeSymbol
-                    ? typeSymbol!.GetMembers().ToList()
-                    : symbol is INamespaceSymbol namespaceSymbol
-                        ? namespaceSymbol.GetMembers().OfType<ISymbol>().ToList()
-                        : throw new NotImplementedException();
+                var cacheTime = DateTime.UtcNow - startTime;
+                logger.LogInformation("Returning cached entities for document: {DocumentPath} with options: {OptionsKey} in {ElapsedMs}ms",
+                    document.FilePath, optionsKey, cacheTime.TotalMilliseconds);
+                return cachedEntity;
+            }
 
-                // Extract all members recursively
-                foreach (var member in allMembers)
+            logger.LogDebug("Getting syntax tree for document: {DocumentPath}", document.FilePath);
+            var syntaxTree = await document.GetSyntaxTreeAsync();
+            if (syntaxTree == null)
+            {
+                logger.LogWarning("Syntax tree is null for document: {DocumentPath}", document.FilePath);
+                return Enumerable.Empty<ParsedEntity>();
+            }
+
+            logger.LogDebug("Getting syntax root for document: {DocumentPath}", document.FilePath);
+            var root = await syntaxTree.GetRootAsync();
+            if (root == null)
+            {
+                logger.LogWarning("Syntax root is null for document: {DocumentPath}", document.FilePath);
+                return Enumerable.Empty<ParsedEntity>();
+            }
+
+            GetSyntaxErrors(document, syntaxTree);
+
+            logger.LogDebug("Getting semantic model for document: {DocumentPath}", document.FilePath);
+            var semanticModel = await document.GetSemanticModelAsync();
+            if (semanticModel == null)
+            {
+                logger.LogWarning("Semantic model is null for document: {DocumentPath}", document.FilePath);
+                return Enumerable.Empty<ParsedEntity>();
+            }
+
+            // Проверка на очень большие файлы
+            var text = await document.GetTextAsync();
+            if (text.Length > MaxFileSizeWarningBytes)
+            {
+                logger.LogWarning("Large file detected ({Size} bytes) for document: {DocumentPath}", text.Length, document.FilePath);
+            }
+
+            var entities = new List<ParsedEntity>();
+            var entityTasks = new List<Task<ParsedEntity?>>();
+
+            // Оптимизация: получаем все узлы одного типа за один вызов DescendantNodes()
+            var allNodes = root.DescendantNodes().ToList();
+
+            // Extract using directives - только если опция ExtractUsingStatementData включена
+            var usingDirectives = allNodes.OfType<UsingDirectiveSyntax>();
+            if (options?.ExtractUsingStatementData != false)
+            {
+                foreach (var usingDirective in usingDirectives)
                 {
-                    // Проверка на рекурсивную обработку
-                    var memberKey = $"{member.Name}_{member.Kind}";
-                    if (processedSymbols.Contains(memberKey))
+                    var usingEntity = await ExtractUsingDirectiveAsync(usingDirective, semanticModel, options?.ExtractFullExtractInheritance is true);
+                    if (usingEntity != null)
                     {
-                        logger.LogWarning("Detected potential recursive dependency for member: {MemberName}", member.Name);
-                        continue;
+                        entities.Add(usingEntity);
                     }
-                    processedSymbols.Add(memberKey);
-
-                    // Skip inherited members that we don't want to duplicate, but keep important ones
-                    if (member.IsOverride && !ShouldIncludeOverrideMember(member))
-                        continue;
-
-                    // Skip compiler-generated members
-                    if (member.IsImplicitlyDeclared && !ShouldIncludeImplicitMember(member))
-                        continue;
-
-                    // Оптимизация: добавляем задачи вместо последовательного выполнения
-                    // Extract methods (including constructors, destructors, operators)
-                    if (member is IMethodSymbol)
-                    {
-                        childEntityTasks.Add(ExtractEntityAsync(member, semanticModel, currentDepth + 1, options));
-                    }
-                    // Extract properties
-                    else if (member is IPropertySymbol)
-                    {
-                        childEntityTasks.Add(ExtractEntityAsync(member, semanticModel, currentDepth + 1, options));
-                    }
-                    // Extract fields
-                    else if (member is IFieldSymbol)
-                    {
-                        childEntityTasks.Add(ExtractEntityAsync(member, semanticModel, currentDepth + 1, options));
-                    }
-                    // Extract events
-                    else if (member is IEventSymbol)
-                    {
-                        childEntityTasks.Add(ExtractEntityAsync(member, semanticModel, currentDepth + 1, options));
-                    }
-                    // Extract nested types
-                    else if (member is INamedTypeSymbol)
-                    {
-                        childEntityTasks.Add(ExtractEntityAsync(member, semanticModel, currentDepth + 1, options));
-                    }
-                }
-
-                // Оптимизация: выполняем все задачи параллельно
-                if (childEntityTasks.Count > 0)
-                {
-                    var childResults = await Task.WhenAll(childEntityTasks);
-                    childEntities.AddRange(childResults);
                 }
             }
 
-            logger.LogInformation("Successfully extracted {ChildCount} child entities for symbol: {SymbolName}", childEntities.Count, symbol.Name);
-            return childEntities;
+            // Extract namespace declarations
+            var namespaceDeclarations = allNodes.OfType<BaseNamespaceDeclarationSyntax>();
+            foreach (var namespaceDeclaration in namespaceDeclarations)
+            {
+                var namespaceSymbol = semanticModel.GetDeclaredSymbol(namespaceDeclaration);
+                if (namespaceSymbol != null)
+                {
+                    entityTasks.Add(ExtractEntityAsync(namespaceSymbol, semanticModel, 0, options));
+                }
+            }
+
+            // Extract type declarations (classes, interfaces, structs, enums, records)
+            var typeDeclarations = allNodes.OfType<TypeDeclarationSyntax>();
+            foreach (var typeDeclaration in typeDeclarations)
+            {
+                var typeSymbol = semanticModel.GetDeclaredSymbol(typeDeclaration);
+                if (typeSymbol != null)
+                {
+                    entityTasks.Add(ExtractEntityAsync(typeSymbol, semanticModel, 0, options));
+                }
+                else
+                {
+                    logger.LogWarning("Could not get symbol for type declaration at line {LineNumber}",
+                        typeDeclaration.GetLocation().GetLineSpan().StartLinePosition.Line + 1);
+                }
+            }
+
+            // Extract method declarations (standalone methods)
+            var methodDeclarations = allNodes.OfType<MethodDeclarationSyntax>();
+            foreach (var methodDeclaration in methodDeclarations)
+            {
+                var methodSymbol = semanticModel.GetDeclaredSymbol(methodDeclaration);
+                if (methodSymbol != null && methodSymbol.ContainingType == null)
+                {
+                    entityTasks.Add(ExtractEntityAsync(methodSymbol, semanticModel, 0, options));
+                }
+            }
+
+            // Extract property declarations (standalone properties)
+            var propertyDeclarations = allNodes.OfType<PropertyDeclarationSyntax>();
+            foreach (var propertyDeclaration in propertyDeclarations)
+            {
+                var propertySymbol = semanticModel.GetDeclaredSymbol(propertyDeclaration);
+                if (propertySymbol != null && propertySymbol.ContainingType == null)
+                {
+                    entityTasks.Add(ExtractEntityAsync(propertySymbol, semanticModel, 0, options));
+                }
+            }
+
+            // Extract field declarations (standalone fields)
+            var fieldDeclarations = allNodes.OfType<FieldDeclarationSyntax>();
+            foreach (var fieldDeclaration in fieldDeclarations)
+            {
+                foreach (var variable in fieldDeclaration.Declaration.Variables)
+                {
+                    var fieldSymbol = semanticModel.GetDeclaredSymbol(variable);
+                    if (fieldSymbol != null && fieldSymbol.ContainingType == null)
+                    {
+                        entityTasks.Add(ExtractEntityAsync(fieldSymbol, semanticModel, 0, options));
+                    }
+                }
+            }
+
+            // Extract event declarations (standalone events)
+            var eventDeclarations = allNodes.OfType<EventDeclarationSyntax>();
+            foreach (var eventDeclaration in eventDeclarations)
+            {
+                var eventSymbol = semanticModel.GetDeclaredSymbol(eventDeclaration);
+                if (eventSymbol != null && eventSymbol.ContainingType == null)
+                {
+                    entityTasks.Add(ExtractEntityAsync(eventSymbol, semanticModel, 0, options));
+                }
+            }
+
+            // Extract event field declarations (standalone event fields)
+            var eventFieldDeclarations = allNodes.OfType<EventFieldDeclarationSyntax>();
+            foreach (var eventFieldDeclaration in eventFieldDeclarations)
+            {
+                foreach (var variable in eventFieldDeclaration.Declaration.Variables)
+                {
+                    var eventSymbol = semanticModel.GetDeclaredSymbol(variable);
+                    if (eventSymbol != null && eventSymbol.ContainingType == null)
+                    {
+                        entityTasks.Add(ExtractEntityAsync(eventSymbol, semanticModel, 0, options));
+                    }
+                }
+            }
+
+            // Extract enum member declarations
+            var enumMemberDeclarations = allNodes.OfType<EnumMemberDeclarationSyntax>();
+            foreach (var enumMember in enumMemberDeclarations)
+            {
+                var enumMemberSymbol = semanticModel.GetDeclaredSymbol(enumMember);
+                if (enumMemberSymbol != null && enumMemberSymbol.ContainingType == null && enumMemberSymbol.ContainingNamespace == null)
+                {
+                    entityTasks.Add(ExtractEntityAsync(enumMemberSymbol, semanticModel, 0, options));
+                }
+            }
+
+            // Оптимизация: выполняем все задачи параллельно
+            logger.LogDebug("Processing {TaskCount} entity extraction tasks in parallel for document: {DocumentPath}",
+                entityTasks.Count, document.FilePath);
+
+            var entityResults = await Task.WhenAll(entityTasks);
+            var validEntities = entityResults.Where(entity => entity != null)!;
+            entities.AddRange(validEntities);
+
+            // Фильтруем дочерние сущности, чтобы оставить только сущности верхнего уровня
+            var filteredEntities = FilterTopLevelEntities(entities);
+
+            var endTime = DateTime.UtcNow;
+            var elapsedTime = endTime - startTime;
+
+            logger.LogInformation("Successfully extracted {EntityCount} entities from document: {DocumentPath} in {ElapsedMs}ms, filtered to {FilteredCount} top-level entities",
+                entities.Count, document.FilePath, elapsedTime.TotalMilliseconds, filteredEntities.Count);
+
+            if (filteredEntities.Any())
+            {
+                entityCache.TryAdd(cacheKey, filteredEntities);
+                logger.LogDebug("Cached extraction result for document: {DocumentPath} with options: {OptionsKey}",
+                    document.FilePath, optionsKey);
+            }
+
+            return filteredEntities;
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error extracting child entities for symbol: {SymbolName}", symbol.Name);
+            logger.LogError(ex, "Error extracting entities from document: {DocumentPath}", document.FilePath);
             throw;
         }
     }
 
-    /// <summary>
-    /// Определяет, следует ли включать переопределенный член
-    /// </summary>
-    private static bool ShouldIncludeOverrideMember(ISymbol member)
+    private List<Diagnostic> GetSyntaxErrors(Document document, SyntaxTree syntaxTree)
     {
-        return IsImportantOverrideMethod(member);
-    }
-
-    /// <summary>
-    /// Определяет, следует ли включать неявно объявленный член
-    /// </summary>
-    private static bool ShouldIncludeImplicitMember(ISymbol member)
-    {
-        // Включаем важные неявно объявленные члены
-        if (member is IMethodSymbol methodSymbol)
+        var diagnostics = syntaxTree.GetDiagnostics();
+        var syntaxErrors = diagnostics.Where(d => d.Severity == DiagnosticSeverity.Error).ToList();
+        if (syntaxErrors.Any())
         {
-            // Включаем конструкторы по умолчанию для записей
-            if (methodSymbol.MethodKind == MethodKind.Constructor &&
-                methodSymbol.ContainingType.IsRecord)
-                return true;
+            logger.LogWarning("Found {ErrorCount} syntax errors in document: {DocumentPath}", syntaxErrors.Count, document.FilePath);
+            foreach (var error in syntaxErrors)
+            {
+                throw new Exception($"Syntax error at line {error.Location.GetLineSpan().StartLinePosition.Line + 1}: {error.GetMessage()}");
+            }
         }
 
-        return false;
+        return syntaxErrors;
     }
 
-    private ParsedEntityType DetermineEntityType(ISymbol symbol) =>
-        symbol switch
-        {
-            INamespaceSymbol => ParsedEntityType.Namespace,
-            INamedTypeSymbol namedTypeSymbol => namedTypeSymbol.TypeKind switch
-            {
-                TypeKind.Class => ParsedEntityType.Class,
-                TypeKind.Interface => ParsedEntityType.Interface,
-                TypeKind.Enum => ParsedEntityType.Enum,
-                TypeKind.Struct => ParsedEntityType.Struct,
-                // TypeKind.Record => ParsedEntityType.Class, // Records are treated as classes
-                // TypeKind.RecordStruct => ParsedEntityType.Struct, // Record structs are treated as structs
-                TypeKind.Delegate => ParsedEntityType.Class, // Delegates are treated as classes
-                _ => ParsedEntityType.Class
-            },
-            IMethodSymbol methodSymbol => methodSymbol.MethodKind switch
-            {
-                // MethodKind.Constructor => ParsedEntityType.Constructor,
-                // MethodKind.Destructor => ParsedEntityType.Destructor,
-                // MethodKind.Operator => ParsedEntityType.Operator,
-                // MethodKind.Conversion => ParsedEntityType.Operator,
-                MethodKind.Ordinary => ParsedEntityType.Method,
-                // MethodKind.StaticConstructor => ParsedEntityType.Constructor,
-                MethodKind.LocalFunction => ParsedEntityType.Method,
-                _ => ParsedEntityType.Method
-            },
-            IPropertySymbol => ParsedEntityType.Property,
-            IFieldSymbol fieldSymbol => fieldSymbol.ContainingType is INamedTypeSymbol { TypeKind: TypeKind.Enum }
-                ? ParsedEntityType.Enum
-                : ParsedEntityType.Property, // Enum members are treated as fields
-            IEventSymbol => ParsedEntityType.UnityEvent, // Using existing enum value
-            _ => ParsedEntityType.Class
-        };
-
-    private bool IsUnityEventField(ISymbol symbol)
+    /// <summary>
+    /// Фильтрует сущности, оставляя только те, что находятся на верхнем уровне иерархии
+    /// Исключает дочерние сущности, которые уже содержатся в Children других сущностей
+    /// </summary>
+    /// <param name="entities">Список всех извлеченных сущностей</param>
+    /// <returns>Отфильтрованный список сущностей верхнего уровня</returns>
+    private List<ParsedEntity> FilterTopLevelEntities(List<ParsedEntity> entities)
     {
-        if (symbol is not IFieldSymbol fieldSymbol)
-            return false;
+        if (entities == null || entities.Count == 0)
+        {
+            return new List<ParsedEntity>();
+        }
 
-        var fieldType = fieldSymbol.Type.ToDisplayString();
+        logger.LogDebug("Filtering {EntityCount} entities to top-level only", entities.Count);
 
-        // Check for exact UnityEvent type names
-        if (UnityEventNames.Contains(fieldType))
-            return true;
+        var childEntityFullNames = new HashSet<string>();
 
-        // Check for UnityEvent with generic parameters using regex
-        if (UnityEventRegex.IsMatch(fieldType))
-            return true;
+        foreach (var entity in entities)
+        {
+            CollectChildEntityFullNames(entity, childEntityFullNames);
+        }
 
-        // Check if the type inherits from UnityEvent
-        if (fieldSymbol.Type.AllInterfaces.Any(i => i.Name.Contains("UnityEvent")))
-            return true;
+        logger.LogDebug("Found {ChildCount} child entities to exclude", childEntityFullNames.Count);
 
-        return false;
+        var topLevelEntities = entities
+            .Where(entity => !childEntityFullNames.Contains(entity.FullName))
+            .ToList();
+
+        logger.LogDebug("Filtered to {TopLevelCount} top-level entities", topLevelEntities.Count);
+
+        return topLevelEntities;
+    }
+
+    /// <summary>
+    /// Рекурсивно собирает FullName всех дочерних сущностей
+    /// </summary>
+    /// <param name="entity">Родительская сущность</param>
+    /// <param name="childFullNames">Набор для хранения FullName дочерних сущностей</param>
+    private void CollectChildEntityFullNames(ParsedEntity entity, HashSet<string> childFullNames)
+    {
+        if (entity?.Children == null || !entity.Children.Any())
+        {
+            return;
+        }
+
+        foreach (var child in entity.Children)
+        {
+            if (!string.IsNullOrEmpty(child.FullName))
+            {
+                childFullNames.Add(child.FullName);
+            }
+
+            CollectChildEntityFullNames(child, childFullNames);
+        }
     }
 }

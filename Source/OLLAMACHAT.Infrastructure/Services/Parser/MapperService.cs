@@ -12,6 +12,7 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
         {
             if (location == null)
             {
+                logger.LogError("Location null!");
                 return new LocationApplication(new Position(null, null, null), new Position(null, null, null));
             }
 
@@ -63,12 +64,6 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
                 case Accessibility.Internal:
                     modifiers.Add("internal");
                     break;
-                case Accessibility.ProtectedOrInternal:
-                    modifiers.Add("protected internal");
-                    break;
-                case Accessibility.ProtectedAndInternal:
-                    modifiers.Add("private protected");
-                    break;
             }
 
             // Type-specific modifiers
@@ -76,7 +71,7 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
             {
                 if (typeSymbol.IsStatic)
                     modifiers.Add("static");
-                if (typeSymbol.IsAbstract)
+                if (typeSymbol is { IsAbstract: true, TypeKind: not TypeKind.Interface }) // интерфейс всегда абстрактный
                     modifiers.Add("abstract");
                 if (typeSymbol.IsSealed)
                     modifiers.Add("sealed");
@@ -184,13 +179,14 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
             var allBaseClasses = new List<string>();
             var allInterfaces = new List<string>();
 
-            // Check if we should extract full inheritance
             var extractFullInheritance = options?.ExtractFullExtractInheritance ?? true;
 
             if (typeSymbol == null)
+            {
+                logger.LogError("TypeSymbol is null!");
                 return new ParsedEntityInheritance(null, null, [], []);
+            }
 
-            // Direct base class
             if (typeSymbol.BaseType != null && typeSymbol.BaseType.SpecialType != SpecialType.System_Object)
             {
                 var baseClassName = typeSymbol.BaseType.ToDisplayString();
@@ -201,7 +197,6 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
                 }
             }
 
-            // All base classes (inheritance chain) - only if ExtractFullExtractInheritance is true
             if (extractFullInheritance)
             {
                 var currentBase = typeSymbol.BaseType;
@@ -216,7 +211,6 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
                 }
             }
 
-            // Direct interfaces
             foreach (var interfaceSymbol in typeSymbol.Interfaces)
             {
                 var interfaceName = interfaceSymbol.ToDisplayString();
@@ -227,7 +221,6 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
                 }
             }
 
-            // All interfaces (including inherited) - only if ExtractFullExtractInheritance is true
             if (extractFullInheritance)
             {
                 foreach (var interfaceSymbol in typeSymbol.AllInterfaces)
@@ -312,16 +305,12 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
                     RefKind.Ref => "ref",
                     RefKind.Out => "out",
                     RefKind.In => "in",
-                    RefKind.None => "",
                     _ => ""
                 };
 
                 // This, params, and other special parameters
                 var isThis = parameter.IsThis;
                 var isParams = parameter.IsParams;
-                var isCallerMemberName = parameter.GetAttributes().Any(a => a.AttributeClass?.Name == "CallerMemberNameAttribute");
-                var isCallerFilePath = parameter.GetAttributes().Any(a => a.AttributeClass?.Name == "CallerFilePathAttribute");
-                var isCallerLineNumber = parameter.GetAttributes().Any(a => a.AttributeClass?.Name == "CallerLineNumberAttribute");
 
                 // Enhanced parameter type information
                 var enhancedParameterType = parameterType;

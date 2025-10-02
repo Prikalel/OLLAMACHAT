@@ -9,20 +9,6 @@ public partial class EntityService
 {
     private async Task<ParsedEntity?> ExtractUsingDirectiveAsync(UsingDirectiveSyntax usingDirective, SemanticModel semanticModel, bool extractUsingData)
     {
-        // Проверка на null директиву
-        if (usingDirective == null)
-        {
-            logger.LogWarning("Using directive is null");
-            return null;
-        }
-
-        // Проверка на null семантическую модель
-        if (semanticModel == null)
-        {
-            logger.LogWarning("Semantic model is null for using directive");
-            return null;
-        }
-
         try
         {
             var name = usingDirective.Name?.ToString() ?? string.Empty;
@@ -30,12 +16,6 @@ public partial class EntityService
             {
                 logger.LogWarning("Using directive name is null or empty");
                 return null;
-            }
-
-            // Проверка на очень длинные имена
-            if (name.Length > MaxUsingNameLength)
-            {
-                logger.LogWarning("Very long using directive name ({Length} characters): {Name}", name.Length, name);
             }
 
             // Проверка на некорректные символы в имени
@@ -55,34 +35,12 @@ public partial class EntityService
             if (usingDirective.GlobalKeyword.Kind() != SyntaxKind.None)
             {
                 modifiers.Add("global");
-                attributes.Add(new Attribute("UsingType", new List<string> { "Global" }));
-            }
-            else
-            {
-                attributes.Add(new Attribute("UsingType", new List<string> { "Local" }));
             }
 
             // Check if it's a static using
             if (usingDirective.StaticKeyword.Kind() != SyntaxKind.None)
             {
                 modifiers.Add("static");
-                attributes.Add(new Attribute("UsingType", new List<string> { "Static" }));
-            }
-
-            // Extract alias information
-            if (!string.IsNullOrEmpty(alias))
-            {
-                attributes.Add(new Attribute("Alias", new List<string> { alias }));
-            }
-
-            // Try to get symbol information for more details
-            if (usingDirective.Name != null)
-            {
-                var symbolInfo = semanticModel.GetSymbolInfo(usingDirective.Name);
-                if (symbolInfo.Symbol != null)
-                {
-                    attributes.Add(new Attribute("TargetSymbol", new List<string> { symbolInfo.Symbol.ToDisplayString() }));
-                }
             }
 
             // Определяем реальный путь к файлам namespace

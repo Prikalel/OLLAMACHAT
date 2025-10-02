@@ -1,13 +1,3 @@
-using System;
-using System.Runtime.CompilerServices;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
-using Microsoft.Extensions.Logging;
-using VelikiyPrikalel.OLLAMACHAT.Application;
-using VelikiyPrikalel.OLLAMACHAT.Application.Models;
-using VelikiyPrikalel.OLLAMACHAT.Infrastructure;
-using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
-
 namespace TestParser;
 
 /// <summary>
@@ -142,24 +132,5 @@ public abstract class TestBase
         }
 
         return errorEntries.Any();
-    }
-
-    /// <summary>
-    /// Проверяет, что логгер записал предупреждения
-    /// </summary>
-    /// <param name="logger">Логгер для проверки</param>
-    /// <param name="expectedWarningMessage">Ожидаемое предупреждение (если null, проверяется наличие любых предупреждений)</param>
-    /// <returns>True, если найдены предупреждения</returns>
-    protected bool HasLogWarnings<T>(FakeLogger<T> logger, string? expectedWarningMessage = null)
-    {
-        var logEntries = logger.LogEntries;
-        var warningEntries = logEntries.Where(r => r.Level == LogLevel.Warning).ToList();
-
-        if (expectedWarningMessage != null)
-        {
-            return warningEntries.Any(r => r.Message.Contains(expectedWarningMessage));
-        }
-
-        return warningEntries.Any();
     }
 }
