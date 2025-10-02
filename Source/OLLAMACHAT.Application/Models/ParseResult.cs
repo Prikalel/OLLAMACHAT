@@ -10,7 +10,6 @@ namespace VelikiyPrikalel.OLLAMACHAT.Application.Models;
 /// <param name="ContentHash">Хэш содержимого файла для кэширования.</param>
 /// <param name="ParseTimeMs">Время парсинга в миллисекундах.</param>
 /// <param name="Errors">Список ошибок.</param>
-/// <param name="Metadata">Метаданные файла.</param>
 public record ParseResult(
     string FilePath,
     ParseResultLanguage Language,
@@ -18,6 +17,5 @@ public record ParseResult(
     List<Relationship>? Relationships,
     string ContentHash,
     int? ParseTimeMs,
-    List<ParseError>? Errors,
-    FileMetadata? Metadata
+    List<ParseError>? Errors
 );

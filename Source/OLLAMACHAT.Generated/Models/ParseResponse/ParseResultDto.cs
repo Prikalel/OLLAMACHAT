@@ -55,12 +55,6 @@ public class ParseResultDto : IEquatable<ParseResultDto>
     public LanguageEnumDto? Language { get; set; }
 
     /// <summary>
-    /// Gets or Sets Metadata
-    /// </summary>
-    [DataMember(Name = "metadata")]
-    public FileMetadataDto Metadata { get; set; }
-
-    /// <summary>
     /// Time taken for parsing in milliseconds.
     /// </summary>
     /// <value>Time taken for parsing in milliseconds.</value>
@@ -146,11 +140,6 @@ public class ParseResultDto : IEquatable<ParseResultDto>
                 Errors == other.Errors ||
                 Errors != null &&
                 Errors.SequenceEqual(other.Errors)
-            ) &&
-            (
-                Metadata == other.Metadata ||
-                Metadata != null &&
-                Metadata.Equals(other.Metadata)
             );
     }
 
@@ -199,11 +188,6 @@ public class ParseResultDto : IEquatable<ParseResultDto>
                 hashCode = hashCode * 59 + Errors.GetHashCode();
             }
 
-            if (Metadata != null)
-            {
-                hashCode = hashCode * 59 + Metadata.GetHashCode();
-            }
-
             return hashCode;
         }
     }
@@ -229,7 +213,6 @@ public class ParseResultDto : IEquatable<ParseResultDto>
         sb.Append("  ContentHash: ").Append(ContentHash).Append("\n");
         sb.Append("  ParseTimeMs: ").Append(ParseTimeMs).Append("\n");
         sb.Append("  Errors: ").Append(Errors).Append("\n");
-        sb.Append("  Metadata: ").Append(Metadata).Append("\n");
         sb.Append("}\n");
         return sb.ToString();
     }

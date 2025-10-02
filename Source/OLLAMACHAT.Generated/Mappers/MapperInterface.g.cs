@@ -15,12 +15,6 @@ namespace OLLAMACHAT.Generated.Mappers
                 Errors = funcMain13(p2.Errors),
                 FilePath = p2.FilePath,
                 Language = (OLLAMACHAT.Generated.Models.ParseResponse.ParseResultDto.LanguageEnumDto?)(OLLAMACHAT.Generated.Models.ParseResponse.ParseResultDto.LanguageEnumDto)p2.Language,
-                Metadata = p2.Metadata == null ? null : new OLLAMACHAT.Generated.Models.ParseResponse.FileMetadataDto()
-                {
-                    ComplexityScore = p2.Metadata.ComplexityScore,
-                    Loc = p2.Metadata.Loc,
-                    Namespace = p2.Metadata.Namespace
-                },
                 ParseTimeMs = p2.ParseTimeMs,
                 Relationships = funcMain14(p2.Relationships)
             };

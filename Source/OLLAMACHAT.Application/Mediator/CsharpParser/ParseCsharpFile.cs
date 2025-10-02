@@ -41,8 +41,7 @@ public sealed class ParseCsharpFile
                             Severity: ParseErrorSeverity.Error,
                             Location: null
                         )
-                    },
-                    Metadata: null
+                    }
                 ), error);
             }
         }

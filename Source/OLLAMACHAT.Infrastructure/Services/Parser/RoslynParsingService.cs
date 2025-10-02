@@ -5,7 +5,6 @@ public class RoslynParsingService(
      IEntityService entityService,
      IRelationshipService relationshipService,
      IErrorService errorService,
-     IMetadataService metadataService,
      IImportService importService,
      ILogger<RoslynParsingService> logger) : IRoslynParsingService
 {
@@ -35,8 +34,6 @@ public class RoslynParsingService(
             logger.LogWarning("Found {ErrorCount} errors in file: {FilePath}", errors.Count(), filePath);
         }
 
-        var metadata = await metadataService.CalculateFileMetadata(document, entities);
-
         var result = new ParseResult(
             FilePath: document.FilePath!,
             Language: ParseResultLanguage.Csharp,
@@ -44,8 +41,7 @@ public class RoslynParsingService(
             Relationships: relationships.ToList(),
             ContentHash: contentHash,
             ParseTimeMs: (int)stopwatch.ElapsedMilliseconds,
-            Errors: errors.ToList(),
-            Metadata: metadata
+            Errors: errors.ToList()
         );
 
         logger.LogInformation("Successfully parsed file: {FilePath} in {ElapsedMs}ms", filePath, stopwatch.ElapsedMilliseconds);
