@@ -6,16 +6,6 @@ namespace VelikiyPrikalel.OLLAMACHAT.Application.Models;
 public enum RelationshipType
 {
     /// <summary>
-    /// Наследование.
-    /// </summary>
-    Inherits,
-
-    /// <summary>
-    /// Реализация интерфейса.
-    /// </summary>
-    Implements,
-
-    /// <summary>
     /// Вызов метода.
     /// </summary>
     Calls,

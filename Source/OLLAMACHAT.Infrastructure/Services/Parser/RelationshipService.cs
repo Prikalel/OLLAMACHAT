@@ -4,6 +4,7 @@ namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 public class RelationshipService(ILogger<RelationshipService> logger) : IRelationshipService
 {
     //TODO: в некоторых местах устанавливается null
+    /// <inheritdoc />
     public async Task<IEnumerable<Relationship>> AnalyzeRelationshipsAsync(IEnumerable<ParsedEntity> entities, Document document)
     {
         logger.LogInformation("Analyzing relationships for document: {DocumentPath}", document.FilePath);
@@ -19,12 +20,6 @@ public class RelationshipService(ILogger<RelationshipService> logger) : IRelatio
 
             foreach (var entity in entities)
             {
-                if (entity.Type == ParsedEntityType.Class || entity.Type == ParsedEntityType.Interface)
-                {
-                    AnalyzeInheritanceRelationships(entity, entityDict, relationships);
-                    AnalyzeInterfaceImplementationRelationships(entity, entityDict, relationships);
-                }
-
                 if (entity.Type == ParsedEntityType.Method)
                 {
                     AnalyzeMethodCallRelationships(entity, entityDict, semanticModel, root, relationships);
@@ -38,44 +33,6 @@ public class RelationshipService(ILogger<RelationshipService> logger) : IRelatio
         {
             logger.LogError(ex, "Error analyzing relationships for document: {DocumentPath}", document.FilePath);
             throw;
-        }
-    }
-
-    private void AnalyzeInheritanceRelationships(ParsedEntity entity, Dictionary<string, ParsedEntity> entityDict, List<Relationship> relationships)
-    {
-        if (entity.Inheritance?.DirectBaseClasses == null)
-            return;
-
-        foreach (var baseClass in entity.Inheritance.AllBaseClasses)
-        {
-            if (entityDict.TryGetValue(baseClass, out var baseEntity))
-            {
-                relationships.Add(new Relationship(
-                    FullNameFrom: entity.FullName,
-                    FullNameTo: baseEntity.FullName,
-                    Type: RelationshipType.Inherits,
-                    TargetDefinitionFilePath: null
-                ));
-            }
-        }
-    }
-
-    private void AnalyzeInterfaceImplementationRelationships(ParsedEntity entity, Dictionary<string, ParsedEntity> entityDict, List<Relationship> relationships)
-    {
-        if (entity.Inheritance?.DirectInterfaces == null)
-            return;
-
-        foreach (var interfaceName in entity.Inheritance.AllInterfaces)
-        {
-            if (entityDict.TryGetValue(interfaceName, out var interfaceEntity))
-            {
-                relationships.Add(new Relationship(
-                    FullNameFrom: entity.FullName,
-                    FullNameTo: interfaceEntity.FullName,
-                    Type: RelationshipType.Implements,
-                    TargetDefinitionFilePath: null
-                ));
-            }
         }
     }
 

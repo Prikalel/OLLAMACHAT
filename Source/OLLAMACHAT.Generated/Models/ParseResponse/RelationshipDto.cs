@@ -14,34 +14,28 @@ public class RelationshipDto : IEquatable<RelationshipDto>
     public enum TypeEnumDto
     {
         /// <summary>
-        /// Enum InheritsEnum for inherits
-        /// </summary>
-        [EnumMember(Value = "inherits")]
-        InheritsEnum = 0,
-
-        /// <summary>
         /// Enum CallsEnum for calls
         /// </summary>
         [EnumMember(Value = "calls")]
-        CallsEnum = 1,
+        CallsEnum = 0,
 
         /// <summary>
         /// Enum IsBaseForEnum for isBaseFor
         /// </summary>
         [EnumMember(Value = "isBaseFor")]
-        IsBaseForEnum = 2,
+        IsBaseForEnum = 1,
 
         /// <summary>
         /// Enum SubscribesToEnum for subscribesTo
         /// </summary>
         [EnumMember(Value = "subscribesTo")]
-        SubscribesToEnum = 3,
+        SubscribesToEnum = 2,
 
         /// <summary>
         /// Enum ObservedByEnum for observedBy
         /// </summary>
         [EnumMember(Value = "observedBy")]
-        ObservedByEnum = 4
+        ObservedByEnum = 3
     }
 
     /// <summary>
