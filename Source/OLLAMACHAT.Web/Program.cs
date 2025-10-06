@@ -62,7 +62,17 @@ public class Program
 
                 var loader = scope.ServiceProvider.GetRequiredService<ISolutionLoaderService>();
                 await loader.LoadSolutionAsync();
-                loader.SolutionReloaded += (_, _) => EntityService.ClearCache();
+                if (loader.IsSolutionLoaded)
+                {
+                    loader.SolutionReloaded += (_, _) => EntityService.ClearCache();
+                    await RelationshipService.InitializeCaches(loader.CurrentSolution);
+                    loader.SolutionReloaded += async (_, arg) => await RelationshipService.InitializeCaches(arg.Solution);
+                    logger.Info("Done registering subscribers");
+                }
+                else
+                {
+                    logger.Error("Error loading solution");
+                }
             }
 
             await build
