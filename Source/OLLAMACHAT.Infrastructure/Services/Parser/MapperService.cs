@@ -189,7 +189,7 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
 
             if (typeSymbol.BaseType != null && typeSymbol.BaseType.SpecialType != SpecialType.System_Object)
             {
-                var baseClassName = typeSymbol.BaseType.ToDisplayString();
+                var baseClassName = typeSymbol.BaseType.GetFullName();
                 baseClasses.Add(baseClassName);
                 if (extractFullInheritance)
                 {
@@ -202,7 +202,7 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
                 var currentBase = typeSymbol.BaseType;
                 while (currentBase != null && currentBase.SpecialType != SpecialType.System_Object)
                 {
-                    var baseClassName = currentBase.ToDisplayString();
+                    var baseClassName = currentBase.GetFullName();
                     if (!allBaseClasses.Contains(baseClassName))
                     {
                         allBaseClasses.Add(baseClassName);
@@ -213,7 +213,7 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
 
             foreach (var interfaceSymbol in typeSymbol.Interfaces)
             {
-                var interfaceName = interfaceSymbol.ToDisplayString();
+                var interfaceName = interfaceSymbol.GetFullName();
                 interfaces.Add(interfaceName);
                 if (extractFullInheritance && !allInterfaces.Contains(interfaceName))
                 {
@@ -225,7 +225,7 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
             {
                 foreach (var interfaceSymbol in typeSymbol.AllInterfaces)
                 {
-                    var interfaceName = interfaceSymbol.ToDisplayString();
+                    var interfaceName = interfaceSymbol.GetFullName();
                     if (!allInterfaces.Contains(interfaceName))
                     {
                         allInterfaces.Add(interfaceName);
@@ -256,22 +256,22 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
 
             if (symbol is IMethodSymbol methodSymbol)
             {
-                return methodSymbol.ReturnType?.ToDisplayString();
+                return methodSymbol.ReturnType?.GetFullName();
             }
 
             if (symbol is IPropertySymbol propertySymbol)
             {
-                return propertySymbol.Type?.ToDisplayString();
+                return propertySymbol.Type?.GetFullName();
             }
 
             if (symbol is IFieldSymbol fieldSymbol)
             {
-                return fieldSymbol.Type?.ToDisplayString();
+                return fieldSymbol.Type?.GetFullName();
             }
 
             if (symbol is IEventSymbol eventSymbol)
             {
-                return eventSymbol.Type?.ToDisplayString();
+                return eventSymbol.Type?.GetFullName();
             }
 
             return null;
@@ -294,7 +294,7 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
 
             foreach (var parameter in methodSymbol.Parameters)
             {
-                var parameterType = parameter.Type?.ToDisplayString() ?? "unknown";
+                var parameterType = parameter.Type?.GetFullName() ?? "unknown";
                 var isOptional = parameter.HasExplicitDefaultValue;
                 var defaultValue = isOptional ? parameter.ExplicitDefaultValue?.ToString() : null;
 
@@ -395,7 +395,7 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
 
             foreach (var attribute in symbol.GetAttributes())
             {
-                var attributeName = attribute.AttributeClass?.ToDisplayString() ?? "unknown";
+                var attributeName = attribute.AttributeClass?.GetFullName() ?? "unknown";
                 var constructorArguments = new List<string>();
                 var namedArguments = new Dictionary<string, string>();
 
@@ -472,7 +472,7 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
 
             if (argument.Kind == TypedConstantKind.Enum)
             {
-                return $"{argument.Type?.ToDisplayString()}.{argument.Value}";
+                return $"{argument.Type?.GetFullName()}.{argument.Value}";
             }
 
             if (argument.Type?.SpecialType == SpecialType.System_String)

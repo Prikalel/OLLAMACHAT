@@ -123,7 +123,7 @@ public partial class EntityService
 
                                 foreach (var namespaceDeclaration in namespaceDeclarations)
                                 {
-                                    var documentNamespace = semanticModel.GetDeclaredSymbol(namespaceDeclaration)?.ToDisplayString();
+                                    var documentNamespace = semanticModel.GetDeclaredSymbol(namespaceDeclaration)?.GetFullName();
                                     if (documentNamespace == namespaceName)
                                     {
                                         namespaceDocuments.Add(document);

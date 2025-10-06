@@ -32,6 +32,7 @@ global using VelikiyPrikalel.OLLAMACHAT.Application.Services.Parser;
 global using VelikiyPrikalel.OLLAMACHAT.Data;
 global using VelikiyPrikalel.OLLAMACHAT.Data.StatelessEnums;
 global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data;
+global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Extensions;
 global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Repositories;
 global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Llm;
 global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;

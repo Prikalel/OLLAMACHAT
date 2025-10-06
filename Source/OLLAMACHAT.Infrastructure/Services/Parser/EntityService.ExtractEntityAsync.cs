@@ -23,7 +23,7 @@ public partial class EntityService
 
         if (string.IsNullOrEmpty(symbol.Name))
         {
-            logger.LogError("Symbol name is null or empty for symbol: {SymbolDisplay}", symbol.ToDisplayString());
+            logger.LogError("Symbol name is null or empty for symbol: {SymbolDisplay}", symbol.GetFullName());
         }
 
         if (!symbol.Locations.Any())
@@ -70,7 +70,7 @@ public partial class EntityService
 
             var entity = new ParsedEntity(
                 SimpleName: symbol.Name ?? string.Empty,
-                FullName: symbol.ToDisplayString(),
+                FullName: symbol.GetFullName(),
                 Type: entityType,
                 Location: location,
                 Children: childEntities.Any() ? childEntities : null,
@@ -283,7 +283,7 @@ public partial class EntityService
         if (symbol is not IFieldSymbol fieldSymbol)
             return false;
 
-        var fieldType = fieldSymbol.Type.ToDisplayString();
+        var fieldType = fieldSymbol.Type.GetFullName();
 
         if (unityEventNames.Contains(fieldType))
             return true;

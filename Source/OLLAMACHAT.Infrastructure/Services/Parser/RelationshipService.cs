@@ -77,7 +77,7 @@ public class RelationshipService(
             var types = GetAllTypesInCompilation(compilation);
             foreach (var type in types)
             {
-                var fullName = type.ToDisplayString();
+                var fullName = type.GetFullName();
                 if (!allTypesCache.ContainsKey(fullName))
                 {
                     allTypesCache[fullName] = type;
@@ -98,21 +98,11 @@ public class RelationshipService(
     /// </summary>
     /// <param name="roots">Корневые сущности</param>
     /// <returns>Плоский список всех сущностей, включая дочерние</returns>
-    private static IEnumerable<ParsedEntity> FlattenAllTrees(IEnumerable<ParsedEntity> roots)
-    {
-        foreach (var root in roots)
-        {
-            yield return root;
-
-            if (root.Children != null && root.Children.Any())
-            {
-                foreach (var child in FlattenAllTrees(root.Children))
-                {
-                    yield return child;
-                }
-            }
-        }
-    }
+    private static List<ParsedEntity> FlattenAllTrees(IEnumerable<ParsedEntity> roots) =>
+        roots.SelectMany(root =>
+            new[] { root }
+                .Concat(root.Children?.SelectMany(x => FlattenAllTrees([x])) ?? [])
+        ).ToList();
 
     /// <summary>
     /// Анализирует вызовы методов внутри метода
@@ -391,8 +381,7 @@ public class RelationshipService(
             if (containingType == null)
                 continue;
 
-            var containingTypeFullName = containingType.ToDisplayString();
-            var fullCalledMethodName = $"{containingTypeFullName}.{methodSymbol.Name}";
+            var fullCalledMethodName = methodSymbol.GetFullName();
 
             // Логирование для отладки проблемы с вложенными классами
             logger.LogDebug("Processing method call from {FromMethod} to {ToMethod}",
@@ -446,8 +435,7 @@ public class RelationshipService(
         if (containingType == null)
             return;
 
-        var containingTypeFullName = containingType.ToDisplayString();
-        var fullMemberName = $"{containingTypeFullName}.{symbol.Name}";
+        var fullMemberName = symbol.GetFullName();
 
         var targetFilePath = GetCachedFilePathForType(containingType);
 
@@ -467,7 +455,7 @@ public class RelationshipService(
         if (typeSymbol == null)
             return null;
 
-        var fullName = typeSymbol.ToDisplayString();
+        var fullName = typeSymbol.GetFullName();
 
         // Проверяем, является ли тип пользовательским
         if (typeToFilePathCache != null && typeToFilePathCache.TryGetValue(fullName, out var cachedPath))
