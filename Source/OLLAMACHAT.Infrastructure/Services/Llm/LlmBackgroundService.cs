@@ -6,7 +6,7 @@ namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Llm;
 public class LlmBackgroundService(
     ILlmService llmService,
     ILogger<LlmBackgroundService> logger,
-    IRepository<UserChat> chatRepository,
+    IUserChatRepository chatRepository,
     IHubContext<ChatHub> hubContext) : ILlmBackgroundService
 {
     /// <inheritdoc />

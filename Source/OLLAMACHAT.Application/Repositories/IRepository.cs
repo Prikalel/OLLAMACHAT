@@ -7,20 +7,6 @@ namespace VelikiyPrikalel.OLLAMACHAT.Application.Repositories;
 public interface IRepository<TEntity> where TEntity : IEntity
 {
     /// <summary>
-    /// Получить пользователя.
-    /// </summary>
-    /// <param name="name">Имя.</param>
-    /// <returns>id пользователя.</returns>
-    Task<User> GetOrCreateUser(string name);
-
-    /// <summary>
-    /// Получить чат по id.
-    /// </summary>
-    /// <param name="id">ID чата.</param>
-    /// <returns>Сущность или null, если не найдено.</returns>
-    Task<UserChat?> GetChatByIdAsync(string id);
-
-    /// <summary>
     /// Обновить существующую сущность.
     /// </summary>
     /// <param name="entity">Обновленная сущность.</param>

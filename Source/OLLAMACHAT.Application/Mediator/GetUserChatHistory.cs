@@ -12,7 +12,7 @@ public sealed class GetUserChatHistory
 
     /// <inheritdoc />
     public sealed class Handler(
-        IRepository<User> userRepository,
+        IUserRepository userRepository,
         ILlmService llmService,
         ILogger<Handler> logger) : IRequestHandler<Query, IEnumerable<ChatMessage>>
     {

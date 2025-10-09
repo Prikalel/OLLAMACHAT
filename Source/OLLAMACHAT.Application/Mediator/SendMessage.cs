@@ -17,7 +17,7 @@ public sealed class SendMessage
     /// <inheritdoc />
     public sealed class Handler(
         ILlmBackgroundService llmBackgroundService,
-        IRepository<User> userRepository,
+        IUserRepository userRepository,
         ILogger<Handler> logger) : IRequestHandler<Command, string>
     {
         /// <inheritdoc />
@@ -36,7 +36,7 @@ public sealed class SendMessage
             {
                 logger.LogInformation("Will generate llm response from model {Model}", activeChat.Model);
 
-                ChatState state = activeChat.UserEnteredPrompt(request.Message);
+                activeChat.UserEnteredPrompt(request.Message);
                 await userRepository.UpdateAsync(user);
 
                 await llmBackgroundService.GenerateTextResponse(

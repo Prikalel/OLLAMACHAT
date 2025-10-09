@@ -1,10 +1,10 @@
 namespace VelikiyPrikalel.OLLAMACHAT.Application.Hubs;
 
-public class ChatHub(IMediator mediator, ILogger<ChatHub> logger, IRepository<UserChat> chatRepository) : Hub
+public class ChatHub(IMediator mediator, ILogger<ChatHub> logger, IUserRepository userRepository, IUserChatRepository chatRepository) : Hub
 {
     public async Task ChangeModel(string model)
     {
-        User u = await chatRepository.GetOrCreateUser("alex");
+        User u = await userRepository.GetOrCreateUser("alex");
         UserChat chat = u.GetOrCreateActiveChat(null, out bool _);
         chat.UpdateModel(model);
         await chatRepository.UpdateAsync(chat);
