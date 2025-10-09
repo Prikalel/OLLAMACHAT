@@ -16,8 +16,6 @@ internal sealed class UserChatConfiguration : IEntityTypeConfiguration<UserChat>
         builder.Property(uc => uc.Name)
             .IsRequired();
 
-        builder.Property(uc => uc.EnqueuedCompletionJobId);
-
         builder.Property(uc => uc.Model)
             .IsRequired();
 

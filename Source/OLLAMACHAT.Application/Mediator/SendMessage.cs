@@ -36,7 +36,7 @@ public sealed class SendMessage
             {
                 logger.LogInformation("Will generate llm response from model {Model}", activeChat.Model);
 
-                ChatState state = activeChat.UserEnteredPrompt(request.Message, null);
+                ChatState state = activeChat.UserEnteredPrompt(request.Message);
                 await userRepository.UpdateAsync(user);
 
                 await llmBackgroundService.GenerateTextResponse(
