@@ -39,13 +39,27 @@ public sealed class SendMessage
                 activeChat.UserEnteredPrompt(request.Message);
                 await userRepository.UpdateAsync(user);
 
-                await llmBackgroundService.GenerateTextResponse(
-                    request.ConnectionId,
-                    request.Message,
-                    activeChat.Model,
-                    activeChat.Id,
-                    activeChat.Messages
-                );
+                try
+                {
+                    await llmBackgroundService.GenerateTextResponse(
+                        request.ConnectionId,
+                        request.Message,
+                        activeChat.Model,
+                        activeChat.Id,
+                        activeChat.Messages
+                    );
+                }
+                catch (Exception)
+                {
+                    if (await userRepository.GetOrCreateUser("alex") is { } user2
+                        && user.GetOrCreateActiveChat(null, out bool _) is { State: ChatState.WaitingMessageGeneration } chat)
+                    {
+                        chat.GenerationFailed();
+                        await userRepository.UpdateAsync(user2);
+                    }
+
+                    throw;
+                }
             }
 
             return null;
