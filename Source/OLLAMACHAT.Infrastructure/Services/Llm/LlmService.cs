@@ -150,26 +150,40 @@ public class LlmService : ILlmService
                                      && mcpConfigurationService.GetServerByName(serverName) is McpServerInfo mcpServerInfo
                                      && mcpServerInfo.Type.Equals("SSE", StringComparison.OrdinalIgnoreCase))
                             {
-                                await using IMcpClient client = await ConnectToSseMcpClient(mcpServerInfo);
+                                string? responseContent = null;
+                                try
+                                {
+                                    await using IMcpClient client = await ConnectToSseMcpClient(mcpServerInfo);
 
-                                JsonNode argumentsNode = JsonNode.Parse(toolCall.FunctionArguments);
-                                IReadOnlyDictionary<string, object?> arguments = ConvertJsonNodeToDictionary(argumentsNode);
+                                    JsonNode argumentsNode = JsonNode.Parse(toolCall.FunctionArguments);
+                                    IReadOnlyDictionary<string, object?> arguments = ConvertJsonNodeToDictionary(argumentsNode);
 
-                                string toolName = toolCall.FunctionName.Substring(separatorIndex + 1);
-                                logger.LogInformation(
-                                    "Request to call tool: {Tool}",
-                                    toolName);
-                                CallToolResult result = await client.CallToolAsync(
-                                    toolName,
-                                    arguments);
-
-                                string? responseContent = (result.Content.FirstOrDefault() as TextContentBlock)?.Text;
-                                chatMessages.Add(new ToolChatMessage(
-                                    toolCall.Id,
-                                    responseContent));
-                                logger.LogInformation(
-                                    "Successfully called tool: {Tool}",
-                                    toolName);
+                                    string toolName = toolCall.FunctionName.Substring(separatorIndex + 1);
+                                    logger.LogInformation(
+                                        "Request to call tool: {Tool}",
+                                        toolName);
+                                    using CancellationTokenSource cts = new(TimeSpan.FromSeconds(30)); // не больше 30 секунд
+                                    CallToolResult result = await client.CallToolAsync(
+                                        toolName,
+                                        arguments,
+                                        cancellationToken: cts.Token);
+                                    responseContent = (result.Content.FirstOrDefault() as TextContentBlock)?.Text;
+                                    logger.LogInformation(
+                                        "Successfully called tool: {Tool}",
+                                        toolName);
+                                }
+                                catch (Exception e)
+                                {
+                                    logger.LogError(e,
+                                        "Error during tool call.");
+                                    responseContent = e.Message;
+                                }
+                                finally
+                                {
+                                    chatMessages.Add(new ToolChatMessage(
+                                        toolCall.Id,
+                                        responseContent ?? "failed"));
+                                }
                             }
                             else
                             {
