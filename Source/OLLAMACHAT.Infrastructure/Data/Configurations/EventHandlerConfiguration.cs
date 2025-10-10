@@ -23,7 +23,11 @@ internal sealed class EventHandlerConfiguration : IEntityTypeConfiguration<Event
         builder.Property(e => e.ParameterTypes)
             .HasConversion(
                 v => v != null ? string.Join(",", v) : string.Empty,
-                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
+                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries))
+            .Metadata.SetValueComparer(new ValueComparer<string[]>(
+                (c1, c2) => c1 != null && c2 != null && c1.SequenceEqual(c2),
+                c => c != null ? c.Aggregate(0, (hash, item) => HashCode.Combine(hash, item.GetHashCode())) : 0,
+                c => c != null ? c.ToArray() : null));
 
         builder.Property(e => e.ArgumentsHash)
             .IsRequired()

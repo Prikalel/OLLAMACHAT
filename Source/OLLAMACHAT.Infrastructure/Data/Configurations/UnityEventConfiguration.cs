@@ -27,7 +27,11 @@ internal sealed class UnityEventConfiguration : IEntityTypeConfiguration<UnityEv
         builder.Property(u => u.GenericTypeArguments)
             .HasConversion(
                 v => v != null ? string.Join(",", v) : null,
-                v => v != null ? v.Split(',', StringSplitOptions.RemoveEmptyEntries) : null);
+                v => v != null ? v.Split(',', StringSplitOptions.RemoveEmptyEntries) : null)
+            .Metadata.SetValueComparer(new ValueComparer<string[]>(
+                (c1, c2) => c1 != null && c2 != null && c1.SequenceEqual(c2),
+                c => c != null ? c.Aggregate(0, (hash, item) => HashCode.Combine(hash, item.GetHashCode())) : 0,
+                c => c != null ? c.ToArray() : null));
 
         builder.Property(u => u.ArgumentsHash)
             .IsRequired()
