@@ -52,10 +52,10 @@ internal sealed class EventHandlerRelationshipConfiguration : IEntityTypeConfigu
         builder.HasIndex(r => r.UpdatedAt)
             .HasDatabaseName("IX_EventHandlerRelationships_UpdatedAt");
 
-        // Уникальный индекс для предотвращения дублирования связей
-        builder.HasIndex(r => new { r.EventId, r.HandlerId, r.Source })
+        // Уникальный индекс для предотвращения дублирования связей между событием и обработчиком
+        builder.HasIndex(r => new { r.EventId, r.HandlerId })
             .IsUnique()
-            .HasDatabaseName("IX_EventHandlerRelationships_EventId_HandlerId_Source");
+            .HasDatabaseName("IX_EventHandlerRelationships_EventId_HandlerId");
 
         // Настройка внешних ключей и навигационных свойств
         builder.HasOne(r => r.Event)
