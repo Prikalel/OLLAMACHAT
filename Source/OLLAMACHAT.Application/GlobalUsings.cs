@@ -9,4 +9,5 @@ global using VelikiyPrikalel.OLLAMACHAT.Application.Repositories;
 global using VelikiyPrikalel.OLLAMACHAT.Application.Services.Parser;
 global using VelikiyPrikalel.OLLAMACHAT.Application.Services.Llm;
 global using VelikiyPrikalel.OLLAMACHAT.Data;
-global using VelikiyPrikalel.OLLAMACHAT.Data.StatelessEnums;
+global using VelikiyPrikalel.OLLAMACHAT.Data.Llm;
+global using VelikiyPrikalel.OLLAMACHAT.Data.Llm.StatelessEnums;

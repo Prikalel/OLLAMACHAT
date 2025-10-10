@@ -1,4 +1,4 @@
-namespace VelikiyPrikalel.OLLAMACHAT.Data;
+namespace VelikiyPrikalel.OLLAMACHAT.Data.Llm;
 
 /// <summary>
 /// Сообщение чата.

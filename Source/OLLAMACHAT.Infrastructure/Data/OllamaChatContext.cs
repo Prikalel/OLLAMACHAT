@@ -1,4 +1,4 @@
-using ChatMessage = VelikiyPrikalel.OLLAMACHAT.Data.ChatMessage;
+using ChatMessage = VelikiyPrikalel.OLLAMACHAT.Data.Llm.ChatMessage;
 
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data;
 
@@ -30,4 +30,35 @@ public class OllamaChatContext : DbContext
     /// Сообщения чатов.
     /// </summary>
     public DbSet<ChatMessage> Messages { get; set; }
+
+    /// <summary>
+    /// События Unity.
+    /// </summary>
+    public DbSet<UnityEvent> UnityEvents { get; set; }
+
+    /// <summary>
+    /// Обработчики событий.
+    /// </summary>
+    public DbSet<EventHandler> EventHandlers { get; set; }
+
+    /// <summary>
+    /// Связи между событиями и обработчиками.
+    /// </summary>
+    public DbSet<EventHandlerRelationship> EventHandlerRelationships { get; set; }
+
+    /// <inheritdoc />
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        // Применение конфигураций для существующих сущностей
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new UserChatConfiguration());
+        modelBuilder.ApplyConfiguration(new ChatMessageConfiguration());
+
+        // Применение конфигураций для новых сущностей Unity
+        modelBuilder.ApplyConfiguration(new UnityEventConfiguration());
+        modelBuilder.ApplyConfiguration(new EventHandlerConfiguration());
+        modelBuilder.ApplyConfiguration(new EventHandlerRelationshipConfiguration());
+    }
 }
