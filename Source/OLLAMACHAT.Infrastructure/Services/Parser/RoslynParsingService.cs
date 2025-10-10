@@ -38,7 +38,9 @@ public class RoslynParsingService(
             FilePath: document.FilePath!,
             Language: ParseResultLanguage.Csharp,
             Entities: entities.ToList(),
-            Relationships: relationships.ToList(),
+            Relationships: relationships
+                .Select(x => new Relationship(x))
+                .ToList(),
             ContentHash: contentHash,
             ParseTimeMs: (int)stopwatch.ElapsedMilliseconds,
             Errors: errors.ToList()

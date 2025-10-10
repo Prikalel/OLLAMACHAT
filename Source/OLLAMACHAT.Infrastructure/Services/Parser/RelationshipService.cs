@@ -9,13 +9,13 @@ public class RelationshipService(
     private static ConcurrentDictionary<string, string>? typeToFilePathCache;
 
     /// <inheritdoc />
-    public async Task<IEnumerable<Relationship>> AnalyzeRelationshipsAsync(IEnumerable<ParsedEntity> entities, Document document)
+    public async Task<IEnumerable<SimpleRelationship>> AnalyzeRelationshipsAsync(IEnumerable<ParsedEntity> entities, Document document)
     {
         logger.LogInformation("Analyzing relationships for document: {DocumentPath}", document.FilePath);
 
         try
         {
-            var relationships = new List<Relationship>();
+            var relationships = new List<SimpleRelationship>();
             var semanticModel = await document.GetSemanticModelAsync();
 
             if (semanticModel == null)
@@ -111,7 +111,7 @@ public class RelationshipService(
         ParsedEntity methodEntity,
         SemanticModel semanticModel,
         SyntaxNode root,
-        List<Relationship> relationships)
+        List<SimpleRelationship> relationships)
     {
         // Ищем декларацию метода
         var methodDeclaration = FindMethodDeclaration(root, methodEntity);
@@ -361,7 +361,7 @@ public class RelationshipService(
         InvocationExpressionSyntax invocation,
         ParsedEntity methodEntity,
         SemanticModel semanticModel,
-        List<Relationship> relationships)
+        List<SimpleRelationship> relationships)
     {
         var symbolInfo = semanticModel.GetSymbolInfo(invocation.Expression);
         var methodSymbols = new List<IMethodSymbol>();
@@ -403,10 +403,10 @@ public class RelationshipService(
 
             var targetFilePath = GetCachedFilePathForType(containingType);
 
-            relationships.Add(new Relationship(
+            relationships.Add(new SimpleRelationship(
                 FullNameFrom: methodEntity.FullName,
                 FullNameTo: fullCalledMethodName,
-                Type: RelationshipType.Calls,
+                Type: SimpleRelationshipType.Calls,
                 TargetDefinitionFilePath: targetFilePath
             ));
         }
@@ -419,7 +419,7 @@ public class RelationshipService(
         MemberAccessExpressionSyntax memberAccess,
         ParsedEntity methodEntity,
         SemanticModel semanticModel,
-        List<Relationship> relationships)
+        List<SimpleRelationship> relationships)
     {
         var symbolInfo = semanticModel.GetSymbolInfo(memberAccess);
         var symbol = symbolInfo.Symbol;
@@ -439,10 +439,10 @@ public class RelationshipService(
 
         var targetFilePath = GetCachedFilePathForType(containingType);
 
-        relationships.Add(new Relationship(
+        relationships.Add(new SimpleRelationship(
             FullNameFrom: methodEntity.FullName,
             FullNameTo: fullMemberName,
-            Type: RelationshipType.Calls,
+            Type: SimpleRelationshipType.Calls,
             TargetDefinitionFilePath: targetFilePath
         ));
     }
@@ -492,7 +492,7 @@ public class RelationshipService(
     /// <summary>
     /// Анализирует отношения наследования для сущности (класса, интерфейса или структуры)
     /// </summary>
-    private void AnalyzeInheritanceRelationships(ParsedEntity entity, List<Relationship> relationships)
+    private void AnalyzeInheritanceRelationships(ParsedEntity entity, List<SimpleRelationship> relationships)
     {
         // Проверяем, что у сущности есть информация о наследовании
         if (entity.Inheritance == null)
@@ -522,10 +522,10 @@ public class RelationshipService(
                     ? path
                     : null;
 
-                relationships.Add(new Relationship(
+                relationships.Add(new SimpleRelationship(
                     FullNameFrom: entity.FullName,
                     FullNameTo: typeFullName,
-                    Type: RelationshipType.IsBaseFor,
+                    Type: SimpleRelationshipType.IsBaseFor,
                     TargetDefinitionFilePath: targetFilePath
                 ));
             }
