@@ -1,4 +1,5 @@
 global using System;
+global using System.Linq.Expressions;
 global using Mediator;
 global using Microsoft.AspNetCore.SignalR;
 global using Microsoft.CodeAnalysis;

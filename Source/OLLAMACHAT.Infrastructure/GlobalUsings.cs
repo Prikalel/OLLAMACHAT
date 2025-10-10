@@ -1,6 +1,7 @@
 global using System;
 global using System.Collections.Concurrent;
 global using System.Diagnostics;
+global using System.Linq.Expressions;
 global using System.Security.Cryptography;
 global using System.Text;
 global using System.Text.Json.Nodes;
