@@ -8,7 +8,7 @@ using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data;
 
 #nullable disable
 
-namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Context.Migrations
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(OllamaChatContext))]
     [Migration("20251009081235_RemoveUnusedField")]

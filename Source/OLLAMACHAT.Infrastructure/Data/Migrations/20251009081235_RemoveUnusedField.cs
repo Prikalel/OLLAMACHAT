@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Context.Migrations
+namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
     public partial class RemoveUnusedField : Migration
