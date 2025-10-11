@@ -10,6 +10,7 @@
         <OutputPath>..\..\Out\$(Configuration)\$(CsProjectName)\</OutputPath>
         <DocumentationFile>..\..\Out\$(Configuration)\$(CsProjectName)\$(CsProjectName).xml</DocumentationFile>
         <RootNamespace>$(CsProjectName)</RootNamespace>
+        <WarningsNotAsErrors>CS1591</WarningsNotAsErrors>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Mapster" Version="7.4.0"/>

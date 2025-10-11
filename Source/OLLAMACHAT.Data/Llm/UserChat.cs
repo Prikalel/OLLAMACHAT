@@ -124,14 +124,14 @@ public class UserChat : IEntity
         this.State = chatStateMachine.State;
         this.Messages.Add(new ChatMessage
         {
-            Id = null,
+            Id = Guid.NewGuid().ToString(),
             ChatId = this.Id,
             Role = ChatMessageRole.User,
             Content = prompt
         });
         this.Messages.Add(new ChatMessage
         {
-            Id = null,
+            Id = Guid.NewGuid().ToString(),
             ChatId = this.Id,
             Role = ChatMessageRole.Assistant,
             Content = response

@@ -1,4 +1,5 @@
 using Attribute = VelikiyPrikalel.OLLAMACHAT.Application.Models.Attribute;
+using Location = VelikiyPrikalel.OLLAMACHAT.Application.Models.Location;
 
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 
@@ -31,30 +32,30 @@ public partial class EntityService
             logger.LogWarning("Symbol has no locations: {SymbolName}", symbol.Name);
         }
 
-        var extractionStartTime = DateTime.UtcNow;
+        DateTime extractionStartTime = DateTime.UtcNow;
         logger.LogInformation("Starting entity extraction for symbol: {SymbolName} of kind: {SymbolKind} containing namespace: {ContainingNamespace} at {StartTime}",
             symbol.Name, symbol.Kind, symbol.ContainingNamespace?.Name ?? "Global", extractionStartTime);
 
         try
         {
             logger.LogDebug("Determining entity type for symbol: {SymbolName}", symbol.Name);
-            var entityType = DetermineEntityType(symbol);
+            ParsedEntityType entityType = DetermineEntityType(symbol);
 
             logger.LogDebug("Mapping basic properties for symbol: {SymbolName}", symbol.Name);
-            var location = mapperService.MapLocation(symbol.Locations.FirstOrDefault());
-            var modifiers = mapperService.MapModifiers(symbol)?.ToList() ?? new List<string>();
-            var attributes = mapperService.MapAttributes(symbol) ?? new List<Attribute>();
-            var inheritance = symbol is INamedTypeSymbol namedTypeSymbol ? mapperService.MapInheritance(namedTypeSymbol, options) : null;
-            var returnType = mapperService.MapReturnType(symbol);
-            var parameters = symbol is IMethodSymbol methodSymbol ? mapperService.MapParameters(methodSymbol) : null;
+            Location location = mapperService.MapLocation(symbol.Locations.First());
+            List<string> modifiers = mapperService.MapModifiers(symbol)?.ToList() ?? new List<string>();
+            List<Attribute> attributes = mapperService.MapAttributes(symbol) ?? new List<Attribute>();
+            ParsedEntityInheritance? inheritance = symbol is INamedTypeSymbol namedTypeSymbol ? mapperService.MapInheritance(namedTypeSymbol, options) : null;
+            string? returnType = mapperService.MapReturnType(symbol);
+            List<ModelParameter>? parameters = symbol is IMethodSymbol methodSymbol ? mapperService.MapParameters(methodSymbol) : null;
 
             logger.LogDebug("Checking for UnityEvent fields for symbol: {SymbolName}", symbol.Name);
-            var isUnityEvent = IsUnityEventField(symbol);
+            bool isUnityEvent = IsUnityEventField(symbol);
 
             logger.LogDebug("Extracting child entities for symbol: {SymbolName}", symbol.Name);
-            var childEntitiesStartTime = DateTime.UtcNow;
-            var childEntities = await ExtractChildEntitiesAsync(symbol, semanticModel, currentDepth, options);
-            var childEntitiesTime = DateTime.UtcNow - childEntitiesStartTime;
+            DateTime childEntitiesStartTime = DateTime.UtcNow;
+            List<ParsedEntity> childEntities = await ExtractChildEntitiesAsync(symbol, semanticModel, currentDepth, options);
+            TimeSpan childEntitiesTime = DateTime.UtcNow - childEntitiesStartTime;
             logger.LogDebug("Extracted {ChildCount} child entities for symbol: {SymbolName} in {ElapsedMs}ms",
                 childEntities.Count, symbol.Name, childEntitiesTime.TotalMilliseconds);
 
@@ -68,7 +69,7 @@ public partial class EntityService
             logger.LogDebug("Creating ParsedEntity for symbol: {SymbolName} with {AttributeCount} attributes",
                 symbol.Name, attributes.Count);
 
-            var entity = new ParsedEntity(
+            ParsedEntity entity = new ParsedEntity(
                 SimpleName: symbol.Name ?? string.Empty,
                 FullName: symbol.GetFullName(),
                 Type: entityType,
@@ -82,8 +83,8 @@ public partial class EntityService
                 UsingStatementData: null
             );
 
-            var extractionEndTime = DateTime.UtcNow;
-            var extractionTime = extractionEndTime - extractionStartTime;
+            DateTime extractionEndTime = DateTime.UtcNow;
+            TimeSpan extractionTime = extractionEndTime - extractionStartTime;
 
             logger.LogInformation("Successfully extracted entity: {SymbolName} of type: {EntityType} in {ElapsedMs}ms",
                 symbol.Name, entityType, extractionTime.TotalMilliseconds);
@@ -132,9 +133,9 @@ public partial class EntityService
 
         try
         {
-            var childEntities = new List<ParsedEntity>();
-            var processedSymbols = new HashSet<string>(); // Защита от рекурсивных зависимостей
-            var childEntityTasks = new List<Task<ParsedEntity>>();
+            List<ParsedEntity> childEntities = new();
+            HashSet<string> processedSymbols = new(); // Защита от рекурсивных зависимостей
+            List<Task<ParsedEntity>> childEntityTasks = new();
 
             // Special handling for properties - extract get/set methods as children
             if (symbol is IPropertySymbol propertySymbol)
@@ -144,14 +145,14 @@ public partial class EntityService
                 if (propertySymbol.GetMethod != null)
                 {
                     logger.LogDebug("Found get method for property: {PropertyName}", propertySymbol.Name);
-                    var getMethodEntity = await ExtractEntityAsync(propertySymbol.GetMethod, semanticModel, currentDepth + 1, options);
+                    ParsedEntity getMethodEntity = await ExtractEntityAsync(propertySymbol.GetMethod, semanticModel, currentDepth + 1, options);
                     childEntities.Add(getMethodEntity);
                 }
 
                 if (propertySymbol.SetMethod != null)
                 {
                     logger.LogDebug("Found set method for property: {PropertyName}", propertySymbol.Name);
-                    var setMethodEntity = await ExtractEntityAsync(propertySymbol.SetMethod, semanticModel, currentDepth + 1, options);
+                    ParsedEntity setMethodEntity = await ExtractEntityAsync(propertySymbol.SetMethod, semanticModel, currentDepth + 1, options);
                     childEntities.Add(setMethodEntity);
                 }
             }
@@ -163,9 +164,9 @@ public partial class EntityService
                         ? namespaceSymbol.GetMembers().OfType<ISymbol>().ToList()
                         : throw new NotImplementedException();
 
-                foreach (var member in allMembers)
+                foreach (ISymbol member in allMembers)
                 {
-                    var memberKey = $"{member.Name}_{member.Kind}";
+                    string memberKey = $"{member.Name}_{member.Kind}";
                     if (!processedSymbols.Add(memberKey))
                     {
                         logger.LogTrace("Detected potential recursive dependency for member: {MemberName}", member.Name);
@@ -173,11 +174,15 @@ public partial class EntityService
                     }
 
                     if (member.IsOverride && !ShouldIncludeOverrideMember(member))
+                    {
                         continue;
+                    }
 
                     // Skip compiler-generated members
                     if (member.IsImplicitlyDeclared && !ShouldIncludeImplicitMember(member))
+                    {
                         continue;
+                    }
 
                     // Skip property accessors (get/set methods) as they are handled separately
                     if (member is IMethodSymbol methodSymbol &&
@@ -216,7 +221,7 @@ public partial class EntityService
 
                 if (childEntityTasks.Count > 0)
                 {
-                    var childResults = await Task.WhenAll(childEntityTasks);
+                    ParsedEntity[] childResults = await Task.WhenAll(childEntityTasks);
                     childEntities.AddRange(childResults);
                 }
             }
@@ -248,7 +253,9 @@ public partial class EntityService
         {
             if (methodSymbol.MethodKind == MethodKind.Constructor &&
                 methodSymbol.ContainingType.IsRecord)
+            {
                 return true;
+            }
         }
 
         return false;
@@ -281,18 +288,26 @@ public partial class EntityService
     private bool IsUnityEventField(ISymbol symbol)
     {
         if (symbol is not IFieldSymbol fieldSymbol)
+        {
             return false;
+        }
 
-        var fieldType = fieldSymbol.Type.GetFullName();
+        string fieldType = fieldSymbol.Type.GetFullName();
 
         if (unityEventNames.Contains(fieldType))
+        {
             return true;
+        }
 
         if (unityEventRegex.IsMatch(fieldType))
+        {
             return true;
+        }
 
         if (fieldSymbol.Type.AllInterfaces.Any(i => i.Name.Contains("UnityEvent")))
+        {
             return true;
+        }
 
         return false;
     }

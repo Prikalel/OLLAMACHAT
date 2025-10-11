@@ -2,12 +2,16 @@ namespace VelikiyPrikalel.OLLAMACHAT.Application.Mediator.CsharpParser;
 
 using ResolveImportResponse = (List<string> result, ErrorResponse? error);
 
+/// <summary>
+/// Команда резолвинга usings выражений.
+/// </summary>
 public sealed class ResolveImportPath
 {
     /// <summary>
     /// Запрос.
     /// </summary>
-    public sealed record Query(ResolveImportRequest request) : IRequest<ResolveImportResponse>;
+    /// <param name="Request">Запрос.</param>
+    public sealed record Query(ResolveImportRequest Request) : IRequest<ResolveImportResponse>;
 
     /// <inheritdoc />
     public sealed class Handler(IRoslynParsingService roslynParsingService) : IRequestHandler<Query, ResolveImportResponse>
@@ -17,15 +21,15 @@ public sealed class ResolveImportPath
         {
             try
             {
-                var result = await roslynParsingService.ResolveImportPathAsync(
-                    request.request.ImportPath,
-                    request.request.FilePath);
+                List<string> result = await roslynParsingService.ResolveImportPathAsync(
+                    request.Request.ImportPath,
+                    request.Request.FilePath);
 
                 return (result, null);
             }
             catch (Exception ex)
             {
-                var error = new ErrorResponse( ex.GetHashCode().ToString(), $"Failed to resolve import path: {ex.Message}", ex.ToString());
+                ErrorResponse error = new ErrorResponse( ex.GetHashCode().ToString(), $"Failed to resolve import path: {ex.Message}", ex.ToString());
 
                 return (new List<string>(), error);
             }

@@ -35,7 +35,7 @@ public sealed class GetInitFiles
                     )
                     .ToList();
                     
-                foreach (var file in findCommonInitFilesAsync)
+                foreach (string file in findCommonInitFilesAsync)
                 {
                     logger.LogTrace("[init file] - {InitFile}", file);
                 }

@@ -94,13 +94,8 @@ public class Startup
 
         services.AddMapster();
 
-        services.Scan(scan => scan
-            .FromApplicationDependencies()
-            .AddClasses(classes =>
-                classes.InNamespaces(
-                    typeof(IMapperInterface).Namespace))
-            .AsImplementedInterfaces()
-            .WithSingletonLifetime());
+        // добавляем сгенерированный маппер
+        services.AddScoped<IMapperInterface, MapperInterface>();
     }
 
     private static void RegisterSwagger(IServiceCollection services)
@@ -115,7 +110,7 @@ public class Startup
 
             c.EnableAnnotations();
 
-            c.CustomSchemaIds(type => type.FullName.Replace('+', '.'));
+            c.CustomSchemaIds(type => type.FullName!.Replace('+', '.'));
             c.IncludeXmlComments($"{AppContext.BaseDirectory}{Path.DirectorySeparatorChar}OLLAMACHAT.Generated.xml");
 
             // Include DataAnnotation attributes on Controller Action parameters as Swagger validation rules (e.g required, pattern, ..)

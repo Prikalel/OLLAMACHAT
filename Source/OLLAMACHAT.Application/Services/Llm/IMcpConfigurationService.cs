@@ -1,5 +1,8 @@
 namespace VelikiyPrikalel.OLLAMACHAT.Application.Services.Llm;
 
+/// <summary>
+/// Интерфейс настроек mcp серверов.
+/// </summary>
 public interface IMcpConfigurationService
 {
     /// <summary>
@@ -16,4 +19,11 @@ public interface IMcpConfigurationService
     McpServerInfo? GetServerByName(string name);
 }
 
+/// <summary>
+/// Информация о mcp сервере.
+/// </summary>
+/// <param name="Name">Имя.</param>
+/// <param name="Url">Путь (если sse).</param>
+/// <param name="Type">Тип.</param>
+/// <param name="AuthToken">Токен (при необходимости авторизации).</param>
 public record McpServerInfo(string Name, string Url, string Type, string? AuthToken);

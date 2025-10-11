@@ -1,3 +1,6 @@
+using System.Reflection;
+using Microsoft.Extensions.Options;
+
 namespace TestParser;
 
 /// <summary>
@@ -28,7 +31,7 @@ public abstract class TestBase
 
         // Создаем сервисы
         MapperService = new MapperService(MapperLogger);
-        var solutionSettingsOptions = Microsoft.Extensions.Options.Options.Create(
+        IOptions<SolutionSettings> solutionSettingsOptions = Microsoft.Extensions.Options.Options.Create(
             new SolutionSettings { SolutionFilePath = Directory.GetCurrentDirectory() });
         SolutionLoaderService = new SolutionLoaderService(solutionSettingsOptions, SolutionLoaderLogger);
 
@@ -49,17 +52,17 @@ public abstract class TestBase
     protected async Task<Document> CreateTestDocumentAsync(string content, string fileName = "TestFile.cs")
     {
         // Создаем рабочее пространство
-        var workspace = new AdhocWorkspace();
-        var project = workspace.AddProject("TestProject", LanguageNames.CSharp);
+        AdhocWorkspace workspace = new AdhocWorkspace();
+        Project? project = workspace.AddProject("TestProject", LanguageNames.CSharp);
 
         // Добавляем необходимые метаданные для корректной работы семантической модели
-        var references = GetMetadataReferences();
+        IEnumerable<MetadataReference> references = GetMetadataReferences();
         project = project.AddMetadataReferences(references);
 
         // Создаем исходный текст
-        var sourceText = SourceText.From(content);
-        var documentId = DocumentId.CreateNewId(project.Id);
-        var documentInfo = DocumentInfo.Create(
+        SourceText sourceText = SourceText.From(content);
+        DocumentId documentId = DocumentId.CreateNewId(project.Id);
+        DocumentInfo documentInfo = DocumentInfo.Create(
             documentId,
             fileName,
             Array.Empty<string>(),
@@ -68,7 +71,7 @@ public abstract class TestBase
             fileName,
             false);
 
-        var document = workspace.AddDocument(documentInfo);
+        Document? document = workspace.AddDocument(documentInfo);
         return document;
     }
 
@@ -78,7 +81,7 @@ public abstract class TestBase
     /// <returns>Список метаданных</returns>
     private static IEnumerable<MetadataReference> GetMetadataReferences()
     {
-        var references = new List<MetadataReference>
+        List<MetadataReference> references = new()
         {
             MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
             MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location),
@@ -87,7 +90,7 @@ public abstract class TestBase
         };
 
         // Добавляем ссылки на базовые сборки .NET
-        var coreAssembly = typeof(System.Runtime.GCSettings).Assembly;
+        Assembly coreAssembly = typeof(System.Runtime.GCSettings).Assembly;
         if (!references.Any(r => r.Display == coreAssembly.Location))
         {
             references.Add(MetadataReference.CreateFromFile(coreAssembly.Location));
@@ -123,8 +126,8 @@ public abstract class TestBase
     /// <returns>True, если найдены ошибки</returns>
     protected bool HasLogErrors<T>(FakeLogger<T> logger, string? expectedErrorMessage = null)
     {
-        var logEntries = logger.LogEntries;
-        var errorEntries = logEntries.Where(r => r.Level >= LogLevel.Error).ToList();
+        IReadOnlyList<LogEntry> logEntries = logger.LogEntries;
+        List<LogEntry> errorEntries = logEntries.Where(r => r.Level >= LogLevel.Error).ToList();
 
         if (expectedErrorMessage != null)
         {

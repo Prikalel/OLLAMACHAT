@@ -22,12 +22,12 @@ public class UnityEvent : IEntity
     public required string FullName { get; set; }
 
     /// <summary>
-    /// Тип события (UnityEvent, UnityEvent<T>).
+    /// Тип события (UnityEvent, UnityEvent{T}).
     /// </summary>
     public required string EventType { get; set; }
 
     /// <summary>
-    /// Массив типов аргументов для UnityEvent<T>.
+    /// Массив типов аргументов для UnityEvent{T}.
     /// </summary>
     public string[]? GenericTypeArguments { get; set; }
 

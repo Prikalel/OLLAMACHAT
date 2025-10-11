@@ -1,16 +1,18 @@
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 
+/// <inheritdoc />
 public class ImportService(
     ISolutionLoaderService solutionLoaderService,
     ILogger<ImportService> logger) : IImportService
 {
+    /// <inheritdoc />
     public async Task<List<string>> ResolveImportPathAsync(string importPath, Document document)
     {
         logger.LogInformation("Resolving import path: {ImportPath} for document: {DocumentPath}", importPath, document.FilePath);
 
         try
         {
-            var resolvedPaths = new List<string>();
+            List<string> resolvedPaths = new();
 
             if (!solutionLoaderService.IsSolutionLoaded)
             {
@@ -18,41 +20,41 @@ public class ImportService(
                 return resolvedPaths;
             }
 
-            var solution = solutionLoaderService.CurrentSolution;
+            Solution? solution = solutionLoaderService.CurrentSolution;
             if (solution == null)
             {
                 logger.LogWarning("No solution available");
                 return resolvedPaths;
             }
 
-            var syntaxTree = await document.GetSyntaxTreeAsync();
-            var root = await syntaxTree.GetRootAsync();
-            var semanticModel = await document.GetSemanticModelAsync();
+            SyntaxTree? syntaxTree = await document.GetSyntaxTreeAsync();
+            SyntaxNode root = await syntaxTree!.GetRootAsync();
+            SemanticModel? semanticModel = await document.GetSemanticModelAsync();
 
-            var usingDirectives = root.DescendantNodes().OfType<UsingDirectiveSyntax>();
-            var documentPath = document.FilePath;
-            var documentDirectory = Path.GetDirectoryName(documentPath);
+            IEnumerable<UsingDirectiveSyntax> usingDirectives = root.DescendantNodes().OfType<UsingDirectiveSyntax>();
+            string? documentPath = document.FilePath;
+            string? documentDirectory = Path.GetDirectoryName(documentPath);
 
-            foreach (var usingDirective in usingDirectives)
+            foreach (UsingDirectiveSyntax usingDirective in usingDirectives)
             {
-                var namespaceName = usingDirective.Name.ToString();
+                string namespaceName = usingDirective.Name.ToString();
                 if (namespaceName.Equals(importPath, StringComparison.OrdinalIgnoreCase))
                 {
-                    foreach (var project in solution.Projects)
+                    foreach (Project project in solution.Projects)
                     {
-                        foreach (var projectDocument in project.Documents)
+                        foreach (Document projectDocument in project.Documents)
                         {
                             if (projectDocument.FilePath != documentPath)
                             {
-                                var projectSyntaxTree = await projectDocument.GetSyntaxTreeAsync();
-                                var projectRoot = await projectSyntaxTree.GetRootAsync();
-                                var namespaceDeclarations = projectRoot.DescendantNodes().OfType<NamespaceDeclarationSyntax>();
+                                SyntaxTree? projectSyntaxTree = await projectDocument.GetSyntaxTreeAsync();
+                                SyntaxNode projectRoot = await projectSyntaxTree!.GetRootAsync();
+                                IEnumerable<NamespaceDeclarationSyntax> namespaceDeclarations = projectRoot.DescendantNodes().OfType<NamespaceDeclarationSyntax>();
 
-                                foreach (var namespaceDeclaration in namespaceDeclarations)
+                                foreach (NamespaceDeclarationSyntax namespaceDeclaration in namespaceDeclarations)
                                 {
                                     if (namespaceDeclaration.Name.ToString().Equals(namespaceName, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        var relativePath = GetRelativePath(documentDirectory, projectDocument.FilePath);
+                                        string relativePath = GetRelativePath(documentDirectory!, projectDocument.FilePath!);
                                         if (!resolvedPaths.Contains(relativePath))
                                         {
                                             resolvedPaths.Add(relativePath);
@@ -75,8 +77,10 @@ public class ImportService(
         }
     }
 
+    /// <inheritdoc />
     public async Task<List<string>> FindCommonInitFilesAsync(string repoPath)
     {
+        await Task.CompletedTask;
         logger.LogInformation("Finding common init files for repo: {RepoPath}", repoPath);
 
         try
@@ -87,8 +91,8 @@ public class ImportService(
                 return new List<string>();
             }
 
-            var regex = new Regex(@"^.*(GlobalUsings\.cs|\.csproj)", RegexOptions.Compiled);
-            var files = new DirectoryInfo(repoPath)
+            Regex regex = new Regex(@"^.*(GlobalUsings\.cs|\.csproj)", RegexOptions.Compiled);
+            List<FileInfo> files = new DirectoryInfo(repoPath)
                 .EnumerateFiles("*.*", SearchOption.AllDirectories)
                 .Where(fi => regex.IsMatch(fi.Name))
                 .ToList();
@@ -106,16 +110,20 @@ public class ImportService(
     private string GetRelativePath(string relativeTo, string path)
     {
         if (string.IsNullOrEmpty(relativeTo))
+        {
             return path;
+        }
 
-        var fromUri = new Uri(relativeTo);
-        var toUri = new Uri(path);
+        Uri fromUri = new Uri(relativeTo);
+        Uri toUri = new Uri(path);
 
         if (fromUri.Scheme != toUri.Scheme)
+        {
             return path;
+        }
 
-        var relativeUri = fromUri.MakeRelativeUri(toUri);
-        var relativePath = Uri.UnescapeDataString(relativeUri.ToString());
+        Uri relativeUri = fromUri.MakeRelativeUri(toUri);
+        string relativePath = Uri.UnescapeDataString(relativeUri.ToString());
 
         if (toUri.Scheme.Equals("file", StringComparison.OrdinalIgnoreCase))
         {

@@ -14,9 +14,11 @@ public static class SymbolExtensions
     public static string GetFullName(this ISymbol symbol)
     {
         if (symbol == null)
+        {
             return string.Empty;
+        }
 
-        var fullName = symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat
+        string fullName = symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat
             .WithParameterOptions(SymbolDisplayParameterOptions.IncludeType
                 | SymbolDisplayParameterOptions.IncludeParamsRefOut)
             .WithMemberOptions(SymbolDisplayMemberOptions.IncludeContainingType

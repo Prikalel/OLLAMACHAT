@@ -10,6 +10,7 @@ public class DocumentService(
     public async Task<Document?> GetDocumentAsync(string filePath)
     {
         logger.LogInformation("Getting document for file: {FilePath}", filePath);
+        await Task.CompletedTask;
 
         if (!solutionLoaderService.IsSolutionLoaded)
         {
@@ -32,7 +33,7 @@ public class DocumentService(
             return null;
         }
 
-        var solution = solutionLoaderService.CurrentSolution;
+        Solution? solution = solutionLoaderService.CurrentSolution;
         if (solution == null)
         {
             logger.LogWarning("No solution available");
@@ -45,7 +46,7 @@ public class DocumentService(
             : Path.Join(repoPath, filePath);
         logger.LogTrace("Will check against {Path}", pathToTestAgainst);
 
-        foreach (var project in solution.Projects)
+        foreach (Project project in solution.Projects)
         {
             Document? document = project.Documents
                 .FirstOrDefault(d => d.FilePath?.Equals(pathToTestAgainst, StringComparison.OrdinalIgnoreCase) is true);
@@ -68,12 +69,12 @@ public class DocumentService(
 
         try
         {
-            var sourceText = await document.GetTextAsync();
-            var content = sourceText.ToString();
+            SourceText sourceText = await document.GetTextAsync();
+            string content = sourceText.ToString();
 
-            using var sha256 = SHA256.Create();
-            var hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(content));
-            var hash = Convert.ToHexString(hashBytes).ToLowerInvariant();
+            using SHA256 sha256 = SHA256.Create();
+            byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(content));
+            string hash = Convert.ToHexString(hashBytes).ToLowerInvariant();
 
             logger.LogTrace("Successfully calculated content hash for document: {DocumentPath}", document.FilePath);
             return hash;
