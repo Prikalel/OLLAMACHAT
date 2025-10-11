@@ -55,26 +55,6 @@ public class Program
             IHost build = CreateWebHostBuilder(args)
                 .Build();
 
-            using (IServiceScope scope = build.Services.CreateScope())
-            {
-                OllamaChatContext db = scope.ServiceProvider.GetRequiredService<OllamaChatContext>();
-                await db.Database.MigrateAsync();
-
-                ISolutionLoaderService loader = scope.ServiceProvider.GetRequiredService<ISolutionLoaderService>();
-                await loader.LoadSolutionAsync();
-                if (loader.IsSolutionLoaded)
-                {
-                    loader.SolutionReloaded += (_, _) => EntityService.ClearCache();
-                    await RelationshipService.InitializeCaches(loader.CurrentSolution!);
-                    loader.SolutionReloaded += async (_, arg) => await RelationshipService.InitializeCaches(arg.Solution);
-                    logger.Info("Done registering subscribers");
-                }
-                else
-                {
-                    logger.Error("Error loading solution");
-                }
-            }
-
             await build
                 .RunAsync();
         }
