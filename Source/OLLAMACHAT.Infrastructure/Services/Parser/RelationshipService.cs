@@ -1,5 +1,6 @@
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 
+/// <inheritdoc />
 [UsedImplicitly]
 public class RelationshipService(
     ILogger<RelationshipService> logger,
@@ -15,8 +16,8 @@ public class RelationshipService(
 
         try
         {
-            var relationships = new List<SimpleRelationship>();
-            var semanticModel = await document.GetSemanticModelAsync();
+            List<SimpleRelationship> relationships = new();
+            SemanticModel? semanticModel = await document.GetSemanticModelAsync();
 
             if (semanticModel == null)
             {
@@ -24,18 +25,18 @@ public class RelationshipService(
                 return relationships;
             }
 
-            var syntaxTree = await document.GetSyntaxTreeAsync();
+            SyntaxTree? syntaxTree = await document.GetSyntaxTreeAsync();
             if (syntaxTree == null)
             {
                 logger.LogWarning("Could not get syntax tree for document: {DocumentPath}", document.FilePath);
                 return relationships;
             }
 
-            var root = await syntaxTree.GetRootAsync();
+            SyntaxNode root = await syntaxTree.GetRootAsync();
 
-            var allEntities = FlattenAllTrees(entities).ToList();
+            List<ParsedEntity> allEntities = FlattenAllTrees(entities).ToList();
 
-            foreach (var entity in allEntities)
+            foreach (ParsedEntity entity in allEntities)
             {
                 if (entity.Type == ParsedEntityType.Method)
                 {
@@ -68,22 +69,24 @@ public class RelationshipService(
         allTypesCache = new();
         typeToFilePathCache = new();
 
-        foreach (var project in solution.Projects)
+        foreach (Project project in solution.Projects)
         {
-            var compilation = await project.GetCompilationAsync();
+            Compilation? compilation = await project.GetCompilationAsync();
             if (compilation == null)
-                continue;
-
-            var types = GetAllTypesInCompilation(compilation);
-            foreach (var type in types)
             {
-                var fullName = type.GetFullName();
+                continue;
+            }
+
+            IEnumerable<INamedTypeSymbol> types = GetAllTypesInCompilation(compilation);
+            foreach (INamedTypeSymbol type in types)
+            {
+                string fullName = type.GetFullName();
                 if (!allTypesCache.ContainsKey(fullName))
                 {
                     allTypesCache[fullName] = type;
 
                     // Кешируем путь к файлу
-                    var filePath = GetFilePathForTypeInternal(type, solution);
+                    string? filePath = GetFilePathForTypeInternal(type, solution);
                     if (!string.IsNullOrEmpty(filePath))
                     {
                         typeToFilePathCache[fullName] = filePath;
@@ -114,9 +117,11 @@ public class RelationshipService(
         List<SimpleRelationship> relationships)
     {
         // Ищем декларацию метода
-        var methodDeclaration = FindMethodDeclaration(root, methodEntity);
+        CSharpSyntaxNode? methodDeclaration = FindMethodDeclaration(root, methodEntity);
         if (methodDeclaration == null)
+        {
             return;
+        }
 
         // Логирование для отладки проблемы с вложенными классами
         logger.LogDebug("Analyzing method: {MethodFullName}, Found declaration at line: {LineNumber}",
@@ -129,19 +134,19 @@ public class RelationshipService(
         }
 
         // Анализируем все вызовы методов
-        var invocationExpressions = methodDeclaration.DescendantNodes().OfType<InvocationExpressionSyntax>();
+        IEnumerable<InvocationExpressionSyntax> invocationExpressions = methodDeclaration.DescendantNodes().OfType<InvocationExpressionSyntax>();
 
-        foreach (var invocation in invocationExpressions)
+        foreach (InvocationExpressionSyntax invocation in invocationExpressions)
         {
             ProcessMethodInvocation(invocation, methodEntity, semanticModel, relationships);
         }
 
         // Анализируем обращения к свойствам и полям
-        var memberAccessExpressions = methodDeclaration.DescendantNodes()
+        IEnumerable<MemberAccessExpressionSyntax> memberAccessExpressions = methodDeclaration.DescendantNodes()
             .OfType<MemberAccessExpressionSyntax>()
             .Where(ma => ma.Parent is not InvocationExpressionSyntax); // Исключаем уже обработанные вызовы методов
 
-        foreach (var memberAccess in memberAccessExpressions)
+        foreach (MemberAccessExpressionSyntax memberAccess in memberAccessExpressions)
         {
             ProcessMemberAccess(memberAccess, methodEntity, semanticModel, relationships);
         }
@@ -157,7 +162,7 @@ public class RelationshipService(
             methodEntity.FullName, methodEntity.SimpleName);
 
         // Проверяем, является ли метод частью вложенного класса
-        var isNestedClassMethod = methodEntity.FullName?.Contains('.') == true &&
+        bool isNestedClassMethod = methodEntity.FullName?.Contains('.') == true &&
                                   methodEntity.FullName.Split('.').Length > 2;
 
         if (isNestedClassMethod)
@@ -167,7 +172,7 @@ public class RelationshipService(
         }
 
         // Поддержка обычных методов
-        var methodDeclaration = root.DescendantNodes()
+        MethodDeclarationSyntax? methodDeclaration = root.DescendantNodes()
             .OfType<MethodDeclarationSyntax>()
             .FirstOrDefault(m => IsMatchingMethod(m.Identifier.Text, methodEntity));
 
@@ -180,7 +185,7 @@ public class RelationshipService(
         }
 
         // Поддержка конструкторов
-        var constructorDeclaration = root.DescendantNodes()
+        ConstructorDeclarationSyntax? constructorDeclaration = root.DescendantNodes()
             .OfType<ConstructorDeclarationSyntax>()
             .FirstOrDefault(c => IsMatchingMethod(c.Identifier.Text, methodEntity) ||
                                  methodEntity.SimpleName == ".ctor");
@@ -194,7 +199,7 @@ public class RelationshipService(
         }
 
         // Поддержка акцессоров свойств
-        var accessorDeclaration = root.DescendantNodes()
+        AccessorDeclarationSyntax? accessorDeclaration = root.DescendantNodes()
             .OfType<AccessorDeclarationSyntax>()
             .FirstOrDefault(a => IsMatchingAccessor(a, methodEntity));
 
@@ -218,34 +223,38 @@ public class RelationshipService(
     private CSharpSyntaxNode? FindNestedClassMethodDeclaration(SyntaxNode root, ParsedEntity methodEntity)
     {
         if (methodEntity.FullName == null)
+        {
             return null;
+        }
 
         // Разбираем полное имя на компоненты
-        var nameParts = methodEntity.FullName.Split('.');
+        string[] nameParts = methodEntity.FullName.Split('.');
         if (nameParts.Length < 2)
+        {
             return null;
+        }
 
         // Последний компонент - имя метода
-        var methodName = nameParts[^1];
+        string methodName = nameParts[^1];
         // Предпоследний компонент - имя класса (может содержать параметры)
-        var classNameWithParams = nameParts[^2];
+        string classNameWithParams = nameParts[^2];
         // Все остальное - иерархия вложенных классов
-        var classHierarchy = nameParts[..^2].ToList();
+        List<string> classHierarchy = nameParts[..^2].ToList();
 
         // Извлекаем имя класса без параметров
-        var className = classNameWithParams.Split('(')[0];
+        string className = classNameWithParams.Split('(')[0];
         classHierarchy.Add(className);
 
         logger.LogDebug("Looking for nested class method: {MethodName} in class hierarchy: {ClassHierarchy}",
             methodName, string.Join(".", classHierarchy));
 
         // Ищем классы в иерархии
-        var currentNodes = root.DescendantNodes().OfType<ClassDeclarationSyntax>().ToList();
+        List<ClassDeclarationSyntax> currentNodes = root.DescendantNodes().OfType<ClassDeclarationSyntax>().ToList();
         ClassDeclarationSyntax? targetClass = null;
 
-        foreach (var classInHierarchy in classHierarchy)
+        foreach (string classInHierarchy in classHierarchy)
         {
-            var foundClasses = currentNodes.Where(c => c.Identifier.Text == classInHierarchy).ToList();
+            List<ClassDeclarationSyntax> foundClasses = currentNodes.Where(c => c.Identifier.Text == classInHierarchy).ToList();
             if (!foundClasses.Any())
             {
                 logger.LogWarning("Class {ClassName} not found in hierarchy", classInHierarchy);
@@ -272,7 +281,7 @@ public class RelationshipService(
         if (methodEntity.SimpleName == ".ctor")
         {
             // Ищем конструктор
-            var constructor = targetClass.DescendantNodes()
+            ConstructorDeclarationSyntax? constructor = targetClass.DescendantNodes()
                 .OfType<ConstructorDeclarationSyntax>()
                 .FirstOrDefault(c => c.Identifier.Text == targetClass.Identifier.Text);
 
@@ -287,7 +296,7 @@ public class RelationshipService(
         else if (methodEntity.SimpleName.StartsWith("get_") || methodEntity.SimpleName.StartsWith("set_"))
         {
             // Ищем акцессор свойства
-            var accessor = targetClass.DescendantNodes()
+            AccessorDeclarationSyntax? accessor = targetClass.DescendantNodes()
                 .OfType<AccessorDeclarationSyntax>()
                 .FirstOrDefault(a => IsMatchingAccessor(a, methodEntity));
 
@@ -302,7 +311,7 @@ public class RelationshipService(
         else
         {
             // Ищем обычный метод
-            var method = targetClass.DescendantNodes()
+            MethodDeclarationSyntax? method = targetClass.DescendantNodes()
                 .OfType<MethodDeclarationSyntax>()
                 .FirstOrDefault(m => IsMatchingMethod(m.Identifier.Text, methodEntity));
 
@@ -324,7 +333,7 @@ public class RelationshipService(
     /// </summary>
     private bool IsMatchingMethod(string methodName, ParsedEntity methodEntity)
     {
-        var isMatch = methodName == methodEntity.SimpleName ||
+        bool isMatch = methodName == methodEntity.SimpleName ||
                       methodEntity.FullName?.EndsWith($".{methodName}") == true ||
                       methodEntity.FullName?.EndsWith($".{methodName}(") == true;
 
@@ -343,13 +352,15 @@ public class RelationshipService(
     /// </summary>
     private bool IsMatchingAccessor(AccessorDeclarationSyntax accessor, ParsedEntity methodEntity)
     {
-        var accessorKind = accessor.Keyword.Text; // "get" или "set"
-        var propertyName = (accessor.Parent?.Parent as PropertyDeclarationSyntax)?.Identifier.Text;
+        string accessorKind = accessor.Keyword.Text; // "get" или "set"
+        string? propertyName = (accessor.Parent?.Parent as PropertyDeclarationSyntax)?.Identifier.Text;
 
         if (propertyName == null)
+        {
             return false;
+        }
 
-        var expectedName = $"{accessorKind}_{propertyName}";
+        string expectedName = $"{accessorKind}_{propertyName}";
         return methodEntity.SimpleName == expectedName ||
                methodEntity.FullName?.Contains($".{expectedName}") == true;
     }
@@ -363,8 +374,8 @@ public class RelationshipService(
         SemanticModel semanticModel,
         List<SimpleRelationship> relationships)
     {
-        var symbolInfo = semanticModel.GetSymbolInfo(invocation.Expression);
-        var methodSymbols = new List<IMethodSymbol>();
+        SymbolInfo symbolInfo = semanticModel.GetSymbolInfo(invocation.Expression);
+        List<IMethodSymbol> methodSymbols = new();
 
         if (symbolInfo.Symbol is IMethodSymbol directSymbol)
         {
@@ -375,13 +386,15 @@ public class RelationshipService(
             methodSymbols.AddRange(symbolInfo.CandidateSymbols.OfType<IMethodSymbol>());
         }
 
-        foreach (var methodSymbol in methodSymbols)
+        foreach (IMethodSymbol methodSymbol in methodSymbols)
         {
-            var containingType = methodSymbol.ContainingType;
+            INamedTypeSymbol? containingType = methodSymbol.ContainingType;
             if (containingType == null)
+            {
                 continue;
+            }
 
-            var fullCalledMethodName = methodSymbol.GetFullName();
+            string fullCalledMethodName = methodSymbol.GetFullName();
 
             // Логирование для отладки проблемы с вложенными классами
             logger.LogDebug("Processing method call from {FromMethod} to {ToMethod}",
@@ -394,17 +407,19 @@ public class RelationshipService(
                     methodEntity.FullName, fullCalledMethodName);
 
                 // Дополнительное логирование для отслеживания проблемы
-                var invocationText = invocation.ToString();
+                string invocationText = invocation.ToString();
                 if (invocationText.Length > 100)
+                {
                     invocationText = invocationText.Substring(0, 100) + "...";
+                }
 
                 logger.LogDebug("Invocation expression: {InvocationText}", invocationText);
             }
 
-            var targetFilePath = GetCachedFilePathForType(containingType);
+            string? targetFilePath = GetCachedFilePathForType(containingType);
 
             relationships.Add(new SimpleRelationship(
-                FullNameFrom: methodEntity.FullName,
+                FullNameFrom: methodEntity.FullName!,
                 FullNameTo: fullCalledMethodName,
                 Type: SimpleRelationshipType.Calls,
                 TargetDefinitionFilePath: targetFilePath
@@ -421,26 +436,32 @@ public class RelationshipService(
         SemanticModel semanticModel,
         List<SimpleRelationship> relationships)
     {
-        var symbolInfo = semanticModel.GetSymbolInfo(memberAccess);
-        var symbol = symbolInfo.Symbol;
+        SymbolInfo symbolInfo = semanticModel.GetSymbolInfo(memberAccess);
+        ISymbol? symbol = symbolInfo.Symbol;
 
         if (symbol == null)
+        {
             return;
+        }
 
         // Обрабатываем только свойства и поля
         if (symbol is not (IPropertySymbol or IFieldSymbol))
+        {
             return;
+        }
 
-        var containingType = symbol.ContainingType;
+        INamedTypeSymbol? containingType = symbol.ContainingType;
         if (containingType == null)
+        {
             return;
+        }
 
-        var fullMemberName = symbol.GetFullName();
+        string fullMemberName = symbol.GetFullName();
 
-        var targetFilePath = GetCachedFilePathForType(containingType);
+        string? targetFilePath = GetCachedFilePathForType(containingType);
 
         relationships.Add(new SimpleRelationship(
-            FullNameFrom: methodEntity.FullName,
+            FullNameFrom: methodEntity.FullName!,
             FullNameTo: fullMemberName,
             Type: SimpleRelationshipType.Calls,
             TargetDefinitionFilePath: targetFilePath
@@ -453,12 +474,14 @@ public class RelationshipService(
     private string? GetCachedFilePathForType(INamedTypeSymbol typeSymbol)
     {
         if (typeSymbol == null)
+        {
             return null;
+        }
 
-        var fullName = typeSymbol.GetFullName();
+        string fullName = typeSymbol.GetFullName();
 
         // Проверяем, является ли тип пользовательским
-        if (typeToFilePathCache != null && typeToFilePathCache.TryGetValue(fullName, out var cachedPath))
+        if (typeToFilePathCache != null && typeToFilePathCache.TryGetValue(fullName, out string? cachedPath))
         {
             return cachedPath;
         }
@@ -472,18 +495,24 @@ public class RelationshipService(
     private static string? GetFilePathForTypeInternal(INamedTypeSymbol typeSymbol, Solution solution)
     {
         if (typeSymbol == null)
+        {
             return null;
+        }
 
-        var typeDeclarations = typeSymbol.DeclaringSyntaxReferences;
+        ImmutableArray<SyntaxReference> typeDeclarations = typeSymbol.DeclaringSyntaxReferences;
         if (typeDeclarations.Length == 0)
+        {
             return null;
+        }
 
-        var syntaxNode = typeDeclarations[0].GetSyntax();
-        var syntaxTree = syntaxNode.SyntaxTree;
-        var filePath = syntaxTree.FilePath;
+        SyntaxNode syntaxNode = typeDeclarations[0].GetSyntax();
+        SyntaxTree syntaxTree = syntaxNode.SyntaxTree;
+        string filePath = syntaxTree.FilePath;
 
         if (string.IsNullOrEmpty(filePath))
+        {
             return null;
+        }
 
         // Возвращаем абсолютный путь
         return Path.GetFullPath(filePath);
@@ -496,34 +525,42 @@ public class RelationshipService(
     {
         // Проверяем, что у сущности есть информация о наследовании
         if (entity.Inheritance == null)
+        {
             return;
+        }
 
         if (!solutionLoaderService.IsSolutionLoaded || solutionLoaderService.CurrentSolution == null)
+        {
             return;
+        }
 
         // Получаем символ текущей сущности из кеша
-        if (allTypesCache == null || !allTypesCache.TryGetValue(entity.FullName!, out var currentEntitySymbol))
+        if (allTypesCache == null || !allTypesCache.TryGetValue(entity.FullName!, out INamedTypeSymbol? currentEntitySymbol))
+        {
             return;
+        }
 
         // Ищем все типы, которые наследуют от текущей сущности
-        foreach (var kvp in allTypesCache)
+        foreach (KeyValuePair<string, INamedTypeSymbol> kvp in allTypesCache)
         {
-            var typeSymbol = kvp.Value;
-            var typeFullName = kvp.Key;
+            INamedTypeSymbol typeSymbol = kvp.Value;
+            string typeFullName = kvp.Key;
 
             // Пропускаем саму сущность
             if (SymbolEqualityComparer.Default.Equals(typeSymbol, currentEntitySymbol))
+            {
                 continue;
+            }
 
             if (InheritsFrom(typeSymbol, currentEntitySymbol))
             {
                 // Получаем путь к файлу из кеша
-                var targetFilePath = typeToFilePathCache?.TryGetValue(typeFullName, out var path) == true
+                string? targetFilePath = typeToFilePathCache?.TryGetValue(typeFullName, out string? path) == true
                     ? path
                     : null;
 
                 relationships.Add(new SimpleRelationship(
-                    FullNameFrom: entity.FullName,
+                    FullNameFrom: entity.FullName!,
                     FullNameTo: typeFullName,
                     Type: SimpleRelationshipType.IsBaseFor,
                     TargetDefinitionFilePath: targetFilePath
@@ -537,7 +574,7 @@ public class RelationshipService(
     /// </summary>
     private static IEnumerable<INamedTypeSymbol> GetAllTypesInCompilation(Compilation compilation)
     {
-        var types = new List<INamedTypeSymbol>();
+        List<INamedTypeSymbol> types = new();
         GetAllTypesInNamespace(compilation.GlobalNamespace, types);
         return types;
     }
@@ -548,7 +585,7 @@ public class RelationshipService(
     private static void GetAllTypesInNamespace(INamespaceSymbol namespaceSymbol, List<INamedTypeSymbol> types)
     {
         // Добавляем типы текущего пространства имен
-        foreach (var typeMember in namespaceSymbol.GetTypeMembers())
+        foreach (INamedTypeSymbol typeMember in namespaceSymbol.GetTypeMembers())
         {
             types.Add(typeMember);
 
@@ -557,7 +594,7 @@ public class RelationshipService(
         }
 
         // Рекурсивно обрабатываем дочерние пространства имен
-        foreach (var childNamespace in namespaceSymbol.GetNamespaceMembers())
+        foreach (INamespaceSymbol childNamespace in namespaceSymbol.GetNamespaceMembers())
         {
             GetAllTypesInNamespace(childNamespace, types);
         }
@@ -568,7 +605,7 @@ public class RelationshipService(
     /// </summary>
     private static void AddNestedTypes(INamedTypeSymbol typeSymbol, List<INamedTypeSymbol> types)
     {
-        foreach (var nestedType in typeSymbol.GetTypeMembers())
+        foreach (INamedTypeSymbol nestedType in typeSymbol.GetTypeMembers())
         {
             types.Add(nestedType);
             AddNestedTypes(nestedType, types);
@@ -581,22 +618,29 @@ public class RelationshipService(
     private bool InheritsFrom(INamedTypeSymbol typeSymbol, INamedTypeSymbol baseTypeSymbol)
     {
         if (typeSymbol == null || baseTypeSymbol == null)
+        {
             return false;
+        }
 
         // Проверяем прямое и косвенное наследование от базового класса
-        var baseType = typeSymbol.BaseType;
+        INamedTypeSymbol? baseType = typeSymbol.BaseType;
         while (baseType != null)
         {
             if (SymbolEqualityComparer.Default.Equals(baseType, baseTypeSymbol))
+            {
                 return true;
+            }
+
             baseType = baseType.BaseType;
         }
 
         // Проверяем реализацию интерфейсов (прямую и косвенную)
-        foreach (var interfaceType in typeSymbol.AllInterfaces)
+        foreach (INamedTypeSymbol interfaceType in typeSymbol.AllInterfaces)
         {
             if (SymbolEqualityComparer.Default.Equals(interfaceType, baseTypeSymbol))
+            {
                 return true;
+            }
         }
 
         return false;

@@ -4,7 +4,7 @@ namespace OLLAMACHAT.Generated.Models.ParseRequest;
 /// Request to parse a C# file.
 /// </summary>
 [DataContract]
-public class ParserRequestDto : IEquatable<ParserRequestDto>
+public class ParserRequestDto
 {
     /// <summary>
     /// Path to the C# source file to parse, relative to the repository root.
@@ -12,13 +12,13 @@ public class ParserRequestDto : IEquatable<ParserRequestDto>
     /// <value>Path to the C# source file to parse, relative to the repository root.</value>
     [Required]
     [DataMember(Name = "filePath")]
-    public string FilePath { get; set; }
+    public required string FilePath { get; set; }
 
     /// <summary>
     /// Gets or Sets Options
     /// </summary>
     [DataMember(Name = "options")]
-    public ParserOptionsDto Options { get; set; }
+    public ParserOptionsDto? Options { get; set; }
 
     /// <summary>
     /// Absolute path to the repository root for resolving context.
@@ -26,91 +26,7 @@ public class ParserRequestDto : IEquatable<ParserRequestDto>
     /// <value>Absolute path to the repository root for resolving context.</value>
     [Required]
     [DataMember(Name = "repoPath")]
-    public string RepoPath { get; set; }
-
-    /// <summary>
-    /// Returns true if objects are equal
-    /// </summary>
-    /// <param name="obj">Object to be compared</param>
-    /// <returns>Boolean</returns>
-    public override bool Equals(object obj)
-    {
-        if (ReferenceEquals(null, obj))
-        {
-            return false;
-        }
-
-        if (ReferenceEquals(this, obj))
-        {
-            return true;
-        }
-
-        return obj.GetType() == GetType() && Equals((ParserRequestDto)obj);
-    }
-
-    /// <summary>
-    /// Returns true if ParserRequest instances are equal
-    /// </summary>
-    /// <param name="other">Instance of ParserRequest to be compared</param>
-    /// <returns>Boolean</returns>
-    public bool Equals(ParserRequestDto other)
-    {
-        if (ReferenceEquals(null, other))
-        {
-            return false;
-        }
-
-        if (ReferenceEquals(this, other))
-        {
-            return true;
-        }
-
-        return
-            (
-                FilePath == other.FilePath ||
-                FilePath != null &&
-                FilePath.Equals(other.FilePath)
-            ) &&
-            (
-                RepoPath == other.RepoPath ||
-                RepoPath != null &&
-                RepoPath.Equals(other.RepoPath)
-            ) &&
-            (
-                Options == other.Options ||
-                Options != null &&
-                Options.Equals(other.Options)
-            );
-    }
-
-    /// <summary>
-    /// Gets the hash code
-    /// </summary>
-    /// <returns>Hash code</returns>
-    public override int GetHashCode()
-    {
-        unchecked // Overflow is fine, just wrap
-        {
-            var hashCode = 41;
-            // Suitable nullity checks etc, of course :)
-            if (FilePath != null)
-            {
-                hashCode = hashCode * 59 + FilePath.GetHashCode();
-            }
-
-            if (RepoPath != null)
-            {
-                hashCode = hashCode * 59 + RepoPath.GetHashCode();
-            }
-
-            if (Options != null)
-            {
-                hashCode = hashCode * 59 + Options.GetHashCode();
-            }
-
-            return hashCode;
-        }
-    }
+    public required string RepoPath { get; set; }
 
     /// <summary>
     /// Returns the JSON string presentation of the object
@@ -124,7 +40,7 @@ public class ParserRequestDto : IEquatable<ParserRequestDto>
     /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
-        var sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         sb.Append("class ParserRequest {\n");
         sb.Append("  FilePath: ").Append(FilePath).Append("\n");
         sb.Append("  RepoPath: ").Append(RepoPath).Append("\n");
@@ -132,22 +48,4 @@ public class ParserRequestDto : IEquatable<ParserRequestDto>
         sb.Append("}\n");
         return sb.ToString();
     }
-
-    #region Operators
-
-#pragma warning disable 1591
-
-    public static bool operator ==(ParserRequestDto left, ParserRequestDto right)
-    {
-        return Equals(left, right);
-    }
-
-    public static bool operator !=(ParserRequestDto left, ParserRequestDto right)
-    {
-        return !Equals(left, right);
-    }
-
-#pragma warning restore 1591
-
-    #endregion Operators
 }

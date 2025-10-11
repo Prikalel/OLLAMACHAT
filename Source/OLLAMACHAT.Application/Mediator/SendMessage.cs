@@ -8,23 +8,21 @@ public sealed class SendMessage
     /// <summary>
     /// Команда на выполнение llm генерации.
     /// </summary>
+    /// <param name="ConnectionId">Идентификатор соединения signalR.</param>
     /// <param name="Message">Строка от пользователя.</param>
-    /// <returns>
-    /// Возвращает id задачи HF.
-    /// </returns>
-    public sealed record Command(string ConnectionId, string Message) : IRequest<string>;
+    public sealed record Command(string ConnectionId, string Message) : IRequest;
 
     /// <inheritdoc />
     public sealed class Handler(
         ILlmBackgroundService llmBackgroundService,
         IUserRepository userRepository,
-        ILogger<Handler> logger) : IRequestHandler<Command, string>
+        ILogger<Handler> logger) : IRequestHandler<Command>
     {
         /// <inheritdoc />
-        public async ValueTask<string> Handle(Command request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             User user = await userRepository.GetOrCreateUser("alex");
-            UserChat activeChat = user.GetOrCreateActiveChat(null, out bool _);
+            UserChat activeChat = user.GetOrCreateActiveChat(string.Empty, out bool _);
 
             if (request.Message.Trim().ToLower().Equals("/undo"))
             {
@@ -52,7 +50,7 @@ public sealed class SendMessage
                 catch (Exception)
                 {
                     if (await userRepository.GetOrCreateUser("alex") is { } user2
-                        && user.GetOrCreateActiveChat(null, out bool _) is { State: ChatState.WaitingMessageGeneration } chat)
+                        && user.GetOrCreateActiveChat(string.Empty, out bool _) is { State: ChatState.WaitingMessageGeneration } chat)
                     {
                         chat.GenerationFailed();
                         await userRepository.UpdateAsync(user2);
@@ -62,7 +60,7 @@ public sealed class SendMessage
                 }
             }
 
-            return null;
+            return new Unit();
         }
     }
 }

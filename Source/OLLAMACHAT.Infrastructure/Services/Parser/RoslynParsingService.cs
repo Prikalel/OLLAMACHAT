@@ -1,5 +1,6 @@
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 
+/// <inheritdoc />
 public class RoslynParsingService(
      IDocumentService documentService,
      IEntityService entityService,
@@ -8,33 +9,34 @@ public class RoslynParsingService(
      IImportService importService,
      ILogger<RoslynParsingService> logger) : IRoslynParsingService
 {
+/// <inheritdoc />
     public async Task<ParseResult> ParseFileAsync(string filePath, ParserOptions? options)
     {
-        var stopwatch = Stopwatch.StartNew();
+        Stopwatch stopwatch = Stopwatch.StartNew();
         logger.LogInformation("Starting to parse file: {FilePath}", filePath);
 
-        var document = await documentService.GetDocumentAsync(filePath);
+        Document? document = await documentService.GetDocumentAsync(filePath);
         if (document == null)
         {
             logger.LogWarning("Document not found: {FilePath}", filePath);
             throw new Exception($"Document not found: {filePath}");
         }
 
-        var contentHash = await documentService.GetContentHashAsync(document);
+        string contentHash = await documentService.GetContentHashAsync(document);
 
-        var entities = await entityService.ExtractEntitiesAsync(document, options);
+        IEnumerable<ParsedEntity> entities = await entityService.ExtractEntitiesAsync(document, options);
         logger.LogInformation("Extracted {EntityCount} entities from file: {FilePath}", entities.Count(), filePath);
 
-        var relationships = await relationshipService.AnalyzeRelationshipsAsync(entities, document);
+        IEnumerable<SimpleRelationship> relationships = await relationshipService.AnalyzeRelationshipsAsync(entities, document);
         logger.LogInformation("Analyzed {RelationshipCount} relationships in file: {FilePath}", relationships.Count(), filePath);
 
-        var errors = await errorService.GetDiagnosticsAsync(document);
+        IEnumerable<ParseError> errors = await errorService.GetDiagnosticsAsync(document);
         if (errors.Any())
         {
             logger.LogWarning("Found {ErrorCount} errors in file: {FilePath}", errors.Count(), filePath);
         }
 
-        var result = new ParseResult(
+        ParseResult result = new ParseResult(
             FilePath: document.FilePath!,
             Language: ParseResultLanguage.Csharp,
             Entities: entities.ToList(),
@@ -50,10 +52,11 @@ public class RoslynParsingService(
         return result;
     }
 
+    /// <inheritdoc />
     public async Task<List<string>> ResolveImportPathAsync(string importPath, string filePath)
     {
         logger.LogInformation("Resolving import path: {ImportPath} for file: {FilePath}", importPath, filePath);
-        var document = await documentService.GetDocumentAsync(filePath);
+        Document? document = await documentService.GetDocumentAsync(filePath);
         if (document == null)
         {
             logger.LogWarning("Document not found: {FilePath}", filePath);

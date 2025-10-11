@@ -32,9 +32,9 @@ public static class ServiceCollectionExtensions
             .FromAssemblyOf<LlmService>()
             .AddClasses(classes =>
                 classes.InNamespaces(
-                    typeof(LlmService).Namespace,
-                    typeof(RoslynParsingService).Namespace,
-                    typeof(Repository<>).Namespace))
+                    typeof(LlmService).Namespace!,
+                    typeof(RoslynParsingService).Namespace!,
+                    typeof(Repository<>).Namespace!))
             .AsImplementedInterfaces()
             .WithScopedLifetime());
     }

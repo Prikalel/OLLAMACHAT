@@ -1,4 +1,4 @@
-using ChatMessage = VelikiyPrikalel.OLLAMACHAT.Data.Llm.ChatMessage;
+﻿using ChatMessage = VelikiyPrikalel.OLLAMACHAT.Data.Llm.ChatMessage;
 
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Llm;
 
@@ -35,7 +35,7 @@ public class LlmBackgroundService(
 
         logger.LogInformation("Streamed response for prompt {Prompt} in chat {Id}", prompt, chatId);
 
-        UserChat chat = await chatRepository.GetChatByIdAsync(chatId);
+        UserChat? chat = await chatRepository.GetChatByIdAsync(chatId);
         if (chat == null)
         {
             throw new Exception($"Chat {chatId} not found");

@@ -4,7 +4,7 @@ namespace OLLAMACHAT.Generated.Models.ParseResponse;
 /// Represents a single parsed code entity (class, method, etc.).
 /// </summary>
 [DataContract]
-public class ParsedEntityDto : IEquatable<ParsedEntityDto>
+public class ParsedEntityDto
 {
     /// <summary>
     /// Gets or Sets Type
@@ -72,63 +72,63 @@ public class ParsedEntityDto : IEquatable<ParsedEntityDto>
     /// Gets or Sets Children
     /// </summary>
     [DataMember(Name = "children")]
-    public List<ParsedEntityDto> Children { get; set; }
+    public required List<ParsedEntityDto> Children { get; set; }
 
     /// <summary>
     /// Gets or Sets Attributes
     /// </summary>
     [DataMember(Name = "attributes")]
-    public List<AttributeDto> Attributes { get; set; }
+    public List<AttributeDto>? Attributes { get; set; }
 
     /// <summary>
     /// Gets or Sets UsingStatementData
     /// </summary>
     [DataMember(Name = "usingData")]
-    public UsingStatementDataDto UsingStatementData { get; set; }
+    public UsingStatementDataDto? UsingStatementData { get; set; }
 
     /// <summary>
     /// Gets or Sets Inheritance
     /// </summary>
     [DataMember(Name = "inheritance")]
-    public ParsedEntityInheritanceDto Inheritance { get; set; }
+    public ParsedEntityInheritanceDto? Inheritance { get; set; }
 
     /// <summary>
     /// Gets or Sets Location
     /// </summary>
     [Required]
     [DataMember(Name = "location")]
-    public LocationDto Location { get; set; }
+    public required LocationDto Location { get; set; }
 
     /// <summary>
     /// Модификаторы - private/static etc.
     /// </summary>
     [DataMember(Name = "modifiers")]
-    public List<string> Modifiers { get; set; }
+    public List<string>? Modifiers { get; set; }
 
     /// <summary>
     /// Gets or Sets SimpleName
     /// </summary>
     [Required]
     [DataMember(Name = "simpleName")]
-    public string SimpleName { get; set; }
+    public required string SimpleName { get; set; }
 
     /// <summary>
     /// Gets or Sets Parameters
     /// </summary>
     [DataMember(Name = "parameters")]
-    public List<ModelParameterDto> Parameters { get; set; }
+    public List<ModelParameterDto>? Parameters { get; set; }
 
     /// <summary>
     /// Gets or Sets ReturnType
     /// </summary>
     [DataMember(Name = "returnType")]
-    public string ReturnType { get; set; }
+    public string? ReturnType { get; set; }
 
     /// <summary>
     /// Gets or Sets FullName
     /// </summary>
     [DataMember(Name = "fullName")]
-    public string FullName { get; set; }
+    public string? FullName { get; set; }
 
     /// <summary>
     /// Gets or Sets Type
@@ -136,170 +136,6 @@ public class ParsedEntityDto : IEquatable<ParsedEntityDto>
     [Required]
     [DataMember(Name = "type")]
     public TypeEnumDto? Type { get; set; }
-
-    /// <summary>
-    /// Returns true if objects are equal
-    /// </summary>
-    /// <param name="obj">Object to be compared</param>
-    /// <returns>Boolean</returns>
-    public override bool Equals(object obj)
-    {
-        if (ReferenceEquals(null, obj))
-        {
-            return false;
-        }
-
-        if (ReferenceEquals(this, obj))
-        {
-            return true;
-        }
-
-        return obj.GetType() == GetType() && Equals((ParsedEntityDto)obj);
-    }
-
-    /// <summary>
-    /// Returns true if ParsedEntity instances are equal
-    /// </summary>
-    /// <param name="other">Instance of ParsedEntity to be compared</param>
-    /// <returns>Boolean</returns>
-    public bool Equals(ParsedEntityDto other)
-    {
-        if (ReferenceEquals(null, other))
-        {
-            return false;
-        }
-
-        if (ReferenceEquals(this, other))
-        {
-            return true;
-        }
-
-        return
-            (
-                SimpleName == other.SimpleName ||
-                SimpleName != null &&
-                SimpleName.Equals(other.SimpleName)
-            ) &&
-            (
-                FullName == other.FullName ||
-                FullName != null &&
-                FullName.Equals(other.FullName)
-            ) &&
-            (
-                Type == other.Type ||
-                Type != null &&
-                Type.Equals(other.Type)
-            ) &&
-            (
-                Location == other.Location ||
-                Location != null &&
-                Location.Equals(other.Location)
-            ) &&
-            (
-                Children == other.Children ||
-                Children != null &&
-                Children.SequenceEqual(other.Children)
-            ) &&
-            (
-                Modifiers == other.Modifiers ||
-                Modifiers != null &&
-                Modifiers.SequenceEqual(other.Modifiers)
-            ) &&
-            (
-                Attributes == other.Attributes ||
-                Attributes != null &&
-                Attributes.SequenceEqual(other.Attributes)
-            ) &&
-            (
-                Inheritance == other.Inheritance ||
-                Inheritance != null &&
-                Inheritance.Equals(other.Inheritance)
-            ) &&
-            (
-                ReturnType == other.ReturnType ||
-                ReturnType != null &&
-                ReturnType.Equals(other.ReturnType)
-            ) &&
-            (
-                Parameters == other.Parameters ||
-                Parameters != null &&
-                Parameters.SequenceEqual(other.Parameters)
-            ) &&
-            (
-                UsingStatementData == other.UsingStatementData ||
-                UsingStatementData != null &&
-                UsingStatementData.Equals(other.UsingStatementData)
-            );
-    }
-
-    /// <summary>
-    /// Gets the hash code
-    /// </summary>
-    /// <returns>Hash code</returns>
-    public override int GetHashCode()
-    {
-        unchecked // Overflow is fine, just wrap
-        {
-            var hashCode = 41;
-            // Suitable nullity checks etc, of course :)
-            if (SimpleName != null)
-            {
-                hashCode = hashCode * 59 + SimpleName.GetHashCode();
-            }
-
-            if (FullName != null)
-            {
-                hashCode = hashCode * 59 + FullName.GetHashCode();
-            }
-
-            if (Type != null)
-            {
-                hashCode = hashCode * 59 + Type.GetHashCode();
-            }
-
-            if (Location != null)
-            {
-                hashCode = hashCode * 59 + Location.GetHashCode();
-            }
-
-            if (Children != null)
-            {
-                hashCode = hashCode * 59 + Children.GetHashCode();
-            }
-
-            if (Modifiers != null)
-            {
-                hashCode = hashCode * 59 + Modifiers.GetHashCode();
-            }
-
-            if (Attributes != null)
-            {
-                hashCode = hashCode * 59 + Attributes.GetHashCode();
-            }
-
-            if (Inheritance != null)
-            {
-                hashCode = hashCode * 59 + Inheritance.GetHashCode();
-            }
-
-            if (ReturnType != null)
-            {
-                hashCode = hashCode * 59 + ReturnType.GetHashCode();
-            }
-
-            if (Parameters != null)
-            {
-                hashCode = hashCode * 59 + Parameters.GetHashCode();
-            }
-
-            if (UsingStatementData != null)
-            {
-                hashCode = hashCode * 59 + UsingStatementData.GetHashCode();
-            }
-
-            return hashCode;
-        }
-    }
 
     /// <summary>
     /// Returns the JSON string presentation of the object
@@ -313,7 +149,7 @@ public class ParsedEntityDto : IEquatable<ParsedEntityDto>
     /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
-        var sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         sb.Append("class ParsedEntity {\n");
         sb.Append("  SimpleName: ").Append(SimpleName).Append("\n");
         sb.Append("  FullName: ").Append(FullName).Append("\n");
@@ -329,22 +165,4 @@ public class ParsedEntityDto : IEquatable<ParsedEntityDto>
         sb.Append("}\n");
         return sb.ToString();
     }
-
-    #region Operators
-
-#pragma warning disable 1591
-
-    public static bool operator ==(ParsedEntityDto left, ParsedEntityDto right)
-    {
-        return Equals(left, right);
-    }
-
-    public static bool operator !=(ParsedEntityDto left, ParsedEntityDto right)
-    {
-        return !Equals(left, right);
-    }
-
-#pragma warning restore 1591
-
-    #endregion Operators
 }

@@ -1,4 +1,5 @@
 using Attribute = VelikiyPrikalel.OLLAMACHAT.Application.Models.Attribute;
+using Location = VelikiyPrikalel.OLLAMACHAT.Application.Models.Location;
 
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 
@@ -11,7 +12,7 @@ public partial class EntityService
     {
         try
         {
-            var name = usingDirective.Name?.ToString() ?? string.Empty;
+            string name = usingDirective.Name?.ToString() ?? string.Empty;
             if (string.IsNullOrEmpty(name))
             {
                 logger.LogWarning("Using directive name is null or empty");
@@ -24,29 +25,29 @@ public partial class EntityService
                 logger.LogWarning("Using directive contains special characters: {Name}", name);
             }
 
-            var location = mapperService.MapLocation(usingDirective.GetLocation());
-            var alias = usingDirective.Alias?.Name.ToString();
+            Location location = mapperService.MapLocation(usingDirective.GetLocation());
+            string? alias = usingDirective.Alias?.Name.ToString();
 
             // Extract additional information about the using directive
-            var attributes = new List<Attribute>();
-            var modifiers = new List<string>();
+            List<Attribute> attributes = new();
+            List<string> modifiers = new();
 
             // Check if it's a global using
-            if (usingDirective.GlobalKeyword.Kind() != SyntaxKind.None)
+            if (!usingDirective.GlobalKeyword.IsKind(SyntaxKind.None))
             {
                 modifiers.Add("global");
             }
 
             // Check if it's a static using
-            if (usingDirective.StaticKeyword.Kind() != SyntaxKind.None)
+            if (!usingDirective.StaticKeyword.IsKind(SyntaxKind.None))
             {
                 modifiers.Add("static");
             }
 
             // Определяем реальный путь к файлам namespace
-            var namespacePath = extractUsingData ? await ResolveNamespacePathAsync(name) : null;
+            string? namespacePath = extractUsingData ? await ResolveNamespacePathAsync(name) : null;
 
-            var entity = new ParsedEntity(
+            ParsedEntity entity = new ParsedEntity(
                 SimpleName: name,
                 FullName: name,
                 Type: ParsedEntityType.UsingStatement,
@@ -91,9 +92,9 @@ public partial class EntityService
                 return null;
             }
 
-            var solution = solutionLoaderService.CurrentSolution;
-            var solutionFilePath = solutionSettings.Value.SolutionFilePath;
-            var solutionDirectory = Path.GetDirectoryName(solutionFilePath);
+            Solution? solution = solutionLoaderService.CurrentSolution;
+            string solutionFilePath = solutionSettings.Value.SolutionFilePath;
+            string? solutionDirectory = Path.GetDirectoryName(solutionFilePath);
 
             if (string.IsNullOrEmpty(solutionDirectory))
             {
@@ -102,28 +103,28 @@ public partial class EntityService
             }
 
             // Ищем все документы в solution, которые принадлежат к указанному namespace
-            var namespaceDocuments = new List<Document>();
+            List<Document> namespaceDocuments = new();
 
-            foreach (var project in solution.Projects)
+            foreach (Project project in solution.Projects)
             {
-                foreach (var document in project.Documents)
+                foreach (Document document in project.Documents)
                 {
                     if (document.FilePath != null && document.FilePath.EndsWith(".cs"))
                     {
                         // Получаем семантическую модель для документа
-                        var semanticModel = await document.GetSemanticModelAsync();
+                        SemanticModel? semanticModel = await document.GetSemanticModelAsync();
                         if (semanticModel != null)
                         {
                             // Получаем корневой узел синтаксического дерева
-                            var root = await semanticModel.SyntaxTree.GetRootAsync();
+                            SyntaxNode? root = await semanticModel.SyntaxTree.GetRootAsync();
                             if (root != null)
                             {
                                 // Ищем объявления namespace в документе
-                                var namespaceDeclarations = root.DescendantNodes().OfType<BaseNamespaceDeclarationSyntax>();
+                                IEnumerable<BaseNamespaceDeclarationSyntax> namespaceDeclarations = root.DescendantNodes().OfType<BaseNamespaceDeclarationSyntax>();
 
-                                foreach (var namespaceDeclaration in namespaceDeclarations)
+                                foreach (BaseNamespaceDeclarationSyntax namespaceDeclaration in namespaceDeclarations)
                                 {
-                                    var documentNamespace = semanticModel.GetDeclaredSymbol(namespaceDeclaration)?.GetFullName();
+                                    string? documentNamespace = semanticModel.GetDeclaredSymbol(namespaceDeclaration)?.GetFullName();
                                     if (documentNamespace == namespaceName)
                                     {
                                         namespaceDocuments.Add(document);
@@ -139,13 +140,13 @@ public partial class EntityService
             if (namespaceDocuments.Any())
             {
                 // Берем путь к первому найденному документу
-                var firstDocumentPath = namespaceDocuments.First().FilePath!;
-                var documentDirectory = Path.GetDirectoryName(firstDocumentPath);
+                string firstDocumentPath = namespaceDocuments.First().FilePath!;
+                string? documentDirectory = Path.GetDirectoryName(firstDocumentPath);
 
                 if (!string.IsNullOrEmpty(documentDirectory))
                 {
                     // Делаем путь относительным относительно директории solution
-                    var relativePath = Path.GetRelativePath(solutionDirectory, documentDirectory);
+                    string relativePath = Path.GetRelativePath(solutionDirectory, documentDirectory);
 
                     // Убедимся, что путь заканчивается на разделитель директории
                     if (!relativePath.EndsWith(Path.DirectorySeparatorChar.ToString()) &&

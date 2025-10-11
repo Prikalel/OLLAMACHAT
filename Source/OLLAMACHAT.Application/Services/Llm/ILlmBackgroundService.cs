@@ -1,4 +1,4 @@
-namespace VelikiyPrikalel.OLLAMACHAT.Application.Services.Llm;
+﻿namespace VelikiyPrikalel.OLLAMACHAT.Application.Services.Llm;
 
 /// <summary>
 /// Сервис фонового выполнения задач.
@@ -8,6 +8,7 @@ public interface ILlmBackgroundService
     /// <summary>
     /// Создать следующую генерацию.
     /// </summary>
+    /// <param name="connectionId">Идентификатор соединения.</param>
     /// <param name="prompt"></param>
     /// <param name="model">Модель выполняющая запрос.</param>
     /// <param name="chatId">Идентификатор чата в котором происходит запрос.</param>

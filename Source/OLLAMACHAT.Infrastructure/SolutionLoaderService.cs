@@ -6,7 +6,7 @@ public class SolutionLoaderService : ISolutionLoaderService, IDisposable
     private readonly ILogger<SolutionLoaderService> logger;
     private readonly IOptions<SolutionSettings> solutionSettings;
     private readonly SemaphoreSlim semaphore = new(1, 1);
-    private readonly object debounceLock = new object();
+    private readonly object debounceLock = new();
     private MSBuildWorkspace? workspace;
     private Solution? currentSolution;
     private FileSystemWatcher? fileWatcher;
@@ -38,7 +38,10 @@ public class SolutionLoaderService : ISolutionLoaderService, IDisposable
     /// <inheritdoc />
     public async Task LoadSolutionAsync()
     {
-        if (disposed) throw new ObjectDisposedException(nameof(SolutionLoaderService));
+        if (disposed)
+        {
+            throw new ObjectDisposedException(nameof(SolutionLoaderService));
+        }
 
         await semaphore.WaitAsync().ConfigureAwait(false);
         try
@@ -84,7 +87,10 @@ public class SolutionLoaderService : ISolutionLoaderService, IDisposable
     /// <inheritdoc />
     public async Task ReloadSolutionAsync()
     {
-        if (disposed) throw new ObjectDisposedException(nameof(SolutionLoaderService));
+        if (disposed)
+        {
+            throw new ObjectDisposedException(nameof(SolutionLoaderService));
+        }
 
         await semaphore.WaitAsync().ConfigureAwait(false);
         try
@@ -125,7 +131,10 @@ public class SolutionLoaderService : ISolutionLoaderService, IDisposable
     /// <inheritdoc />
     public IEnumerable<Project> GetProjects()
     {
-        if (disposed) throw new ObjectDisposedException(nameof(SolutionLoaderService));
+        if (disposed)
+        {
+            throw new ObjectDisposedException(nameof(SolutionLoaderService));
+        }
 
         if (!IsSolutionLoaded || currentSolution == null)
         {
@@ -139,7 +148,10 @@ public class SolutionLoaderService : ISolutionLoaderService, IDisposable
     /// <inheritdoc />
     public Project? GetProjectByName(string projectName)
     {
-        if (disposed) throw new ObjectDisposedException(nameof(SolutionLoaderService));
+        if (disposed)
+        {
+            throw new ObjectDisposedException(nameof(SolutionLoaderService));
+        }
 
         if (!IsSolutionLoaded || currentSolution == null)
         {
@@ -153,9 +165,12 @@ public class SolutionLoaderService : ISolutionLoaderService, IDisposable
     /// <inheritdoc />
     public IEnumerable<Document> GetProjectDocuments(string projectName)
     {
-        if (disposed) throw new ObjectDisposedException(nameof(SolutionLoaderService));
+        if (disposed)
+        {
+            throw new ObjectDisposedException(nameof(SolutionLoaderService));
+        }
 
-        var project = GetProjectByName(projectName);
+        Project? project = GetProjectByName(projectName);
         return project?.Documents ?? Enumerable.Empty<Document>();
     }
 
@@ -192,9 +207,11 @@ public class SolutionLoaderService : ISolutionLoaderService, IDisposable
 
     private async void OnFileChanged(object sender, FileSystemEventArgs e)
     {
-        var now = DateTime.Now;
+        DateTime now = DateTime.Now;
         if (now - lastFileChangeTime < fileChangeCooldown)
+        {
             return;
+        }
 
         lastFileChangeTime = now;
 
@@ -213,9 +230,11 @@ public class SolutionLoaderService : ISolutionLoaderService, IDisposable
 
     private async void OnFileRenamed(object sender, RenamedEventArgs e)
     {
-        var now = DateTime.Now;
+        DateTime now = DateTime.Now;
         if (now - lastFileChangeTime < fileChangeCooldown)
+        {
             return;
+        }
 
         lastFileChangeTime = now;
 
@@ -285,7 +304,7 @@ public class SolutionLoaderService : ISolutionLoaderService, IDisposable
         }
     }
 
-    private void OnWorkspaceFailed(object sender, WorkspaceDiagnosticEventArgs e)
+    private void OnWorkspaceFailed(object? sender, WorkspaceDiagnosticEventArgs e)
     {
         logger.LogWarning("Workspace diagnostic: {Kind} - {Message}", e.Diagnostic.Kind, e.Diagnostic.Message);
     }

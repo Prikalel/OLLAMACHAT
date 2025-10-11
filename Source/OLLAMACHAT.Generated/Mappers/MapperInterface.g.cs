@@ -14,7 +14,7 @@ namespace OLLAMACHAT.Generated.Mappers
                 Entities = funcMain1(p2.Entities),
                 Errors = funcMain13(p2.Errors),
                 FilePath = p2.FilePath,
-                Language = (OLLAMACHAT.Generated.Models.ParseResponse.ParseResultDto.LanguageEnumDto?)(OLLAMACHAT.Generated.Models.ParseResponse.ParseResultDto.LanguageEnumDto)p2.Language,
+                Language = (OLLAMACHAT.Generated.Models.ParseResponse.ParseResultDto.LanguageEnumDto)p2.Language,
                 ParseTimeMs = p2.ParseTimeMs,
                 Relationships = funcMain14(p2.Relationships)
             };
@@ -113,7 +113,7 @@ namespace OLLAMACHAT.Generated.Mappers
                     FullNameFrom = item.FullNameFrom,
                     TargetDefinitionFilePath = item.TargetDefinitionFilePath,
                     FullNameTo = item.FullNameTo,
-                    Type = (OLLAMACHAT.Generated.Models.ParseResponse.RelationshipDto.TypeEnumDto?)(OLLAMACHAT.Generated.Models.ParseResponse.RelationshipDto.TypeEnumDto)item.Type
+                    Type = (OLLAMACHAT.Generated.Models.ParseResponse.RelationshipDto.TypeEnumDto)item.Type
                 });
                 i++;
             }

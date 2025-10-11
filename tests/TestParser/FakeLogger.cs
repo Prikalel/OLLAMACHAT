@@ -34,7 +34,7 @@ public class FakeLogger<T> : ILogger<T>
     /// </summary>
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
-        var message = formatter(state, exception);
+        string message = formatter(state, exception);
         logEntries.Add(new LogEntry(logLevel, eventId, message, exception));
     }
 }

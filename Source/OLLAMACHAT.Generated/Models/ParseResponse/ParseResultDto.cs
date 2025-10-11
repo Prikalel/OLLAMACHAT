@@ -4,7 +4,7 @@ namespace OLLAMACHAT.Generated.Models.ParseResponse;
 /// Complete parsing result for a single file.
 /// </summary>
 [DataContract]
-public class ParseResultDto : IEquatable<ParseResultDto>
+public class ParseResultDto
 {
     /// <summary>
     /// Gets or Sets Language
@@ -25,34 +25,34 @@ public class ParseResultDto : IEquatable<ParseResultDto>
     /// <value>SHA-256 hash of the file content for caching.</value>
     [Required]
     [DataMember(Name = "contentHash")]
-    public string ContentHash { get; set; }
+    public required string ContentHash { get; set; }
 
     /// <summary>
     /// Gets or Sets Entities
     /// </summary>
     [Required]
     [DataMember(Name = "entities")]
-    public List<ParsedEntityDto> Entities { get; set; }
+    public required List<ParsedEntityDto> Entities { get; set; }
 
     /// <summary>
     /// Gets or Sets Errors
     /// </summary>
     [DataMember(Name = "errors")]
-    public List<ParseErrorDto> Errors { get; set; }
+    public List<ParseErrorDto>? Errors { get; set; }
 
     /// <summary>
     /// Gets or Sets FilePath
     /// </summary>
     [Required]
     [DataMember(Name = "filePath")]
-    public string FilePath { get; set; }
+    public required string FilePath { get; set; }
 
     /// <summary>
     /// Gets or Sets Language
     /// </summary>
     [Required]
     [DataMember(Name = "language")]
-    public LanguageEnumDto? Language { get; set; }
+    public required LanguageEnumDto Language { get; set; }
 
     /// <summary>
     /// Time taken for parsing in milliseconds.
@@ -60,137 +60,13 @@ public class ParseResultDto : IEquatable<ParseResultDto>
     /// <value>Time taken for parsing in milliseconds.</value>
     [Required]
     [DataMember(Name = "parseTimeMs")]
-    public int? ParseTimeMs { get; set; }
+    public required int? ParseTimeMs { get; set; }
 
     /// <summary>
     /// Gets or Sets Relationships
     /// </summary>
     [DataMember(Name = "relationships")]
-    public List<RelationshipDto> Relationships { get; set; }
-
-    /// <summary>
-    /// Returns true if objects are equal
-    /// </summary>
-    /// <param name="obj">Object to be compared</param>
-    /// <returns>Boolean</returns>
-    public override bool Equals(object obj)
-    {
-        if (ReferenceEquals(null, obj))
-        {
-            return false;
-        }
-
-        if (ReferenceEquals(this, obj))
-        {
-            return true;
-        }
-
-        return obj.GetType() == GetType() && Equals((ParseResultDto)obj);
-    }
-
-    /// <summary>
-    /// Returns true if ParseResult instances are equal
-    /// </summary>
-    /// <param name="other">Instance of ParseResult to be compared</param>
-    /// <returns>Boolean</returns>
-    public bool Equals(ParseResultDto other)
-    {
-        if (ReferenceEquals(null, other))
-        {
-            return false;
-        }
-
-        if (ReferenceEquals(this, other))
-        {
-            return true;
-        }
-
-        return
-            (
-                FilePath == other.FilePath ||
-                FilePath != null &&
-                FilePath.Equals(other.FilePath)
-            ) &&
-            (
-                Language == other.Language ||
-                Language != null &&
-                Language.Equals(other.Language)
-            ) &&
-            (
-                Entities == other.Entities ||
-                Entities != null &&
-                Entities.SequenceEqual(other.Entities)
-            ) &&
-            (
-                Relationships == other.Relationships ||
-                Relationships != null &&
-                Relationships.SequenceEqual(other.Relationships)
-            ) &&
-            (
-                ContentHash == other.ContentHash ||
-                ContentHash != null &&
-                ContentHash.Equals(other.ContentHash)
-            ) &&
-            (
-                ParseTimeMs == other.ParseTimeMs ||
-                ParseTimeMs != null &&
-                ParseTimeMs.Equals(other.ParseTimeMs)
-            ) &&
-            (
-                Errors == other.Errors ||
-                Errors != null &&
-                Errors.SequenceEqual(other.Errors)
-            );
-    }
-
-    /// <summary>
-    /// Gets the hash code
-    /// </summary>
-    /// <returns>Hash code</returns>
-    public override int GetHashCode()
-    {
-        unchecked // Overflow is fine, just wrap
-        {
-            var hashCode = 41;
-            // Suitable nullity checks etc, of course :)
-            if (FilePath != null)
-            {
-                hashCode = hashCode * 59 + FilePath.GetHashCode();
-            }
-
-            if (Language != null)
-            {
-                hashCode = hashCode * 59 + Language.GetHashCode();
-            }
-
-            if (Entities != null)
-            {
-                hashCode = hashCode * 59 + Entities.GetHashCode();
-            }
-
-            if (Relationships != null)
-            {
-                hashCode = hashCode * 59 + Relationships.GetHashCode();
-            }
-
-            if (ContentHash != null)
-            {
-                hashCode = hashCode * 59 + ContentHash.GetHashCode();
-            }
-
-            if (ParseTimeMs != null)
-            {
-                hashCode = hashCode * 59 + ParseTimeMs.GetHashCode();
-            }
-
-            if (Errors != null)
-            {
-                hashCode = hashCode * 59 + Errors.GetHashCode();
-            }
-
-            return hashCode;
-        }
-    }
+    public List<RelationshipDto>? Relationships { get; set; }
 
     /// <summary>
     /// Returns the JSON string presentation of the object
@@ -204,7 +80,7 @@ public class ParseResultDto : IEquatable<ParseResultDto>
     /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
-        var sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         sb.Append("class ParseResult {\n");
         sb.Append("  FilePath: ").Append(FilePath).Append("\n");
         sb.Append("  Language: ").Append(Language).Append("\n");
@@ -216,22 +92,4 @@ public class ParseResultDto : IEquatable<ParseResultDto>
         sb.Append("}\n");
         return sb.ToString();
     }
-
-    #region Operators
-
-#pragma warning disable 1591
-
-    public static bool operator ==(ParseResultDto left, ParseResultDto right)
-    {
-        return Equals(left, right);
-    }
-
-    public static bool operator !=(ParseResultDto left, ParseResultDto right)
-    {
-        return !Equals(left, right);
-    }
-
-#pragma warning restore 1591
-
-    #endregion Operators
 }

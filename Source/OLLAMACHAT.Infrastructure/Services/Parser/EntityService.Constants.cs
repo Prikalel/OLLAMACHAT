@@ -21,7 +21,10 @@ public partial class EntityService
     private static bool ContainsSpecialCharacters(string name)
     {
         if (string.IsNullOrEmpty(name))
+        {
             return false;
+        }
+
         const string AllowedSymbols = "_`.[]<>,";
         return name.Any(c => !char.IsLetterOrDigit(c) && !AllowedSymbols.Contains(c));
     }

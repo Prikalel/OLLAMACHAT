@@ -1,5 +1,7 @@
 namespace OLLAMACHAT.Generated.Attributes;
 
+using Attribute = System.Attribute;
+
 /// <summary>
 /// Model state validation attribute
 /// </summary>
@@ -12,15 +14,15 @@ public class ValidateModelStateAttribute : ActionFilterAttribute
     public override void OnActionExecuting(ActionExecutingContext context)
     {
         // Per https://blog.markvincze.com/how-to-validate-action-parameters-with-dataannotation-attributes/
-        var descriptor = context.ActionDescriptor as ControllerActionDescriptor;
+        ControllerActionDescriptor? descriptor = context.ActionDescriptor as ControllerActionDescriptor;
         if (descriptor != null)
         {
-            foreach (var parameter in descriptor.MethodInfo.GetParameters())
+            foreach (ParameterInfo parameter in descriptor.MethodInfo.GetParameters())
             {
-                object args = null;
-                if (context.ActionArguments.ContainsKey(parameter.Name))
+                object? args = null;
+                if (parameter.Name != null && context.ActionArguments.TryGetValue(parameter.Name, out object? argument))
                 {
-                    args = context.ActionArguments[parameter.Name];
+                    args = argument;
                 }
 
                 ValidateAttributes(parameter, args, context.ModelState);
@@ -33,19 +35,19 @@ public class ValidateModelStateAttribute : ActionFilterAttribute
         }
     }
 
-    private void ValidateAttributes(ParameterInfo parameter, object args, ModelStateDictionary modelState)
+    private void ValidateAttributes(ParameterInfo parameter, object? args, ModelStateDictionary modelState)
     {
-        foreach (var attributeData in parameter.CustomAttributes)
+        foreach (CustomAttributeData attributeData in parameter.CustomAttributes)
         {
-            var attributeInstance = parameter.GetCustomAttribute(attributeData.AttributeType);
+            Attribute? attributeInstance = parameter.GetCustomAttribute(attributeData.AttributeType);
 
-            var validationAttribute = attributeInstance as ValidationAttribute;
+            ValidationAttribute? validationAttribute = attributeInstance as ValidationAttribute;
             if (validationAttribute != null)
             {
-                var isValid = validationAttribute.IsValid(args);
+                bool isValid = validationAttribute.IsValid(args);
                 if (!isValid)
                 {
-                    modelState.AddModelError(parameter.Name, validationAttribute.FormatErrorMessage(parameter.Name));
+                    modelState.AddModelError(parameter.Name!, validationAttribute.FormatErrorMessage(parameter.Name!));
                 }
             }
         }

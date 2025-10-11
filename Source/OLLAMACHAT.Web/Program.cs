@@ -60,12 +60,12 @@ public class Program
                 OllamaChatContext db = scope.ServiceProvider.GetRequiredService<OllamaChatContext>();
                 await db.Database.MigrateAsync();
 
-                var loader = scope.ServiceProvider.GetRequiredService<ISolutionLoaderService>();
+                ISolutionLoaderService loader = scope.ServiceProvider.GetRequiredService<ISolutionLoaderService>();
                 await loader.LoadSolutionAsync();
                 if (loader.IsSolutionLoaded)
                 {
                     loader.SolutionReloaded += (_, _) => EntityService.ClearCache();
-                    await RelationshipService.InitializeCaches(loader.CurrentSolution);
+                    await RelationshipService.InitializeCaches(loader.CurrentSolution!);
                     loader.SolutionReloaded += async (_, arg) => await RelationshipService.InitializeCaches(arg.Solution);
                     logger.Info("Done registering subscribers");
                 }

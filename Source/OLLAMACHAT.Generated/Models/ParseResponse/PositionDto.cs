@@ -3,7 +3,7 @@ namespace OLLAMACHAT.Generated.Models.ParseResponse;
 /// <summary>
 /// </summary>
 [DataContract]
-public class PositionDto : IEquatable<PositionDto>
+public class PositionDto
 {
     /// <summary>
     /// 0-based column position.
@@ -27,90 +27,6 @@ public class PositionDto : IEquatable<PositionDto>
     public int? Line { get; set; }
 
     /// <summary>
-    /// Returns true if objects are equal
-    /// </summary>
-    /// <param name="obj">Object to be compared</param>
-    /// <returns>Boolean</returns>
-    public override bool Equals(object obj)
-    {
-        if (ReferenceEquals(null, obj))
-        {
-            return false;
-        }
-
-        if (ReferenceEquals(this, obj))
-        {
-            return true;
-        }
-
-        return obj.GetType() == GetType() && Equals((PositionDto)obj);
-    }
-
-    /// <summary>
-    /// Returns true if Position instances are equal
-    /// </summary>
-    /// <param name="other">Instance of Position to be compared</param>
-    /// <returns>Boolean</returns>
-    public bool Equals(PositionDto other)
-    {
-        if (ReferenceEquals(null, other))
-        {
-            return false;
-        }
-
-        if (ReferenceEquals(this, other))
-        {
-            return true;
-        }
-
-        return
-            (
-                Line == other.Line ||
-                Line != null &&
-                Line.Equals(other.Line)
-            ) &&
-            (
-                Column == other.Column ||
-                Column != null &&
-                Column.Equals(other.Column)
-            ) &&
-            (
-                Index == other.Index ||
-                Index != null &&
-                Index.Equals(other.Index)
-            );
-    }
-
-    /// <summary>
-    /// Gets the hash code
-    /// </summary>
-    /// <returns>Hash code</returns>
-    public override int GetHashCode()
-    {
-        unchecked // Overflow is fine, just wrap
-        {
-            var hashCode = 41;
-            // Suitable nullity checks etc, of course :)
-            if (Line != null)
-            {
-                hashCode = hashCode * 59 + Line.GetHashCode();
-            }
-
-            if (Column != null)
-            {
-                hashCode = hashCode * 59 + Column.GetHashCode();
-            }
-
-            if (Index != null)
-            {
-                hashCode = hashCode * 59 + Index.GetHashCode();
-            }
-
-            return hashCode;
-        }
-    }
-
-    /// <summary>
     /// Returns the JSON string presentation of the object
     /// </summary>
     /// <returns>JSON string presentation of the object</returns>
@@ -122,7 +38,7 @@ public class PositionDto : IEquatable<PositionDto>
     /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
-        var sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         sb.Append("class Position {\n");
         sb.Append("  Line: ").Append(Line).Append("\n");
         sb.Append("  Column: ").Append(Column).Append("\n");
@@ -130,22 +46,4 @@ public class PositionDto : IEquatable<PositionDto>
         sb.Append("}\n");
         return sb.ToString();
     }
-
-    #region Operators
-
-#pragma warning disable 1591
-
-    public static bool operator ==(PositionDto left, PositionDto right)
-    {
-        return Equals(left, right);
-    }
-
-    public static bool operator !=(PositionDto left, PositionDto right)
-    {
-        return !Equals(left, right);
-    }
-
-#pragma warning restore 1591
-
-    #endregion Operators
 }

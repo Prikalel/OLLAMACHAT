@@ -1,29 +1,31 @@
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 
+/// <inheritdoc />
 public class ErrorService(
      IMapperService mapperService,
      ILogger<ErrorService> logger) : IErrorService
 {
+    /// <inheritdoc />
     public async Task<IEnumerable<ParseError>> GetDiagnosticsAsync(Document document)
     {
         logger.LogInformation("Getting diagnostics for document: {DocumentPath}", document.FilePath);
 
         try
         {
-            var semanticModel = await document.GetSemanticModelAsync();
-            var syntaxTree = await document.GetSyntaxTreeAsync();
+            SemanticModel? semanticModel = await document.GetSemanticModelAsync();
+            SyntaxTree? syntaxTree = await document.GetSyntaxTreeAsync();
 
-            var diagnostics = semanticModel.GetDiagnostics();
-            var syntaxDiagnostics = syntaxTree.GetDiagnostics();
+            ImmutableArray<Diagnostic> diagnostics = semanticModel!.GetDiagnostics();
+            IEnumerable<Diagnostic> syntaxDiagnostics = syntaxTree!.GetDiagnostics();
 
-            var allDiagnostics = diagnostics.Concat(syntaxDiagnostics);
+            IEnumerable<Diagnostic> allDiagnostics = diagnostics.Concat(syntaxDiagnostics);
 
-            var errors = allDiagnostics
+            List<ParseError> errors = allDiagnostics
                 .Where(d => d.Severity == DiagnosticSeverity.Error || d.Severity == DiagnosticSeverity.Warning)
                 .Select(d => new ParseError(
                     Message: d.GetMessage(),
                     Severity: mapperService.MapSeverity(d.Severity),
-                    Location: mapperService.MapErrorLocation(d.Location)
+                    Location: mapperService.MapLocation(d.Location)
                 ))
                 .ToList();
 

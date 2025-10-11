@@ -3,28 +3,31 @@ namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Repositories;
 /// <inheritdoc />
 public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, IEntity
 {
-    private readonly OllamaChatContext context;
+    /// <summary>
+    /// Контекст.
+    /// </summary>
+    protected readonly OllamaChatContext Context;
     private readonly DbSet<TEntity> dbSet;
 
     /// <inheritdoc />
     public Repository(OllamaChatContext context)
     {
-        this.context = context;
-        dbSet = this.context.Set<TEntity>();
+        this.Context = context;
+        dbSet = this.Context.Set<TEntity>();
     }
 
     /// <inheritdoc />
     public async Task AddAsync(TEntity entity)
     {
         await dbSet.AddAsync(entity);
-        await context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
     }
 
     /// <inheritdoc />
     public async Task UpdateAsync(TEntity entity)
     {
         dbSet.Update(entity);
-        await context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
     }
 
     /// <inheritdoc />

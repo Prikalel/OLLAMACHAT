@@ -1,4 +1,4 @@
-using ChatMessage = OpenAI.Chat.ChatMessage;
+﻿using ChatMessage = OpenAI.Chat.ChatMessage;
 
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Llm;
 
@@ -15,6 +15,7 @@ public class LlmService : ILlmService
     /// </summary>
     /// <param name="openAISettings">OpenAI settings.</param>
     /// <param name="logger">Logger.</param>
+    /// <param name="mcpConfigurationService">mcp сервера.</param>
     public LlmService(IOptions<OpenAISettings> openAISettings, ILogger<LlmService> logger, IMcpConfigurationService mcpConfigurationService)
     {
         this.logger = logger;
@@ -138,7 +139,7 @@ public class LlmService : ILlmService
                             if (toolCall.FunctionName == "search_wikipedia")
                             {
                                 string toolResult = await SearchWikipedia(
-                                    JObject.Parse(toolCall.FunctionArguments)["term"]
+                                    JObject.Parse(toolCall.FunctionArguments)["term"]!
                                         .ToString());
                                 chatMessages.Add(new ToolChatMessage(toolCall.Id,
                                     toolResult));
@@ -155,7 +156,7 @@ public class LlmService : ILlmService
                                 {
                                     await using IMcpClient client = await ConnectToSseMcpClient(mcpServerInfo);
 
-                                    JsonNode argumentsNode = JsonNode.Parse(toolCall.FunctionArguments);
+                                    JsonNode argumentsNode = JsonNode.Parse(toolCall.FunctionArguments)!;
                                     IReadOnlyDictionary<string, object?> arguments = ConvertJsonNodeToDictionary(argumentsNode);
 
                                     string toolName = toolCall.FunctionName.Substring(separatorIndex + 1);
@@ -225,7 +226,7 @@ public class LlmService : ILlmService
     /// <returns>Список инструментов.</returns>
     private async Task<List<ChatTool>> GetTools()
     {
-        List<ChatTool> tools = new List<ChatTool>();
+        List<ChatTool> tools = new();
 
         // Создаем инструмент для поиска по википедии
         ChatTool wikipediaTool = ChatTool.CreateFunctionTool(
@@ -337,7 +338,9 @@ public class LlmService : ILlmService
     private object? ConvertJsonValue(JsonNode? node)
     {
         if (node == null)
+        {
             return null;
+        }
 
         return node switch
         {
@@ -351,13 +354,24 @@ public class LlmService : ILlmService
     private object? GetJsonValueContent(JsonValue jsonValue)
     {
         if (jsonValue.TryGetValue<string>(out string? stringValue))
+        {
             return stringValue;
+        }
+
         if (jsonValue.TryGetValue<int>(out int intValue))
+        {
             return intValue;
+        }
+
         if (jsonValue.TryGetValue<double>(out double doubleValue))
+        {
             return doubleValue;
+        }
+
         if (jsonValue.TryGetValue<bool>(out bool boolValue))
+        {
             return boolValue;
+        }
 
         return jsonValue.ToString();
     }

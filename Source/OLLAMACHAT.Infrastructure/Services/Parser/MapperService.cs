@@ -4,8 +4,10 @@ using LocationApplication = VelikiyPrikalel.OLLAMACHAT.Application.Models.Locati
 
 namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 
+/// <inheritdoc />
 public class MapperService(ILogger<MapperService> logger) : IMapperService
 {
+    /// <inheritdoc />
     public LocationApplication MapLocation(Location location)
     {
         try
@@ -16,9 +18,9 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
                 return new LocationApplication(new Position(null, null, null), new Position(null, null, null));
             }
 
-            var lineSpan = location.GetLineSpan();
-            var startLinePosition = lineSpan.StartLinePosition;
-            var endLinePosition = lineSpan.EndLinePosition;
+            FileLinePositionSpan lineSpan = location.GetLineSpan();
+            LinePosition startLinePosition = lineSpan.StartLinePosition;
+            LinePosition endLinePosition = lineSpan.EndLinePosition;
 
             return new LocationApplication(
                 new Position(
@@ -40,14 +42,17 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
         }
     }
 
+    /// <inheritdoc />
     public IEnumerable<string> MapModifiers(ISymbol symbol)
     {
         try
         {
-            var modifiers = new List<string>();
+            List<string> modifiers = new();
 
             if (symbol == null)
+            {
                 return modifiers;
+            }
 
             // Accessibility modifiers
             switch (symbol.DeclaredAccessibility)
@@ -70,95 +75,195 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
             if (symbol is ITypeSymbol typeSymbol)
             {
                 if (typeSymbol.IsStatic)
+                {
                     modifiers.Add("static");
+                }
+
                 if (typeSymbol is { IsAbstract: true, TypeKind: not TypeKind.Interface }) // интерфейс всегда абстрактный
+                {
                     modifiers.Add("abstract");
+                }
+
                 if (typeSymbol.IsSealed)
+                {
                     modifiers.Add("sealed");
+                }
+
                 if (typeSymbol.IsReadOnly)
+                {
                     modifiers.Add("readonly");
+                }
+
                 if (typeSymbol.IsValueType)
+                {
                     modifiers.Add("struct");
+                }
+
                 if (typeSymbol.TypeKind is TypeKind.Class)
+                {
                     modifiers.Add("class");
+                }
+
                 if (typeSymbol.TypeKind is TypeKind.Interface)
+                {
                     modifiers.Add("interface");
+                }
+
                 if (typeSymbol.IsAnonymousType)
+                {
                     modifiers.Add("anonymous");
+                }
+
                 if (typeSymbol.IsTupleType)
+                {
                     modifiers.Add("tuple");
+                }
             }
 
             // Method-specific modifiers
             if (symbol is IMethodSymbol methodSymbol)
             {
                 if (methodSymbol.IsStatic)
+                {
                     modifiers.Add("static");
+                }
+
                 if (methodSymbol.IsVirtual)
+                {
                     modifiers.Add("virtual");
+                }
+
                 if (methodSymbol.IsOverride)
+                {
                     modifiers.Add("override");
+                }
+
                 if (methodSymbol.IsAbstract)
+                {
                     modifiers.Add("abstract");
+                }
+
                 if (methodSymbol.IsSealed)
+                {
                     modifiers.Add("sealed");
+                }
+
                 if (methodSymbol.IsAsync)
+                {
                     modifiers.Add("async");
+                }
+
                 if (methodSymbol.IsExtensionMethod)
+                {
                     modifiers.Add("extension");
+                }
+
                 if (methodSymbol.IsExtern)
+                {
                     modifiers.Add("extern");
+                }
+
                 if (methodSymbol.IsGenericMethod)
+                {
                     modifiers.Add("generic");
+                }
             }
 
             // Property-specific modifiers
             if (symbol is IPropertySymbol propertySymbol)
             {
                 if (propertySymbol.IsStatic)
+                {
                     modifiers.Add("static");
+                }
+
                 if (propertySymbol.IsVirtual)
+                {
                     modifiers.Add("virtual");
+                }
+
                 if (propertySymbol.IsOverride)
+                {
                     modifiers.Add("override");
+                }
+
                 if (propertySymbol.IsAbstract)
+                {
                     modifiers.Add("abstract");
+                }
+
                 if (propertySymbol.IsSealed)
+                {
                     modifiers.Add("sealed");
+                }
+
                 if (propertySymbol.IsReadOnly)
+                {
                     modifiers.Add("readonly");
+                }
+
                 if (propertySymbol.IsRequired)
+                {
                     modifiers.Add("required");
+                }
             }
 
             // Field-specific modifiers
             if (symbol is IFieldSymbol fieldSymbol)
             {
                 if (fieldSymbol.IsStatic)
+                {
                     modifiers.Add("static");
+                }
+
                 if (fieldSymbol.IsReadOnly)
+                {
                     modifiers.Add("readonly");
+                }
+
                 if (fieldSymbol.IsVolatile)
+                {
                     modifiers.Add("volatile");
+                }
+
                 if (fieldSymbol.IsConst)
+                {
                     modifiers.Add("const");
+                }
+
                 if (fieldSymbol.IsRequired)
+                {
                     modifiers.Add("required");
+                }
             }
 
             // Event-specific modifiers
             if (symbol is IEventSymbol eventSymbol)
             {
                 if (eventSymbol.IsStatic)
+                {
                     modifiers.Add("static");
+                }
+
                 if (eventSymbol.IsVirtual)
+                {
                     modifiers.Add("virtual");
+                }
+
                 if (eventSymbol.IsOverride)
+                {
                     modifiers.Add("override");
+                }
+
                 if (eventSymbol.IsAbstract)
+                {
                     modifiers.Add("abstract");
+                }
+
                 if (eventSymbol.IsSealed)
+                {
                     modifiers.Add("sealed");
+                }
             }
 
             return modifiers;
@@ -170,16 +275,17 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
         }
     }
 
+    /// <inheritdoc />
     public ParsedEntityInheritance MapInheritance(INamedTypeSymbol typeSymbol, ParserOptions? options = null)
     {
         try
         {
-            var baseClasses = new List<string>();
-            var interfaces = new List<string>();
-            var allBaseClasses = new List<string>();
-            var allInterfaces = new List<string>();
+            List<string> baseClasses = new();
+            List<string> interfaces = new();
+            List<string> allBaseClasses = new();
+            List<string> allInterfaces = new();
 
-            var extractFullInheritance = options?.ExtractFullExtractInheritance ?? true;
+            bool extractFullInheritance = options?.ExtractFullExtractInheritance ?? true;
 
             if (typeSymbol == null)
             {
@@ -189,7 +295,7 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
 
             if (typeSymbol.BaseType != null && typeSymbol.BaseType.SpecialType != SpecialType.System_Object)
             {
-                var baseClassName = typeSymbol.BaseType.GetFullName();
+                string baseClassName = typeSymbol.BaseType.GetFullName();
                 baseClasses.Add(baseClassName);
                 if (extractFullInheritance)
                 {
@@ -199,10 +305,10 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
 
             if (extractFullInheritance)
             {
-                var currentBase = typeSymbol.BaseType;
+                INamedTypeSymbol? currentBase = typeSymbol.BaseType;
                 while (currentBase != null && currentBase.SpecialType != SpecialType.System_Object)
                 {
-                    var baseClassName = currentBase.GetFullName();
+                    string baseClassName = currentBase.GetFullName();
                     if (!allBaseClasses.Contains(baseClassName))
                     {
                         allBaseClasses.Add(baseClassName);
@@ -211,9 +317,9 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
                 }
             }
 
-            foreach (var interfaceSymbol in typeSymbol.Interfaces)
+            foreach (INamedTypeSymbol interfaceSymbol in typeSymbol.Interfaces)
             {
-                var interfaceName = interfaceSymbol.GetFullName();
+                string interfaceName = interfaceSymbol.GetFullName();
                 interfaces.Add(interfaceName);
                 if (extractFullInheritance && !allInterfaces.Contains(interfaceName))
                 {
@@ -223,9 +329,9 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
 
             if (extractFullInheritance)
             {
-                foreach (var interfaceSymbol in typeSymbol.AllInterfaces)
+                foreach (INamedTypeSymbol interfaceSymbol in typeSymbol.AllInterfaces)
                 {
-                    var interfaceName = interfaceSymbol.GetFullName();
+                    string interfaceName = interfaceSymbol.GetFullName();
                     if (!allInterfaces.Contains(interfaceName))
                     {
                         allInterfaces.Add(interfaceName);
@@ -247,12 +353,15 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
         }
     }
 
+    /// <inheritdoc />
     public string? MapReturnType(ISymbol symbol)
     {
         try
         {
             if (symbol == null)
+            {
                 return null;
+            }
 
             if (symbol is IMethodSymbol methodSymbol)
             {
@@ -283,24 +392,27 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
         }
     }
 
+    /// <inheritdoc />
     public List<ModelParameter> MapParameters(IMethodSymbol methodSymbol)
     {
         try
         {
-            var parameters = new List<ModelParameter>();
+            List<ModelParameter> parameters = new();
 
             if (methodSymbol == null)
-                return parameters;
-
-            foreach (var parameter in methodSymbol.Parameters)
             {
-                var parameterType = parameter.Type?.GetFullName() ?? "unknown";
-                var isOptional = parameter.HasExplicitDefaultValue;
-                var defaultValue = isOptional ? parameter.ExplicitDefaultValue?.ToString() : null;
+                return parameters;
+            }
+
+            foreach (IParameterSymbol parameter in methodSymbol.Parameters)
+            {
+                string parameterType = parameter.Type?.GetFullName() ?? "unknown";
+                bool isOptional = parameter.HasExplicitDefaultValue;
+                string? defaultValue = isOptional ? parameter.ExplicitDefaultValue?.ToString() : null;
 
                 // Parameter modifiers
-                var refKind = parameter.RefKind;
-                var refKindString = refKind switch
+                RefKind refKind = parameter.RefKind;
+                string refKindString = refKind switch
                 {
                     RefKind.Ref => "ref",
                     RefKind.Out => "out",
@@ -309,11 +421,11 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
                 };
 
                 // This, params, and other special parameters
-                var isThis = parameter.IsThis;
-                var isParams = parameter.IsParams;
+                bool isThis = parameter.IsThis;
+                bool isParams = parameter.IsParams;
 
                 // Enhanced parameter type information
-                var enhancedParameterType = parameterType;
+                string enhancedParameterType = parameterType;
                 if (!string.IsNullOrEmpty(refKindString))
                 {
                     enhancedParameterType = $"{refKindString} {parameterType}";
@@ -338,17 +450,28 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
                 // Check for generic type parameters
                 if (parameter.Type is ITypeParameterSymbol typeParam)
                 {
-                    var constraints = new List<string>();
+                    List<string> constraints = new();
                     if (typeParam.HasReferenceTypeConstraint)
+                    {
                         constraints.Add("class");
-                    if (typeParam.HasValueTypeConstraint)
-                        constraints.Add("struct");
-                    if (typeParam.HasNotNullConstraint)
-                        constraints.Add("notnull");
-                    if (typeParam.HasUnmanagedTypeConstraint)
-                        constraints.Add("unmanaged");
+                    }
 
-                    var constraintTypes = typeParam.ConstraintTypes.Select(t => t.Name);
+                    if (typeParam.HasValueTypeConstraint)
+                    {
+                        constraints.Add("struct");
+                    }
+
+                    if (typeParam.HasNotNullConstraint)
+                    {
+                        constraints.Add("notnull");
+                    }
+
+                    if (typeParam.HasUnmanagedTypeConstraint)
+                    {
+                        constraints.Add("unmanaged");
+                    }
+
+                    IEnumerable<string> constraintTypes = typeParam.ConstraintTypes.Select(t => t.Name);
                     constraints.AddRange(constraintTypes);
 
                     if (constraints.Any())
@@ -358,11 +481,11 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
                 }
 
                 // Check for tuple types
-                if (parameter.Type.IsTupleType && parameter.Type is INamedTypeSymbol tupleType)
+                if (parameter.Type?.IsTupleType is true && parameter.Type is INamedTypeSymbol tupleType)
                 {
-                    var tupleElements = tupleType.TupleElements;
-                    var elementNames = tupleElements.Select(e => e.Name);
-                    var elementTypes = tupleElements.Select(e => e.Type.Name);
+                    ImmutableArray<IFieldSymbol> tupleElements = tupleType.TupleElements;
+                    IEnumerable<string> elementNames = tupleElements.Select(e => e.Name);
+                    IEnumerable<string> elementTypes = tupleElements.Select(e => e.Type.Name);
 
                     enhancedParameterType += $" ({string.Join(", ", elementNames.Select((n, i) => $"{n}:{elementTypes.ElementAt(i)}"))})";
                 }
@@ -384,38 +507,41 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
         }
     }
 
+    /// <inheritdoc />
     public List<Attribute> MapAttributes(ISymbol symbol)
     {
         try
         {
-            var attributes = new List<Attribute>();
+            List<Attribute> attributes = new();
 
             if (symbol == null)
-                return attributes;
-
-            foreach (var attribute in symbol.GetAttributes())
             {
-                var attributeName = attribute.AttributeClass?.GetFullName() ?? "unknown";
-                var constructorArguments = new List<string>();
-                var namedArguments = new Dictionary<string, string>();
+                return attributes;
+            }
+
+            foreach (AttributeData attribute in symbol.GetAttributes())
+            {
+                string attributeName = attribute.AttributeClass?.GetFullName() ?? "unknown";
+                List<string> constructorArguments = new();
+                Dictionary<string, string> namedArguments = new();
 
                 // Constructor arguments
-                foreach (var argument in attribute.ConstructorArguments)
+                foreach (TypedConstant argument in attribute.ConstructorArguments)
                 {
                     constructorArguments.Add(FormatAttributeArgument(argument));
                 }
 
                 // Named arguments
-                foreach (var namedArgument in attribute.NamedArguments)
+                foreach (KeyValuePair<string, TypedConstant> namedArgument in attribute.NamedArguments)
                 {
                     namedArguments[namedArgument.Key] = FormatAttributeArgument(namedArgument.Value);
                 }
 
                 // Combine constructor arguments and named arguments
-                var allArguments = new List<string>(constructorArguments);
+                List<string> allArguments = new(constructorArguments);
 
                 // Add named arguments in a readable format
-                foreach (var namedArg in namedArguments)
+                foreach (KeyValuePair<string, string> namedArg in namedArguments)
                 {
                     allArguments.Add($"{namedArg.Key} = {namedArg.Value}");
                 }
@@ -432,6 +558,7 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
         }
     }
 
+    /// <inheritdoc />
     public ParseErrorSeverity MapSeverity(DiagnosticSeverity diagnosticSeverity)
     {
         try
@@ -452,21 +579,18 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
         }
     }
 
-    public LocationApplication MapErrorLocation(Location location)
-    {
-        return MapLocation(location);
-    }
-
     private string FormatAttributeArgument(TypedConstant argument)
     {
         try
         {
             if (argument.IsNull)
+            {
                 return "null";
+            }
 
             if (argument.Kind == TypedConstantKind.Array)
             {
-                var arrayElements = argument.Values.Select(FormatAttributeArgument);
+                IEnumerable<string> arrayElements = argument.Values.Select(FormatAttributeArgument);
                 return $"[{string.Join(", ", arrayElements)}]";
             }
 
@@ -487,7 +611,7 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
 
             if (argument.Type?.SpecialType == SpecialType.System_Boolean)
             {
-                return argument.Value?.ToString().ToLower() ?? "false";
+                return argument.Value?.ToString()?.ToLower() ?? "false";
             }
 
             return argument.Value?.ToString() ?? "null";

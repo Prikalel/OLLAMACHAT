@@ -8,16 +8,16 @@ public class UserRepository(OllamaChatContext context) : Repository<User>(contex
     /// <inheritdoc />
     public async Task<User> GetOrCreateUser(string name)
     {
-        if (await context.Users.AnyAsync())
+        if (await Context.Users.AnyAsync())
         {
-            return context.Users
+            return Context.Users
                 .Include(x => x.Chats)
                 .ThenInclude(x => x.Messages)
-                .FirstOrDefault(x => x.Name == name);
+                .First(x => x.Name == name);
         }
 
-        EntityEntry<User> entity = await context.Users.AddAsync(new User { Id = null, Name = name });
-        await context.SaveChangesAsync();
+        EntityEntry<User> entity = await Context.Users.AddAsync(new User { Id = Guid.NewGuid().ToString(), Name = name });
+        await Context.SaveChangesAsync();
         return entity.Entity;
     }
 }
