@@ -28,14 +28,22 @@ public static class ServiceCollectionExtensions
         // Register SolutionLoaderService as a singleton
         services.AddSingleton<ISolutionLoaderService, SolutionLoaderService>();
 
-        services.Scan(scan => scan
-            .FromAssemblyOf<LlmService>()
-            .AddClasses(classes =>
-                classes.InNamespaces(
-                    typeof(LlmService).Namespace!,
-                    typeof(RoslynParsingService).Namespace!,
-                    typeof(Repository<>).Namespace!))
-            .AsImplementedInterfaces()
-            .WithScopedLifetime());
+        services
+            .Scan(scan => scan
+                .FromAssemblyOf<LlmService>()
+                .AddClasses(classes =>
+                    classes.InNamespaces(
+                        typeof(LlmService).Namespace!,
+                        typeof(RoslynParsingService).Namespace!,
+                        typeof(Repository<>).Namespace!))
+                .AsImplementedInterfaces()
+                .WithScopedLifetime())
+            .Scan(scan => scan
+                .FromAssemblyOf<EventHandlerFactory>()
+                .AddClasses(classes =>
+                    classes.InNamespaces(
+                        typeof(EventHandlerFactory).Namespace!))
+                .AsSelf()
+                .WithScopedLifetime());
     }
 }

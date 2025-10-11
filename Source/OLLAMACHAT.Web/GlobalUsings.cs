@@ -24,6 +24,7 @@ global using Swashbuckle.AspNetCore.SwaggerGen;
 global using VelikiyPrikalel.OLLAMACHAT.Application;
 global using VelikiyPrikalel.OLLAMACHAT.Application.Hubs;
 global using VelikiyPrikalel.OLLAMACHAT.Application.Mediator;
+global using VelikiyPrikalel.OLLAMACHAT.Application.Mediator.UnityParser;
 global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data;
 global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 global using VelikiyPrikalel.OLLAMACHAT.Web.Models;

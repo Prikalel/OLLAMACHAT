@@ -64,9 +64,19 @@ public class Program
                 await loader.LoadSolutionAsync();
                 if (loader.IsSolutionLoaded)
                 {
-                    loader.SolutionReloaded += (_, _) => EntityService.ClearCache();
+                    //TODO: исправить
                     await RelationshipService.InitializeCaches(loader.CurrentSolution!);
-                    loader.SolutionReloaded += async (_, arg) => await RelationshipService.InitializeCaches(arg.Solution);
+                    loader.SolutionReloaded += async (_, arg) =>
+                    {
+                        EntityService.ClearCache();
+                        await RelationshipService.InitializeCaches(arg.Solution);
+                        IMediator mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                        logger.Info("Starting UnityEvent data population...");
+                        PopulateUnityEventData.Response result = await mediator.Send(new PopulateUnityEventData.Command());
+                        logger.Info("UnityEvent data population completed. Processed {ProcessedFiles} files, found {UnityEvents} UnityEvents, {Handlers} handlers, created {Relationships} relationships",
+                            result.ProcessedFiles, result.UnityEvents, result.Handlers, result.Relationships);
+                    };
+
                     logger.Info("Done registering subscribers");
                 }
                 else
