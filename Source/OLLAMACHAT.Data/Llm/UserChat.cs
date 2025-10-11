@@ -122,14 +122,14 @@ public class UserChat : IEntity
     {
         chatStateMachine.Fire(ChatAction.GenerationComplete);
         this.State = chatStateMachine.State;
-        this.Messages.Add(new ChatMessage
+        this.Messages.Add(new()
         {
             Id = Guid.NewGuid().ToString(),
             ChatId = this.Id,
             Role = ChatMessageRole.User,
             Content = prompt
         });
-        this.Messages.Add(new ChatMessage
+        this.Messages.Add(new()
         {
             Id = Guid.NewGuid().ToString(),
             ChatId = this.Id,

@@ -40,7 +40,7 @@ public class ParserRequestDto
     /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
         sb.Append("class ParserRequest {\n");
         sb.Append("  FilePath: ").Append(FilePath).Append("\n");
         sb.Append("  RepoPath: ").Append(RepoPath).Append("\n");

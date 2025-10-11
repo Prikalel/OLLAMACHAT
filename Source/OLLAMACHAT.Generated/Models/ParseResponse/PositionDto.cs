@@ -38,7 +38,7 @@ public class PositionDto
     /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
         sb.Append("class Position {\n");
         sb.Append("  Line: ").Append(Line).Append("\n");
         sb.Append("  Column: ").Append(Column).Append("\n");

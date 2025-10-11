@@ -31,7 +31,7 @@ public class LocationDto
     /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
         sb.Append("class Location {\n");
         sb.Append("  Start: ").Append(Start).Append("\n");
         sb.Append("  End: ").Append(End).Append("\n");

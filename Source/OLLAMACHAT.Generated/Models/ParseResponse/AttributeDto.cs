@@ -29,7 +29,7 @@ public class AttributeDto
     /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
         sb.Append("class Attribute {\n");
         sb.Append("  Name: ").Append(Name).Append("\n");
         sb.Append("  Arguments: ").Append(Arguments).Append("\n");

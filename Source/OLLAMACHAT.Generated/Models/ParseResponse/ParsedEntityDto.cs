@@ -149,7 +149,7 @@ public class ParsedEntityDto
     /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
         sb.Append("class ParsedEntity {\n");
         sb.Append("  SimpleName: ").Append(SimpleName).Append("\n");
         sb.Append("  FullName: ").Append(FullName).Append("\n");

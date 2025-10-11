@@ -47,7 +47,7 @@ public partial class EntityService
             // Определяем реальный путь к файлам namespace
             string? namespacePath = extractUsingData ? await ResolveNamespacePathAsync(name) : null;
 
-            ParsedEntity entity = new ParsedEntity(
+            ParsedEntity entity = new(
                 SimpleName: name,
                 FullName: name,
                 Type: ParsedEntityType.UsingStatement,

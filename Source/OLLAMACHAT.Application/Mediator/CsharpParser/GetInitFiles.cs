@@ -20,7 +20,7 @@ public sealed class GetInitFiles
             if (!loaderService.IsSolutionLoaded)
             {
                 logger.LogError("Solution not loaded");
-                return new List<string>();
+                return new();
             }
 
             try
@@ -45,7 +45,7 @@ public sealed class GetInitFiles
             catch (Exception ex)
             {
                 logger.LogError(ex, "error getting init files");
-                return new List<string>();
+                return new();
             }
         }
     }

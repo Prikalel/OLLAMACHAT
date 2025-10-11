@@ -80,7 +80,7 @@ public class ParseResultDto
     /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
         sb.Append("class ParseResult {\n");
         sb.Append("  FilePath: ").Append(FilePath).Append("\n");
         sb.Append("  Language: ").Append(Language).Append("\n");

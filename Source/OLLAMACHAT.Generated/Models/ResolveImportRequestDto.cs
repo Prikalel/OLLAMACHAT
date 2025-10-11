@@ -41,7 +41,7 @@ public class ResolveImportRequestDto
     /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
         sb.Append("class ResolveImportRequest {\n");
         sb.Append("  ImportPath: ").Append(ImportPath).Append("\n");
         sb.Append("  FilePath: ").Append(FilePath).Append("\n");

@@ -83,7 +83,7 @@ public class LlmService : ILlmService
             openAISettings.ApiKey,
             new()
             {
-                Endpoint = new Uri(uri)
+                Endpoint = new(uri)
             });
 
         ChatCompletionOptions chatCompletionOptions = new()
@@ -278,7 +278,7 @@ public class LlmService : ILlmService
         SseClientTransport clientTransport = new(new()
         {
             Name = serverInfo.Name,
-            Endpoint = new Uri(serverInfo.Url),
+            Endpoint = new(serverInfo.Url),
             AdditionalHeaders = serverInfo.AuthToken is null
                 ? null
                 : new Dictionary<string, string>()
@@ -296,7 +296,7 @@ public class LlmService : ILlmService
         try
         {
             // Используем API Wikipedia для получения краткого содержания страницы
-            using HttpClient httpClient = new HttpClient();
+            using HttpClient httpClient = new();
             string requestUri = $"https://en.wikipedia.org/api/rest_v1/page/summary/{Uri.EscapeDataString(term)}";
             HttpResponseMessage response = await httpClient.GetAsync(requestUri);
 

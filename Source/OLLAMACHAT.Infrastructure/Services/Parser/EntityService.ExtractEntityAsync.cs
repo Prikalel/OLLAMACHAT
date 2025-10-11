@@ -69,7 +69,7 @@ public partial class EntityService
             logger.LogDebug("Creating ParsedEntity for symbol: {SymbolName} with {AttributeCount} attributes",
                 symbol.Name, attributes.Count);
 
-            ParsedEntity entity = new ParsedEntity(
+            ParsedEntity entity = new(
                 SimpleName: symbol.Name ?? string.Empty,
                 FullName: symbol.GetFullName(),
                 Type: entityType,
@@ -108,13 +108,13 @@ public partial class EntityService
         if (symbol == null)
         {
             logger.LogError("Symbol is null in ExtractChildEntitiesAsync");
-            return new List<ParsedEntity>();
+            return new();
         }
 
         if (semanticModel == null)
         {
             logger.LogError("Semantic model is null in ExtractChildEntitiesAsync for symbol: {SymbolName}", symbol.Name);
-            return new List<ParsedEntity>();
+            return new();
         }
 
         if (symbol.Name != null && ContainsSpecialCharacters(symbol.Name))
@@ -128,7 +128,7 @@ public partial class EntityService
         {
             logger.LogTrace("Maximum depth ({MaxDepth}) reached for symbol: {SymbolName} at depth {CurrentDepth}",
                 options.MaxDepth.Value, symbol.Name, currentDepth);
-            return new List<ParsedEntity>();
+            return new();
         }
 
         try

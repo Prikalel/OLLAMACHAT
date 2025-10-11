@@ -88,10 +88,10 @@ public class ImportService(
             if (!Directory.Exists(repoPath))
             {
                 logger.LogWarning("Repository path does not exist: {RepoPath}", repoPath);
-                return new List<string>();
+                return new();
             }
 
-            Regex regex = new Regex(@"^.*(GlobalUsings\.cs|\.csproj)", RegexOptions.Compiled);
+            Regex regex = new(@"^.*(GlobalUsings\.cs|\.csproj)", RegexOptions.Compiled);
             List<FileInfo> files = new DirectoryInfo(repoPath)
                 .EnumerateFiles("*.*", SearchOption.AllDirectories)
                 .Where(fi => regex.IsMatch(fi.Name))
@@ -114,8 +114,8 @@ public class ImportService(
             return path;
         }
 
-        Uri fromUri = new Uri(relativeTo);
-        Uri toUri = new Uri(path);
+        Uri fromUri = new(relativeTo);
+        Uri toUri = new(path);
 
         if (fromUri.Scheme != toUri.Scheme)
         {

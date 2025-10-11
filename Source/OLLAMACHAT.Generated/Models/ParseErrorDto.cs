@@ -60,7 +60,7 @@ public class ParseErrorDto
     /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
         sb.Append("class ParseError {\n");
         sb.Append("  Message: ").Append(Message).Append("\n");
         sb.Append("  Severity: ").Append(Severity).Append("\n");

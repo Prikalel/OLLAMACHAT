@@ -39,7 +39,7 @@ public class ParserOptionsDto
     /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
         sb.Append("class ParserOptions {\n");
         sb.Append("  ExtractFullExtractInheritance: ").Append(ExtractFullExtractInheritance).Append("\n");
         sb.Append("  ExtractUsingStatementData: ").Append(ExtractUsingStatementData).Append("\n");

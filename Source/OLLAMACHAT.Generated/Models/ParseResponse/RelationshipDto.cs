@@ -80,7 +80,7 @@ public class RelationshipDto
     /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
         sb.Append("class Relationship {\n");
         sb.Append("  FullNameFrom: ").Append(FullNameFrom).Append("\n");
         sb.Append("  FullNameTo: ").Append(FullNameTo).Append("\n");

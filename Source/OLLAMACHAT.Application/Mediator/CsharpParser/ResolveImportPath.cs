@@ -29,9 +29,9 @@ public sealed class ResolveImportPath
             }
             catch (Exception ex)
             {
-                ErrorResponse error = new ErrorResponse( ex.GetHashCode().ToString(), $"Failed to resolve import path: {ex.Message}", ex.ToString());
+                ErrorResponse error = new( ex.GetHashCode().ToString(), $"Failed to resolve import path: {ex.Message}", ex.ToString());
 
-                return (new List<string>(), error);
+                return (new(), error);
             }
         }
     }

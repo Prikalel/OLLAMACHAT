@@ -41,7 +41,7 @@ public class ParsedEntityInheritanceDto
     /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
         sb.Append("class ParsedEntityInheritance {\n");
         sb.Append("  DirectBaseClasses: ").Append(DirectBaseClasses).Append("\n");
         sb.Append("  DirectInterfaces: ").Append(DirectInterfaces).Append("\n");

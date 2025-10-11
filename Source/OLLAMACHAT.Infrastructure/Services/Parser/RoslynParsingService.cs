@@ -19,7 +19,7 @@ public class RoslynParsingService(
         if (document == null)
         {
             logger.LogWarning("Document not found: {FilePath}", filePath);
-            throw new Exception($"Document not found: {filePath}");
+            throw new($"Document not found: {filePath}");
         }
 
         string contentHash = await documentService.GetContentHashAsync(document);
@@ -36,7 +36,7 @@ public class RoslynParsingService(
             logger.LogWarning("Found {ErrorCount} errors in file: {FilePath}", errors.Count(), filePath);
         }
 
-        ParseResult result = new ParseResult(
+        ParseResult result = new(
             FilePath: document.FilePath!,
             Language: ParseResultLanguage.Csharp,
             Entities: entities.ToList(),
@@ -60,7 +60,7 @@ public class RoslynParsingService(
         if (document == null)
         {
             logger.LogWarning("Document not found: {FilePath}", filePath);
-            return new List<string>();
+            return new();
         }
 
         return await importService.ResolveImportPathAsync(importPath, document);
