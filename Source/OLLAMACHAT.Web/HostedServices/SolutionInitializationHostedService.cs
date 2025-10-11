@@ -23,7 +23,8 @@ public class SolutionInitializationHostedService(
             await RelationshipService.InitializeCaches(loader.CurrentSolution!);
 
             loader.SolutionReloaded += OnSolutionReloaded;
-            logger.LogInformation("Done registering subscribers");
+            PopulateUnityEventData.Response result = await PopulateUnityEventData();
+            logger.LogInformation("Done registering subscribers. Populated database in {s}s", result.ExecutionTime.TotalMilliseconds / 1000);
         }
         else
         {
@@ -33,15 +34,12 @@ public class SolutionInitializationHostedService(
 
     private async void OnSolutionReloaded(object? sender, SolutionReloadedEventArgs args)
     {
-        using IServiceScope scope = serviceProvider.CreateScope();
-
-        IMediator mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-
         EntityService.ClearCache();
         await RelationshipService.InitializeCaches(args.Solution);
 
         logger.LogInformation("Starting UnityEvent data population...");
-        PopulateUnityEventData.Response result = await mediator.Send(new PopulateUnityEventData.Command());
+
+        PopulateUnityEventData.Response result = await PopulateUnityEventData();
         logger.LogInformation(
             "UnityEvent data population completed. Processed {ProcessedFiles} files, found {UnityEvents} UnityEvents, {Handlers} handlers, created {Relationships} relationships",
             result.ProcessedFiles, result.UnityEvents, result.Handlers, result.Relationships);
@@ -49,4 +47,12 @@ public class SolutionInitializationHostedService(
 
     /// <inheritdoc />
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+
+    private async Task<PopulateUnityEventData.Response> PopulateUnityEventData()
+    {
+        using IServiceScope scope = serviceProvider.CreateScope();
+        IMediator mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+        PopulateUnityEventData.Response result = await mediator.Send(new PopulateUnityEventData.Command());
+        return result;
+    }
 }
