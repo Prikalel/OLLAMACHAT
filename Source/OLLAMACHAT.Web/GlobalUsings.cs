@@ -27,5 +27,6 @@ global using VelikiyPrikalel.OLLAMACHAT.Application.Mediator;
 global using VelikiyPrikalel.OLLAMACHAT.Application.Mediator.UnityParser;
 global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data;
 global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
+global using VelikiyPrikalel.OLLAMACHAT.Web.HostedServices;
 global using VelikiyPrikalel.OLLAMACHAT.Web.Models;
 global using LogLevel = Microsoft.Extensions.Logging.LogLevel;

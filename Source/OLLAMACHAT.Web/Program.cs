@@ -55,36 +55,6 @@ public class Program
             IHost build = CreateWebHostBuilder(args)
                 .Build();
 
-            using (IServiceScope scope = build.Services.CreateScope())
-            {
-                OllamaChatContext db = scope.ServiceProvider.GetRequiredService<OllamaChatContext>();
-                await db.Database.MigrateAsync();
-
-                ISolutionLoaderService loader = scope.ServiceProvider.GetRequiredService<ISolutionLoaderService>();
-                await loader.LoadSolutionAsync();
-                if (loader.IsSolutionLoaded)
-                {
-                    //TODO: исправить
-                    await RelationshipService.InitializeCaches(loader.CurrentSolution!);
-                    loader.SolutionReloaded += async (_, arg) =>
-                    {
-                        EntityService.ClearCache();
-                        await RelationshipService.InitializeCaches(arg.Solution);
-                        IMediator mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-                        logger.Info("Starting UnityEvent data population...");
-                        PopulateUnityEventData.Response result = await mediator.Send(new PopulateUnityEventData.Command());
-                        logger.Info("UnityEvent data population completed. Processed {ProcessedFiles} files, found {UnityEvents} UnityEvents, {Handlers} handlers, created {Relationships} relationships",
-                            result.ProcessedFiles, result.UnityEvents, result.Handlers, result.Relationships);
-                    };
-
-                    logger.Info("Done registering subscribers");
-                }
-                else
-                {
-                    logger.Error("Error loading solution");
-                }
-            }
-
             await build
                 .RunAsync();
         }

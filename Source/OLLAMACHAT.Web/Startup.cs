@@ -68,7 +68,7 @@ public class Startup
     /// <param name="services">Коллекция сервисов.</param>
     public void ConfigureServices(IServiceCollection services)
     {
-        //services.AddHostedService<UserChatBackgroundService>();
+        services.AddHostedService<SolutionInitializationHostedService>();
         services.RegisterInfrastructure(Configuration);
 
         if (ServicesRegistrationOptions.RegisterSwagger)
