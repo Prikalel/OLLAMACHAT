@@ -28,18 +28,14 @@ public sealed class GetUserChatHistory
 
             string defaultModel = models.First();
             logger.LogInformation("For new chats default model {Model} will be used", defaultModel);
-            UserChat activeChat = user.GetOrCreateActiveChat(defaultModel, out bool createdChat);
-            if (createdChat)
-            {
-                await userRepository.UpdateAsync(user);
-                logger.LogInformation("Updated user {Id}", user.Id);
-                // для сохранения созданного чата.
-            }
+            UserChat activeChat = await userRepository.GetOrCreateActiveChat(user, defaultModel);
 
             logger.LogInformation("Returning {Count} messages in chat history",
                 activeChat
                     .Messages
                     .Count);
+
+            await userRepository.SaveChanges(); // чтобы сохранить если было добавлено.
 
             return activeChat
                 .Messages

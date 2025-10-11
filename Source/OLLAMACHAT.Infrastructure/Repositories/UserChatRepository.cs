@@ -7,7 +7,7 @@ public class UserChatRepository(OllamaChatContext context) : Repository<UserChat
 {
     /// <inheritdoc />
     public async Task<UserChat?> GetChatByIdAsync(string id) =>
-        await Context.UserChats
+        await DbSet
             .Include(x => x.Messages)
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync();

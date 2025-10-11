@@ -7,7 +7,7 @@ namespace VelikiyPrikalel.OLLAMACHAT.Application.Repositories;
 public interface IRepository<TEntity> where TEntity : IEntity
 {
     /// <summary>
-    /// Добавить.
+    /// Добавить, но не сохранять.
     /// </summary>
     /// <param name="entity">Сущность.</param>
     /// <returns><see cref="Task"/>.</returns>
@@ -16,21 +16,22 @@ public interface IRepository<TEntity> where TEntity : IEntity
     /// <summary>
     /// Обновить существующую сущность.
     /// </summary>
-    /// <param name="entity">Обновленная сущность.</param>
-    Task UpdateAsync(TEntity entity);
+    Task SaveChanges();
 
     /// <summary>
     /// Получить сущности.
     /// </summary>
     /// <param name="predicate">Предикат.</param>
+    /// <param name="asNoTracking">Выключить отслеживание.</param>
     /// <returns><see cref="Task"/>.</returns>
-    Task<IReadOnlyList<TEntity>> GetMany(Expression<Func<TEntity, bool>> predicate);
+    Task<IReadOnlyList<TEntity>> GetMany(Expression<Func<TEntity, bool>> predicate, bool asNoTracking = false);
 
     /// <summary>
     /// Получить сущность.
     /// Если по предикату их получилось больше 1, то будет исключение.
     /// </summary>
     /// <param name="predicate">Предикат.</param>
+    /// <param name="asNoTracking">Выключить отслеживание.</param>
     /// <returns>Сущность или null если не найдена.</returns>
-    Task<TEntity?> GetSingle(Expression<Func<TEntity, bool>> predicate);
+    Task<TEntity?> GetSingle(Expression<Func<TEntity, bool>> predicate, bool asNoTracking = false);
 }

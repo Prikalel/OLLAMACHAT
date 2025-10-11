@@ -34,10 +34,7 @@ public class GeneratePathParamsValidationFilter : IOperationFilter
                 if (regexAttr != null)
                 {
                     string regex = (string)regexAttr.ConstructorArguments[0].Value!;
-                    if (swaggerParam is OpenApiParameter)
-                    {
-                        swaggerParam.Schema.Pattern = regex;
-                    }
+                    swaggerParam.Schema.Pattern = regex;
                 }
 
                 // String Length [StringLength]
@@ -65,11 +62,9 @@ public class GeneratePathParamsValidationFilter : IOperationFilter
                     maxLength = (int)maxLengthAttr.ConstructorArguments[0].Value!;
                 }
 
-                if (swaggerParam is OpenApiParameter)
-                {
-                    swaggerParam.Schema.MinLength = minLenght;
-                    swaggerParam.Schema.MaxLength = maxLength;
-                }
+                swaggerParam.Schema.MinLength = minLenght;
+                swaggerParam.Schema.MaxLength = maxLength;
+
 
                 // Range [Range]
                 CustomAttributeData? rangeAttr = attributes.FirstOrDefault(p => p.AttributeType == typeof(RangeAttribute));
@@ -78,11 +73,9 @@ public class GeneratePathParamsValidationFilter : IOperationFilter
                     int rangeMin = (int)rangeAttr.ConstructorArguments[0].Value!;
                     int rangeMax = (int)rangeAttr.ConstructorArguments[1].Value!;
 
-                    if (swaggerParam is OpenApiParameter)
-                    {
-                        swaggerParam.Schema.Minimum = rangeMin;
-                        swaggerParam.Schema.Maximum = rangeMax;
-                    }
+
+                    swaggerParam.Schema.Minimum = rangeMin;
+                    swaggerParam.Schema.Maximum = rangeMax;
                 }
             }
         }

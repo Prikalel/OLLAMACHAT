@@ -16,51 +16,66 @@ public sealed class SendMessage
     public sealed class Handler(
         ILlmBackgroundService llmBackgroundService,
         IUserRepository userRepository,
+        IRepository<ChatMessage> messageRepository,
         ILogger<Handler> logger) : IRequestHandler<Command>
     {
         /// <inheritdoc />
         public async ValueTask<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
-            User user = await userRepository.GetOrCreateUser("alex");
-            UserChat activeChat = user.GetOrCreateActiveChat(string.Empty, out bool _);
+            (User user, UserChat activeChat) = await GetUserActiveChat();
 
             if (request.Message.Trim().ToLower().Equals("/undo"))
             {
                 logger.LogInformation("Will delete last message");
                 activeChat.DeleteLastMessage();
-                await userRepository.UpdateAsync(user);
+                await userRepository.SaveChanges();
+                return new();
             }
-            else
+
+            logger.LogInformation("Will generate llm response from model {Model}", activeChat.Model);
+
+            activeChat.UserEnteredPrompt(request.Message);
+            await userRepository.SaveChanges();
+
+            try
             {
-                logger.LogInformation("Will generate llm response from model {Model}", activeChat.Model);
-
-                activeChat.UserEnteredPrompt(request.Message);
-                await userRepository.UpdateAsync(user);
-
-                try
+                await ExecuteLlmRequest(request, activeChat);
+                foreach (ChatMessage message in activeChat.Messages.TakeLast(2))
                 {
-                    await llmBackgroundService.GenerateTextResponse(
-                        request.ConnectionId,
-                        request.Message,
-                        activeChat.Model,
-                        activeChat.Id,
-                        activeChat.Messages
-                    );
+                    await messageRepository.AddAsync(message);
                 }
-                catch (Exception)
-                {
-                    if (await userRepository.GetOrCreateUser("alex") is { } user2
-                        && user.GetOrCreateActiveChat(string.Empty, out bool _) is { State: ChatState.WaitingMessageGeneration } chat)
-                    {
-                        chat.GenerationFailed();
-                        await userRepository.UpdateAsync(user2);
-                    }
 
-                    throw;
+                await userRepository.SaveChanges();
+            }
+            catch (Exception)
+            {
+                if ((await GetUserActiveChat()).Chat is { State: ChatState.WaitingMessageGeneration } chat)
+                {
+                    chat.GenerationFailed();
+                    await userRepository.SaveChanges();
                 }
+
+                throw;
             }
 
             return new();
+        }
+
+        private async ValueTask ExecuteLlmRequest(Command request, UserChat activeChat)
+        {
+            string fullResponse = await llmBackgroundService.GenerateTextResponse(
+                request.ConnectionId,
+                request.Message,
+                activeChat
+            );
+            activeChat.LlmReturnedResponse(request.Message, fullResponse);
+        }
+
+        private async ValueTask<(User User, UserChat Chat)> GetUserActiveChat()
+        {
+            User user = await userRepository.GetOrCreateUser("alex");
+            UserChat activeChat = await userRepository.GetOrCreateActiveChat(user, string.Empty);
+            return (user, activeChat);
         }
     }
 }

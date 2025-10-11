@@ -1,0 +1,15 @@
+global using System;
+global using Mediator;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.ChangeTracking;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Logging;
+global using Microsoft.Extensions.Logging.Abstractions;
+global using Moq;
+global using VelikiyPrikalel.OLLAMACHAT.Application.Mediator;
+global using VelikiyPrikalel.OLLAMACHAT.Application.Repositories;
+global using VelikiyPrikalel.OLLAMACHAT.Application.Services.Llm;
+global using VelikiyPrikalel.OLLAMACHAT.Data.Llm;
+global using VelikiyPrikalel.OLLAMACHAT.Data.Llm.StatelessEnums;
+global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Data;
+global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Repositories;
