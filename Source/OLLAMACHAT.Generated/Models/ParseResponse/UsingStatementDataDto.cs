@@ -23,7 +23,7 @@ public class UsingStatementDataDto
     /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
         sb.Append("class UsingStatementData {\n");
         sb.Append("  Source: ").Append(Source).Append("\n");
         sb.Append("}\n");

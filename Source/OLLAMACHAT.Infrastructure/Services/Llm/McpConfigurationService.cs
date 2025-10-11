@@ -13,7 +13,7 @@ public class McpConfigurationService : IMcpConfigurationService
     public McpConfigurationService(IConfiguration configuration)
     {
         this.configuration = configuration;
-        servers = new List<McpServerConfiguration>();
+        servers = new();
         configuration
             .GetSection("McpServers")
             .Bind(servers);

@@ -60,7 +60,7 @@ public sealed class SendMessage
                 }
             }
 
-            return new Unit();
+            return new();
         }
     }
 }

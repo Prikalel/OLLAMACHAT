@@ -25,17 +25,17 @@ public abstract class TestBase
     public virtual void Setup()
     {
         // Создаем фейковые логгеры для тестов
-        EntityLogger = new FakeLogger<EntityService>();
-        MapperLogger = new FakeLogger<MapperService>();
-        SolutionLoaderLogger = new FakeLogger<SolutionLoaderService>();
+        EntityLogger = new();
+        MapperLogger = new();
+        SolutionLoaderLogger = new();
 
         // Создаем сервисы
-        MapperService = new MapperService(MapperLogger);
+        MapperService = new(MapperLogger);
         IOptions<SolutionSettings> solutionSettingsOptions = Microsoft.Extensions.Options.Options.Create(
             new SolutionSettings { SolutionFilePath = Directory.GetCurrentDirectory() });
-        SolutionLoaderService = new SolutionLoaderService(solutionSettingsOptions, SolutionLoaderLogger);
+        SolutionLoaderService = new(solutionSettingsOptions, SolutionLoaderLogger);
 
-        EntityService = new EntityService(
+        EntityService = new(
             MapperService,
             EntityLogger,
             solutionSettingsOptions,
@@ -52,7 +52,7 @@ public abstract class TestBase
     protected async Task<Document> CreateTestDocumentAsync(string content, string fileName = "TestFile.cs")
     {
         // Создаем рабочее пространство
-        AdhocWorkspace workspace = new AdhocWorkspace();
+        AdhocWorkspace workspace = new();
         Project? project = workspace.AddProject("TestProject", LanguageNames.CSharp);
 
         // Добавляем необходимые метаданные для корректной работы семантической модели
@@ -111,7 +111,7 @@ public abstract class TestBase
         int? maxDepth = null,
         bool extractUsingStatements = true)
     {
-        return new ParserOptions(
+        return new(
             ExtractFullExtractInheritance: extractFullInheritance,
             MaxDepth: maxDepth,
             ExtractUsingStatementData: extractUsingStatements

@@ -185,7 +185,7 @@ public class SolutionLoaderService : ISolutionLoaderService, IDisposable
         try
         {
             fileWatcher?.Dispose();
-            fileWatcher = new FileSystemWatcher(directoryPath)
+            fileWatcher = new(directoryPath)
             {
                 IncludeSubdirectories = true,
                 EnableRaisingEvents = true,
@@ -258,7 +258,7 @@ public class SolutionLoaderService : ISolutionLoaderService, IDisposable
         lock (debounceLock)
         {
             debounceCts?.Cancel();
-            debounceCts = new CancellationTokenSource();
+            debounceCts = new();
             localCts = debounceCts;
         }
 
@@ -311,7 +311,7 @@ public class SolutionLoaderService : ISolutionLoaderService, IDisposable
 
     private void OnSolutionReloaded(Solution solution)
     {
-        SolutionReloaded?.Invoke(this, new SolutionReloadedEventArgs(solution));
+        SolutionReloaded?.Invoke(this, new(solution));
     }
 
     /// <inheritdoc />

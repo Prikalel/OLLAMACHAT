@@ -38,7 +38,7 @@ public class LlmBackgroundService(
         UserChat? chat = await chatRepository.GetChatByIdAsync(chatId);
         if (chat == null)
         {
-            throw new Exception($"Chat {chatId} not found");
+            throw new($"Chat {chatId} not found");
         }
         ChatState state = chat.LlmReturnedResponse(prompt, fullResponse);
         await chatRepository.UpdateAsync(chat);

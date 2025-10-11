@@ -37,7 +37,7 @@ public class ErrorResponseDto
     /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
         sb.Append("class ErrorResponse {\n");
         sb.Append("  Code: ").Append(Code).Append("\n");
         sb.Append("  Message: ").Append(Message).Append("\n");

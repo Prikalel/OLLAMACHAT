@@ -15,20 +15,20 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
             if (location == null)
             {
                 logger.LogError("Location null!");
-                return new LocationApplication(new Position(null, null, null), new Position(null, null, null));
+                return new(new(null, null, null), new(null, null, null));
             }
 
             FileLinePositionSpan lineSpan = location.GetLineSpan();
             LinePosition startLinePosition = lineSpan.StartLinePosition;
             LinePosition endLinePosition = lineSpan.EndLinePosition;
 
-            return new LocationApplication(
-                new Position(
+            return new(
+                new(
                     startLinePosition.Line + 1,
                     startLinePosition.Character,
                     location.SourceSpan.Start
                 ),
-                new Position(
+                new(
                     endLinePosition.Line + 1,
                     endLinePosition.Character,
                     location.SourceSpan.End
@@ -38,7 +38,7 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
         catch (Exception ex)
         {
             logger.LogError(ex, "Error mapping location");
-            return new LocationApplication(new Position(null, null, null), new Position(null, null, null));
+            return new(new(null, null, null), new(null, null, null));
         }
     }
 
@@ -290,7 +290,7 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
             if (typeSymbol == null)
             {
                 logger.LogError("TypeSymbol is null!");
-                return new ParsedEntityInheritance(null, null, [], []);
+                return new(null, null, [], []);
             }
 
             if (typeSymbol.BaseType != null && typeSymbol.BaseType.SpecialType != SpecialType.System_Object)
@@ -339,7 +339,7 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
                 }
             }
 
-            return new ParsedEntityInheritance(
+            return new(
                 baseClasses.Any() ? baseClasses : null,
                 interfaces.Any() ? interfaces : null,
                 extractFullInheritance ? allBaseClasses : [],
@@ -349,7 +349,7 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
         catch (Exception ex)
         {
             logger.LogError(ex, "Error mapping inheritance for type: {TypeName}", typeSymbol?.Name);
-            return new ParsedEntityInheritance(null, null, [], []);
+            return new(null, null, [], []);
         }
     }
 
@@ -490,7 +490,7 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
                     enhancedParameterType += $" ({string.Join(", ", elementNames.Select((n, i) => $"{n}:{elementTypes.ElementAt(i)}"))})";
                 }
 
-                parameters.Add(new ModelParameter(
+                parameters.Add(new(
                     parameter.Name,
                     enhancedParameterType,
                     isOptional,
@@ -503,7 +503,7 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
         catch (Exception ex)
         {
             logger.LogError(ex, "Error mapping parameters for method: {MethodName}", methodSymbol?.Name);
-            return new List<ModelParameter>();
+            return new();
         }
     }
 
@@ -546,7 +546,7 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
                     allArguments.Add($"{namedArg.Key} = {namedArg.Value}");
                 }
 
-                attributes.Add(new Attribute(attributeName, allArguments));
+                attributes.Add(new(attributeName, allArguments));
             }
 
             return attributes;
@@ -554,7 +554,7 @@ public class MapperService(ILogger<MapperService> logger) : IMapperService
         catch (Exception ex)
         {
             logger.LogError(ex, "Error mapping attributes for symbol: {SymbolName}", symbol?.Name);
-            return new List<Attribute>();
+            return new();
         }
     }
 

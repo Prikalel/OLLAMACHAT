@@ -418,7 +418,7 @@ public class RelationshipService(
 
             string? targetFilePath = GetCachedFilePathForType(containingType);
 
-            relationships.Add(new SimpleRelationship(
+            relationships.Add(new(
                 FullNameFrom: methodEntity.FullName!,
                 FullNameTo: fullCalledMethodName,
                 Type: SimpleRelationshipType.Calls,
@@ -460,7 +460,7 @@ public class RelationshipService(
 
         string? targetFilePath = GetCachedFilePathForType(containingType);
 
-        relationships.Add(new SimpleRelationship(
+        relationships.Add(new(
             FullNameFrom: methodEntity.FullName!,
             FullNameTo: fullMemberName,
             Type: SimpleRelationshipType.Calls,
@@ -559,7 +559,7 @@ public class RelationshipService(
                     ? path
                     : null;
 
-                relationships.Add(new SimpleRelationship(
+                relationships.Add(new(
                     FullNameFrom: entity.FullName!,
                     FullNameTo: typeFullName,
                     Type: SimpleRelationshipType.IsBaseFor,

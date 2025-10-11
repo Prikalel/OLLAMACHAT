@@ -16,7 +16,7 @@ public class UserRepository(OllamaChatContext context) : Repository<User>(contex
                 .First(x => x.Name == name);
         }
 
-        EntityEntry<User> entity = await Context.Users.AddAsync(new User { Id = Guid.NewGuid().ToString(), Name = name });
+        EntityEntry<User> entity = await Context.Users.AddAsync(new() { Id = Guid.NewGuid().ToString(), Name = name });
         await Context.SaveChangesAsync();
         return entity.Entity;
     }

@@ -239,7 +239,7 @@ public partial class EntityService(
             logger.LogWarning("Found {ErrorCount} syntax errors in document: {DocumentPath}", syntaxErrors.Count, document.FilePath);
             foreach (Diagnostic error in syntaxErrors)
             {
-                throw new Exception($"Syntax error at line {error.Location.GetLineSpan().StartLinePosition.Line + 1}: {error.GetMessage()}");
+                throw new($"Syntax error at line {error.Location.GetLineSpan().StartLinePosition.Line + 1}: {error.GetMessage()}");
             }
         }
 
@@ -256,7 +256,7 @@ public partial class EntityService(
     {
         if (entities == null || entities.Count == 0)
         {
-            return new List<ParsedEntity>();
+            return new();
         }
 
         logger.LogDebug("Filtering {EntityCount} entities to top-level only", entities.Count);

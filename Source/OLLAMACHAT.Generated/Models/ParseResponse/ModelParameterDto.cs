@@ -41,7 +41,7 @@ public class ModelParameterDto
     /// <returns>String presentation of the object</returns>
     public override string ToString()
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new();
         sb.Append("class ModelParameter {\n");
         sb.Append("  Name: ").Append(Name).Append("\n");
         sb.Append("  FullTypeName: ").Append(FullTypeName).Append("\n");

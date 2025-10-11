@@ -29,16 +29,16 @@ public sealed class ParseCsharpFile
             }
             catch (Exception ex)
             {
-                ErrorResponse error = new ErrorResponse(ex.GetHashCode().ToString(), $"Failed to parse C# file: {ex.Message}", ex.ToString());
+                ErrorResponse error = new(ex.GetHashCode().ToString(), $"Failed to parse C# file: {ex.Message}", ex.ToString());
 
-                return (new ParseResult(
+                return (new(
                     FilePath: request.Request.FilePath,
                     Language: ParseResultLanguage.Csharp,
-                    Entities: new List<ParsedEntity>(),
-                    Relationships: new List<Relationship>(),
+                    Entities: new(),
+                    Relationships: new(),
                     ContentHash: "",
                     ParseTimeMs: 0,
-                    Errors: new List<ParseError>
+                    Errors: new()
                     {
                         new(
                             Message: ex.Message,
