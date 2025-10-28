@@ -51,27 +51,30 @@ public abstract class TestBase
     /// <returns>Документ для анализа</returns>
     protected async Task<Document> CreateTestDocumentAsync(string content, string fileName = "TestFile.cs")
     {
+        Document? document;
         // Создаем рабочее пространство
-        AdhocWorkspace workspace = new();
-        Project? project = workspace.AddProject("TestProject", LanguageNames.CSharp);
+        using (AdhocWorkspace workspace = new())
+        {
+            Project? project = workspace.AddProject("TestProject", LanguageNames.CSharp);
 
-        // Добавляем необходимые метаданные для корректной работы семантической модели
-        IEnumerable<MetadataReference> references = GetMetadataReferences();
-        project = project.AddMetadataReferences(references);
+            // Добавляем необходимые метаданные для корректной работы семантической модели
+            IEnumerable<MetadataReference> references = GetMetadataReferences();
+            project = project.AddMetadataReferences(references);
 
-        // Создаем исходный текст
-        SourceText sourceText = SourceText.From(content);
-        DocumentId documentId = DocumentId.CreateNewId(project.Id);
-        DocumentInfo documentInfo = DocumentInfo.Create(
-            documentId,
-            fileName,
-            Array.Empty<string>(),
-            SourceCodeKind.Regular,
-            TextLoader.From(TextAndVersion.Create(sourceText, VersionStamp.Default, fileName)),
-            fileName,
-            false);
+            // Создаем исходный текст
+            SourceText sourceText = SourceText.From(content);
+            DocumentId documentId = DocumentId.CreateNewId(project.Id);
+            DocumentInfo documentInfo = DocumentInfo.Create(
+                documentId,
+                fileName,
+                Array.Empty<string>(),
+                SourceCodeKind.Regular,
+                TextLoader.From(TextAndVersion.Create(sourceText, VersionStamp.Default, fileName)),
+                fileName,
+                false);
 
-        Document? document = workspace.AddDocument(documentInfo);
+            document = workspace.AddDocument(documentInfo);
+        }
         return document;
     }
 

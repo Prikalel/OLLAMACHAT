@@ -6,12 +6,13 @@ namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Llm;
 public class LlmBackgroundService(
     ILlmService llmService,
     ILogger<LlmBackgroundService> logger,
-    IUserChatRepository chatRepository,
     IHubContext<ChatHub> hubContext) : ILlmBackgroundService
 {
     /// <inheritdoc />
-    public async Task GenerateTextResponse(string connectionId, string prompt, string model, string chatId, ICollection<ChatMessage> previousMessages)
+    public async Task<string> GenerateTextResponse(string connectionId, string prompt, UserChat chat)
     {
+        string model = chat.Model;
+        ICollection<ChatMessage> previousMessages = chat.Messages;
         if (!await llmService.IsServerAlive())
         {
             throw new InvalidOperationException("Сервер не отвечает");
@@ -33,15 +34,8 @@ public class LlmBackgroundService(
                 .ToList());
         await hubContext.Clients.Client(connectionId).SendAsync("ReceiveMessageChunk", Markdig.Markdown.ToHtml(fullResponse));
 
-        logger.LogInformation("Streamed response for prompt {Prompt} in chat {Id}", prompt, chatId);
+        logger.LogInformation("Streamed response for prompt {Prompt} in chat {Id}", prompt, chat.Id);
 
-        UserChat? chat = await chatRepository.GetChatByIdAsync(chatId);
-        if (chat == null)
-        {
-            throw new($"Chat {chatId} not found");
-        }
-        ChatState state = chat.LlmReturnedResponse(prompt, fullResponse);
-        await chatRepository.UpdateAsync(chat);
-        logger.LogInformation("Updated state of chat {Id} to {State}", chatId, state);
+        return fullResponse;
     }
 }

@@ -10,12 +10,9 @@ public interface ILlmBackgroundService
     /// </summary>
     /// <param name="connectionId">Идентификатор соединения.</param>
     /// <param name="prompt"></param>
-    /// <param name="model">Модель выполняющая запрос.</param>
-    /// <param name="chatId">Идентификатор чата в котором происходит запрос.</param>
-    /// <param name="previousMessages">Предыдущая переписка.</param>
+    /// <param name="chat">Идентификатор чата в котором происходит запрос.</param>
     /// <returns>Ответ llm.</returns>
-    Task GenerateTextResponse(string connectionId, string prompt,
-        string model,
-        string chatId,
-        ICollection<ChatMessage> previousMessages);
+    Task<string> GenerateTextResponse(string connectionId,
+        string prompt,
+        UserChat chat);
 }

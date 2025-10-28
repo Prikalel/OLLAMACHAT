@@ -1,7 +1,7 @@
 namespace VelikiyPrikalel.OLLAMACHAT.Application.Hubs;
 
 /// <inheritdoc />
-public class ChatHub(IMediator mediator, ILogger<ChatHub> logger, IUserRepository userRepository, IUserChatRepository chatRepository) : Hub
+public class ChatHub(IMediator mediator, ILogger<ChatHub> logger, IUserRepository userRepository) : Hub
 {
     /// <summary>
     /// Изменить модель взаимодействия с сервером.
@@ -10,9 +10,9 @@ public class ChatHub(IMediator mediator, ILogger<ChatHub> logger, IUserRepositor
     public async Task ChangeModel(string model)
     {
         User u = await userRepository.GetOrCreateUser("alex");
-        UserChat chat = u.GetOrCreateActiveChat(model, out bool _);
+        UserChat chat = await userRepository.GetOrCreateActiveChat(u, model);
         chat.UpdateModel(model);
-        await chatRepository.UpdateAsync(chat);
+        await userRepository.SaveChanges();
         logger.LogInformation("Model changed to {M}", model);
     }
 
