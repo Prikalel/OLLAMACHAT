@@ -81,15 +81,13 @@ public class RelationshipService(
             foreach (INamedTypeSymbol type in types)
             {
                 string fullName = type.GetFullName();
-                if (!allTypesCache.ContainsKey(fullName))
+                if (allTypesCache.TryAdd(fullName, type))
                 {
-                    allTypesCache[fullName] = type;
-
                     // Кешируем путь к файлу
                     string? filePath = GetFilePathForTypeInternal(type, solution);
                     if (!string.IsNullOrEmpty(filePath))
                     {
-                        typeToFilePathCache[fullName] = filePath;
+                        typeToFilePathCache.TryAdd(fullName, filePath);
                     }
                 }
             }

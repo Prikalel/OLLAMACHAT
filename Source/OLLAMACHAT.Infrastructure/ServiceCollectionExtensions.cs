@@ -6,6 +6,45 @@ namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
+    /// Регистрирует Redis кэш в DI контейнере.
+    /// </summary>
+    /// <param name="services"><see cref="IServiceCollection"/>.</param>
+    /// <param name="configuration"><see cref="IConfiguration"/>.</param>
+    public static void AddRedisCache(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<RedisSettings>(options =>
+            configuration.GetSection("Redis").Bind(options));
+
+        services.AddSingleton<IConnectionMultiplexer>(provider =>
+        {
+            RedisSettings redisSettings = provider.GetRequiredService<IOptions<RedisSettings>>().Value;
+            ConfigurationOptions configurationOptions = ConfigurationOptions.Parse(redisSettings.ConnectionString);
+            configurationOptions.AbortOnConnectFail = false;
+            configurationOptions.ConnectRetry = 3;
+
+            try
+            {
+                return ConnectionMultiplexer.Connect(configurationOptions);
+            }
+            catch (Exception ex)
+            {
+                ILogger<ConnectionMultiplexer>? logger = provider.GetService<ILogger<ConnectionMultiplexer>>();
+                logger?.LogError(ex, "Failed to connect to Redis at {ConnectionString}", redisSettings.ConnectionString);
+
+                return null!;
+            }
+        });
+
+        services.AddScoped<IDatabase>(provider =>
+        {
+            IConnectionMultiplexer connectionMultiplexer = provider.GetRequiredService<IConnectionMultiplexer>();
+            return connectionMultiplexer.GetDatabase();
+        });
+
+        services.AddSingleton(typeof(ICacheRepository<>), typeof(CacheRepository<>));
+    }
+
+    /// <summary>
     /// Регистрирует конфиги инфраструктуры.
     /// </summary>
     /// <param name="services"><see cref="IServiceCollection"/>.</param>

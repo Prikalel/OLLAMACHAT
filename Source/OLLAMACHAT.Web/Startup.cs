@@ -70,6 +70,7 @@ public class Startup
     {
         //services.AddHostedService<UserChatBackgroundService>();
         services.RegisterInfrastructure(Configuration);
+        services.AddRedisCache(Configuration);
 
         if (ServicesRegistrationOptions.RegisterSwagger)
         {
