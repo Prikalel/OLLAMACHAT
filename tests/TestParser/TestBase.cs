@@ -1,6 +1,3 @@
-using System.Reflection;
-using Microsoft.Extensions.Options;
-
 namespace TestParser;
 
 /// <summary>
@@ -31,7 +28,7 @@ public abstract class TestBase
 
         // Создаем сервисы
         MapperService = new(MapperLogger);
-        IOptions<SolutionSettings> solutionSettingsOptions = Microsoft.Extensions.Options.Options.Create(
+        IOptions<SolutionSettings> solutionSettingsOptions = Options.Create(
             new SolutionSettings { SolutionFilePath = Directory.GetCurrentDirectory() });
         SolutionLoaderService = new(solutionSettingsOptions, SolutionLoaderLogger);
 
@@ -39,7 +36,8 @@ public abstract class TestBase
             MapperService,
             EntityLogger,
             solutionSettingsOptions,
-            SolutionLoaderService
+            SolutionLoaderService,
+            new FakeCacheRepository<List<ParsedEntity>>()
         );
     }
 

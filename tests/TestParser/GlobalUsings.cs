@@ -1,11 +1,16 @@
 ﻿global using System;
+global using System.Collections.Concurrent;
+global using System.Reflection;
 global using System.Runtime.CompilerServices;
 global using System.Text.Json;
 global using Microsoft.CodeAnalysis;
 global using Microsoft.CodeAnalysis.Text;
 global using Microsoft.Extensions.Logging;
+global using Microsoft.Extensions.Options;
 global using VelikiyPrikalel.OLLAMACHAT.Application;
 global using VelikiyPrikalel.OLLAMACHAT.Application.Models;
+global using VelikiyPrikalel.OLLAMACHAT.Application.Repositories.Parser;
 global using VelikiyPrikalel.OLLAMACHAT.Infrastructure;
+global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Repositories.Parser;
 global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 global using Xunit.Abstractions;
