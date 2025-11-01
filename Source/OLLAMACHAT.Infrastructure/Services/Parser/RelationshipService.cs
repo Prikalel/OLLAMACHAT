@@ -5,8 +5,7 @@ namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 public class RelationshipService(
     ILogger<RelationshipService> logger,
     ISolutionLoaderService solutionLoaderService,
-    ICacheRepository<INamedTypeSymbol> allTypesCache,
-    ICacheRepository<string> typeToFilePathCache) : IRelationshipService
+    ICacheRepository<NamedTypeSymbol> allTypesCache) : IRelationshipService
 {
     /// <inheritdoc />
     public async Task<IEnumerable<SimpleRelationship>> AnalyzeRelationshipsAsync(IEnumerable<ParsedEntity> entities, Document document)
@@ -64,7 +63,6 @@ public class RelationshipService(
     public async Task InitializeCaches(Solution solution)
     {
         allTypesCache.Clear();
-        typeToFilePathCache.Clear();
 
         foreach (Project project in solution.Projects)
         {
@@ -78,15 +76,7 @@ public class RelationshipService(
             foreach (INamedTypeSymbol type in types)
             {
                 string fullName = type.GetFullName();
-                if (allTypesCache.TryAdd(fullName, type))
-                {
-                    // Кешируем путь к файлу
-                    string? filePath = GetFilePathForTypeInternal(type, solution);
-                    if (!string.IsNullOrEmpty(filePath))
-                    {
-                        typeToFilePathCache.TryAdd(fullName, filePath);
-                    }
-                }
+                allTypesCache.TryAdd(fullName, NamedTypeSymbol.Create(type));
             }
         }
     }
@@ -462,44 +452,12 @@ public class RelationshipService(
             return null;
         }
 
-        string fullName = typeSymbol.GetFullName();
-
-        // Проверяем, является ли тип пользовательским
-        if (typeToFilePathCache != null && typeToFilePathCache.TryGetValue(fullName, out string? cachedPath))
+        if (allTypesCache.TryGetValue(typeSymbol.GetFullName(), out NamedTypeSymbol? type))
         {
-            return cachedPath;
+            return type!.FilePath;
         }
 
         return null;
-    }
-
-    /// <summary>
-    /// Получает путь к файлу, в котором определен тип (внутренний метод для кеширования)
-    /// </summary>
-    private static string? GetFilePathForTypeInternal(INamedTypeSymbol typeSymbol, Solution solution)
-    {
-        if (typeSymbol == null)
-        {
-            return null;
-        }
-
-        ImmutableArray<SyntaxReference> typeDeclarations = typeSymbol.DeclaringSyntaxReferences;
-        if (typeDeclarations.Length == 0)
-        {
-            return null;
-        }
-
-        SyntaxNode syntaxNode = typeDeclarations[0].GetSyntax();
-        SyntaxTree syntaxTree = syntaxNode.SyntaxTree;
-        string filePath = syntaxTree.FilePath;
-
-        if (string.IsNullOrEmpty(filePath))
-        {
-            return null;
-        }
-
-        // Возвращаем абсолютный путь
-        return Path.GetFullPath(filePath);
     }
 
     /// <summary>
@@ -519,19 +477,19 @@ public class RelationshipService(
         }
 
         // Получаем символ текущей сущности из кеша
-        if (allTypesCache == null || !allTypesCache.TryGetValue(entity.FullName!, out INamedTypeSymbol? currentEntitySymbol))
+        if (allTypesCache == null || !allTypesCache.TryGetValue(entity.FullName!, out NamedTypeSymbol? currentEntitySymbol))
         {
             return;
         }
 
         // Ищем все типы, которые наследуют от текущей сущности
-        foreach (KeyValuePair<string, INamedTypeSymbol> kvp in allTypesCache.GetAll())
+        foreach (KeyValuePair<string, NamedTypeSymbol> kvp in allTypesCache.GetAll())
         {
-            INamedTypeSymbol typeSymbol = kvp.Value;
+            NamedTypeSymbol typeSymbol = kvp.Value;
             string typeFullName = kvp.Key;
 
             // Пропускаем саму сущность
-            if (SymbolEqualityComparer.Default.Equals(typeSymbol, currentEntitySymbol))
+            if (typeSymbol.FullName == currentEntitySymbol!.FullName)
             {
                 continue;
             }
@@ -539,9 +497,7 @@ public class RelationshipService(
             if (InheritsFrom(typeSymbol, currentEntitySymbol!))
             {
                 // Получаем путь к файлу из кеша
-                string? targetFilePath = typeToFilePathCache?.TryGetValue(typeFullName, out string? path) == true
-                    ? path
-                    : null;
+                string? targetFilePath = kvp.Value.FilePath;
 
                 relationships.Add(new SimpleRelationship(
                     FullNameFrom: entity.FullName!,
@@ -599,7 +555,7 @@ public class RelationshipService(
     /// <summary>
     /// Проверяет, наследует ли тип от указанного базового типа (включая косвенное наследование)
     /// </summary>
-    private bool InheritsFrom(INamedTypeSymbol typeSymbol, INamedTypeSymbol baseTypeSymbol)
+    private bool InheritsFrom(NamedTypeSymbol typeSymbol, NamedTypeSymbol baseTypeSymbol)
     {
         if (typeSymbol == null || baseTypeSymbol == null)
         {
@@ -607,26 +563,7 @@ public class RelationshipService(
         }
 
         // Проверяем прямое и косвенное наследование от базового класса
-        INamedTypeSymbol? baseType = typeSymbol.BaseType;
-        while (baseType != null)
-        {
-            if (SymbolEqualityComparer.Default.Equals(baseType, baseTypeSymbol))
-            {
-                return true;
-            }
-
-            baseType = baseType.BaseType;
-        }
-
-        // Проверяем реализацию интерфейсов (прямую и косвенную)
-        foreach (INamedTypeSymbol interfaceType in typeSymbol.AllInterfaces)
-        {
-            if (SymbolEqualityComparer.Default.Equals(interfaceType, baseTypeSymbol))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return typeSymbol.BaseClassnames.Contains(baseTypeSymbol.FullName)
+            || typeSymbol.AllInterfaces.Contains(baseTypeSymbol.FullName);
     }
 }

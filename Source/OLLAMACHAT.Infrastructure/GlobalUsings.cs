@@ -48,6 +48,7 @@ global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Settings;
 global using StackExchange.Redis;
 global using VelikiyPrikalel.OLLAMACHAT.Application.Repositories.Parser;
+global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Cache;
 global using VelikiyPrikalel.OLLAMACHAT.Infrastructure.Repositories.Parser;
 global using ChatMessageRole = VelikiyPrikalel.OLLAMACHAT.Data.Llm.ChatMessageRole;
 global using EventHandler = VelikiyPrikalel.OLLAMACHAT.Data.Parser.EventHandler;
