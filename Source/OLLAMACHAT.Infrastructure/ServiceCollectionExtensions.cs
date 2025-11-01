@@ -35,7 +35,7 @@ public static class ServiceCollectionExtensions
             }
         });
 
-        services.AddScoped<IDatabase>(provider =>
+        services.AddSingleton<IDatabase>(provider =>
         {
             IConnectionMultiplexer connectionMultiplexer = provider.GetRequiredService<IConnectionMultiplexer>();
             return connectionMultiplexer.GetDatabase();
