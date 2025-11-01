@@ -34,7 +34,7 @@ public class RelationshipService(
 
             SyntaxNode root = await syntaxTree.GetRootAsync();
 
-            List<ParsedEntity> allEntities = FlattenAllTrees(entities).ToList();
+            List<ParsedEntity> allEntities = entities.FlattenAllTrees().ToList();
 
             foreach (ParsedEntity entity in allEntities)
             {
@@ -95,17 +95,6 @@ public class RelationshipService(
             }
         }
     }
-
-    /// <summary>
-    /// Рекурсивно обходит все дочерние сущности и возвращает плоский список всех сущностей
-    /// </summary>
-    /// <param name="roots">Корневые сущности</param>
-    /// <returns>Плоский список всех сущностей, включая дочерние</returns>
-    private static List<ParsedEntity> FlattenAllTrees(IEnumerable<ParsedEntity> roots) =>
-        roots.SelectMany(root =>
-            new[] { root }
-                .Concat(root.Children?.SelectMany(x => FlattenAllTrees([x])) ?? [])
-        ).ToList();
 
     /// <summary>
     /// Анализирует вызовы методов внутри метода
@@ -418,7 +407,7 @@ public class RelationshipService(
 
             string? targetFilePath = GetCachedFilePathForType(containingType);
 
-            relationships.Add(new(
+            relationships.Add(new SimpleRelationship(
                 FullNameFrom: methodEntity.FullName!,
                 FullNameTo: fullCalledMethodName,
                 Type: SimpleRelationshipType.Calls,
@@ -460,7 +449,7 @@ public class RelationshipService(
 
         string? targetFilePath = GetCachedFilePathForType(containingType);
 
-        relationships.Add(new(
+        relationships.Add(new SimpleRelationship(
             FullNameFrom: methodEntity.FullName!,
             FullNameTo: fullMemberName,
             Type: SimpleRelationshipType.Calls,
@@ -559,7 +548,7 @@ public class RelationshipService(
                     ? path
                     : null;
 
-                relationships.Add(new(
+                relationships.Add(new SimpleRelationship(
                     FullNameFrom: entity.FullName!,
                     FullNameTo: typeFullName,
                     Type: SimpleRelationshipType.IsBaseFor,

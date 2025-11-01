@@ -27,6 +27,7 @@ global using Microsoft.Extensions.Options;
 global using ModelContextProtocol.Protocol;
 global using OpenAI.Chat;
 global using VelikiyPrikalel.OLLAMACHAT.Application;
+global using VelikiyPrikalel.OLLAMACHAT.Application.Extensions;
 global using VelikiyPrikalel.OLLAMACHAT.Application.Hubs;
 global using VelikiyPrikalel.OLLAMACHAT.Application.Models;
 global using VelikiyPrikalel.OLLAMACHAT.Application.Repositories;
