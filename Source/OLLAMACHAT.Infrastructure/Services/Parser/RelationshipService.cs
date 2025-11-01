@@ -4,11 +4,10 @@ namespace VelikiyPrikalel.OLLAMACHAT.Infrastructure.Services.Parser;
 [UsedImplicitly]
 public class RelationshipService(
     ILogger<RelationshipService> logger,
-    ISolutionLoaderService solutionLoaderService) : IRelationshipService
+    ISolutionLoaderService solutionLoaderService,
+    ICacheRepository<INamedTypeSymbol> allTypesCache,
+    ICacheRepository<string> typeToFilePathCache) : IRelationshipService
 {
-    private static ConcurrentDictionary<string, INamedTypeSymbol>? allTypesCache;
-    private static ConcurrentDictionary<string, string>? typeToFilePathCache;
-
     /// <inheritdoc />
     public async Task<IEnumerable<SimpleRelationship>> AnalyzeRelationshipsAsync(IEnumerable<ParsedEntity> entities, Document document)
     {
@@ -61,13 +60,11 @@ public class RelationshipService(
         }
     }
 
-    /// <summary>
-    /// Инициализирует кеши типов и путей к файлам для оптимизации поиска
-    /// </summary>
-    public static async Task InitializeCaches(Solution solution)
+    /// <inheritdoc />
+    public async Task InitializeCaches(Solution solution)
     {
-        allTypesCache = new();
-        typeToFilePathCache = new();
+        allTypesCache.Clear();
+        typeToFilePathCache.Clear();
 
         foreach (Project project in solution.Projects)
         {
@@ -528,7 +525,7 @@ public class RelationshipService(
         }
 
         // Ищем все типы, которые наследуют от текущей сущности
-        foreach (KeyValuePair<string, INamedTypeSymbol> kvp in allTypesCache)
+        foreach (KeyValuePair<string, INamedTypeSymbol> kvp in allTypesCache.GetAll())
         {
             INamedTypeSymbol typeSymbol = kvp.Value;
             string typeFullName = kvp.Key;
@@ -539,7 +536,7 @@ public class RelationshipService(
                 continue;
             }
 
-            if (InheritsFrom(typeSymbol, currentEntitySymbol))
+            if (InheritsFrom(typeSymbol, currentEntitySymbol!))
             {
                 // Получаем путь к файлу из кеша
                 string? targetFilePath = typeToFilePathCache?.TryGetValue(typeFullName, out string? path) == true

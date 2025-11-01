@@ -6,6 +6,13 @@ namespace VelikiyPrikalel.OLLAMACHAT.Application.Services.Parser;
 public interface IRelationshipService
 {
     /// <summary>
+    /// Инициализирует кеши типов и путей к файлам для оптимизации поиска
+    /// </summary>
+    /// <param name="solution">Решение.</param>
+    /// <returns><see cref="Task"/>.</returns>
+    Task InitializeCaches(Solution solution);
+
+    /// <summary>
     /// Проанализировать сущности на отношения между ними.
     /// Определяет отношения, определённые в <see cref="SimpleRelationshipType"/>.
     /// </summary>
