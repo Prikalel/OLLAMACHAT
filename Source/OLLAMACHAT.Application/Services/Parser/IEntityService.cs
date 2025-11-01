@@ -6,6 +6,11 @@ namespace VelikiyPrikalel.OLLAMACHAT.Application.Services.Parser;
 public interface IEntityService
 {
     /// <summary>
+    /// Очистить кеш.
+    /// </summary>
+    void ClearCache();
+
+    /// <summary>
     /// Выгрузить сущности.
     /// </summary>
     /// <param name="document">Документ.</param>

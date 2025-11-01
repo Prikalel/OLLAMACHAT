@@ -5,14 +5,11 @@ public partial class EntityService(
     IMapperService mapperService,
     ILogger<EntityService> logger,
     IOptions<SolutionSettings> solutionSettings,
-    ISolutionLoaderService solutionLoaderService) : IEntityService
+    ISolutionLoaderService solutionLoaderService,
+    ICacheRepository<List<ParsedEntity>> entityCache) : IEntityService
 {
-    private static readonly ConcurrentDictionary<string, List<ParsedEntity>> entityCache = new();
-
-    /// <summary>
-    /// Очистить кеш.
-    /// </summary>
-    public static void ClearCache() => entityCache.Clear();
+    /// <inheritdoc />
+    public void ClearCache() => entityCache.Clear();
 
     /// <inheritdoc />
     public async Task<IEnumerable<ParsedEntity>> ExtractEntitiesAsync(Document document, ParserOptions? options = null)
@@ -44,7 +41,7 @@ public partial class EntityService(
                 TimeSpan cacheTime = DateTime.UtcNow - startTime;
                 logger.LogInformation("Returning cached entities for document: {DocumentPath} with options: {OptionsKey} in {ElapsedMs}ms",
                     document.FilePath, optionsKey, cacheTime.TotalMilliseconds);
-                return cachedEntity;
+                return cachedEntity!;
             }
 
             logger.LogDebug("Getting syntax tree for document: {DocumentPath}", document.FilePath);
